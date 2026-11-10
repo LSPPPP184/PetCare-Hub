@@ -37,6 +37,18 @@ class StageOneTest {
    .andExpect(model().attributeHasFieldErrors("registration","fullName","email","password"));
   mvc.perform(post("/register")).andExpect(status().isForbidden());
  }
+ @Test void registrationValidatesAndNormalizesPhone() throws Exception {
+  String email = "phone-check@petcare.vn";
+  mvc.perform(post("/register").with(csrf()).param("fullName", "Khách hàng")
+    .param("email", email).param("password", "Password123").param("phone", "--------"))
+   .andExpect(status().isOk()).andExpect(model().attributeHasFieldErrors("registration", "phone"));
+  assertThat(users.existsByEmail(email)).isFalse();
+
+  mvc.perform(post("/register").with(csrf()).param("fullName", "Khách hàng")
+    .param("email", email).param("password", "Password123").param("phone", "  +84  901 234 567  "))
+   .andExpect(redirectedUrl("/login"));
+  assertThat(users.findByEmail(email).orElseThrow().getPhone()).isEqualTo("+84 901 234 567");
+ }
  @Test void rolesAndPublicPages() throws Exception {
   for(String path:new String[]{"/","/login","/register"}) mvc.perform(get(path)).andExpect(status().isOk());
   mvc.perform(get("/admin/dashboard")).andExpect(status().is3xxRedirection());
