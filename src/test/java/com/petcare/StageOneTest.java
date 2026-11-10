@@ -7,11 +7,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.mock.web.MockHttpSession;
+import jakarta.servlet.http.Cookie;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 @SpringBootTest @AutoConfigureMockMvc @ActiveProfiles("test")
@@ -49,12 +52,30 @@ class StageOneTest {
  @Test void seededLoginAndMenus() throws Exception {
   String[][] accounts={{"admin","Admin@123","ADMIN"},{"staff","Staff@123","STAFF"},{"customer","Customer@123","CUSTOMER"}};
   for(var account:accounts) {
-   mvc.perform(formLogin().user("email",account[0]+"@petcare.vn").password(account[1])).andExpect(authenticated().withRoles(account[2]));
-   var result=mvc.perform(get("/").with(user(account[0]).roles(account[2]))).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+   var loginResult = mvc.perform(formLogin().user("email", account[0] + "@petcare.vn").password(account[1]))
+    .andExpect(authenticated().withRoles(account[2])).andReturn();
+   var session = (MockHttpSession) loginResult.getRequest().getSession(false);
+   assertThat(session).isNotNull();
+   String sessionId = session.getId();
+   var result = mvc.perform(get("/").session(session))
+    .andExpect(status().isOk()).andExpect(authenticated().withRoles(account[2]))
+    .andReturn().getResponse().getContentAsString();
    assertThat(result.contains("href=\"/admin/dashboard\"")).isEqualTo(account[2].equals("ADMIN"));
    assertThat(result.contains("href=\"/staff/dashboard\"")).isEqualTo(!account[2].equals("CUSTOMER"));
+   mvc.perform(get("/admin/dashboard").session(session))
+    .andExpect(status().is(account[2].equals("ADMIN") ? 200 : 403));
+   mvc.perform(get("/staff/dashboard").session(session))
+    .andExpect(status().is(account[2].equals("CUSTOMER") ? 403 : 200));
+
+   mvc.perform(post("/logout").session(session).with(csrf()))
+    .andExpect(redirectedUrl("/login?logout")).andExpect(unauthenticated());
+   assertThat(session.isInvalid()).isTrue();
+   // Session cũ đã bị hủy; cookie cũ không cấp lại quyền truy cập.
+   for (String path : new String[]{"/admin/dashboard", "/staff/dashboard"}) {
+    mvc.perform(get(path).cookie(new Cookie("JSESSIONID", sessionId)))
+     .andExpect(unauthenticated()).andExpect(redirectedUrl("http://localhost/login"));
+   }
   }
   mvc.perform(formLogin().user("email","admin@petcare.vn").password("wrong")).andExpect(redirectedUrl("/login?error"));
-  mvc.perform(post("/logout").with(user("customer")).with(csrf())).andExpect(redirectedUrl("/login?logout"));
  }
 }
