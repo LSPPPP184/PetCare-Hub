@@ -1,0 +1,15 @@
+# PetCare Hub: quy ước dự án
+
+- Đây là bài tập lớn môn Lập trình hướng đối tượng (OOP) Java. Ưu tiên code sạch, thể hiện rõ 4 tính chất OOP: đóng gói, kế thừa, đa hình, trừu tượng.
+- Stack cố định: Java 21, Spring Boot 3.5.16 (cố định, không nâng lên 4.x), Spring Data JPA (Hibernate), Spring Security, Thymeleaf, Bootstrap 5 (CDN), Maven, SQL Server (production/dev), H2 (chỉ cho test), JUnit 5, Mockito, Lombok.
+- KHÔNG dùng React/Vue/Angular. JavaScript chỉ dùng khi thật sự cần và ở mức tối thiểu.
+- Không thêm thư viện ngoài danh sách trên nếu chưa hỏi và giải thích lý do.
+- Package gốc: com.petcare. Chia lớp: controller / service / repository / domain / dto / config / scheduler / event.
+- Logic nghiệp vụ nằm trong domain và service. Controller chỉ nhận request, gọi service, trả view.
+- Design pattern bắt buộc: State (Order, Appointment, VaccinationRecord, Subscription), Strategy (MatchingStrategy, DiscountStrategy), Factory (ProductFactory). Tùy chọn: Observer (Spring ApplicationEvent), Decorator, Builder.
+- Mỗi pattern phải: nằm trong package/class riêng, có Javadoc tiếng Việt ngắn giải thích pattern và lý do dùng, có unit test.
+- Tên class, method, biến bằng tiếng Anh. Comment, Javadoc và thông báo hiển thị cho người dùng bằng tiếng Việt.
+- Không dùng if/else hoặc switch theo loại đối tượng khi có thể dùng đa hình.
+- Mật khẩu luôn mã hóa BCrypt. Thông tin kết nối database lấy từ biến môi trường (DB_URL, DB_USERNAME, DB_PASSWORD), không hard-code.
+- Mỗi giai đoạn: không phá code cũ, mọi test phải xanh trước khi kết thúc, cuối cùng tóm tắt thay đổi, giả định đã đặt ra và cách chạy.
+- Không tự ý đổi cấu trúc package hoặc đổi tên class đã có ở giai đoạn trước.

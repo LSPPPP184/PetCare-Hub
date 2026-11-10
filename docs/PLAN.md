@@ -1,0 +1,10 @@
+- [ ] GĐ1 Khởi tạo, bảo mật, layout
+- [ ] GĐ2 Sản phẩm (kế thừa + Factory)
+- [ ] GĐ3 Giỏ hàng, đơn hàng (State)
+- [ ] GĐ4 Đặt lịch dịch vụ (State)
+- [ ] GĐ5 Sức khỏe, tiêm phòng (State + Scheduler)
+- [ ] GĐ6 Quiz ghép đôi (Strategy)
+- [ ] GĐ7 Khách hàng thân thiết (Strategy + Observer)
+- [ ] GĐ8 Gói chăm sóc theo tháng
+- [ ] GĐ9 Dashboard, hoàn thiện, kiểm thử
+- [ ] GĐ10 Tài liệu báo cáo
