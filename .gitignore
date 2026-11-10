@@ -1,0 +1,24 @@
+# Maven
+target/
+
+# IntelliJ
+.idea/
+*.iml
+*.iws
+out/
+
+# VS Code
+.vscode/
+
+# Log, file tạm
+*.log
+logs/
+*.tmp
+
+# Hệ điều hành
+.DS_Store
+Thumbs.db
+
+# Cấu hình chứa mật khẩu
+.env
+application-local.properties
