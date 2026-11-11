@@ -6,6 +6,7 @@
 <h1>Thông tin sản phẩm</h1><form th:if="${id == null}" th:action="@{/staff/products/new}" method="get"><label>Chọn loại <select name="type"><option th:each="t : ${types}" th:value="${t}" th:text="${t.label}" th:selected="${t == form.type}"></option></select></label><button>Đổi loại</button></form>
 <form th:action="@{/staff/products/save}" th:object="${form}" method="post">
 <input type="hidden" name="id" th:value="${id}"><input type="hidden" th:field="*{type}">
+<input type="hidden" th:field="*{version}">
 <div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}"><p th:each="e : ${#fields.allErrors()}" th:text="${e}"></p></div>
 <div class="mb-3" ><label for="name">Tên sản phẩm</label><input class="form-control" id="name" th:field="*{name}" type="text" ></div>
 <div class="mb-3" ><label for="description">Mô tả</label><input class="form-control" id="description" th:field="*{description}" type="text" ></div>
@@ -18,9 +19,10 @@
 <div class="mb-3" th:if="${fields.contains('gender')}"><label for="gender">Giới tính</label><input class="form-control" id="gender" th:field="*{gender}" type="text" ></div>
 <div class="mb-3" th:if="${fields.contains('size')}"><label for="size">Kích thước</label><input class="form-control" id="size" th:field="*{size}" type="text" ></div>
 <div class="mb-3" th:if="${fields.contains('healthNote')}"><label for="healthNote">Ghi chú sức khỏe</label><input class="form-control" id="healthNote" th:field="*{healthNote}" type="text" ></div>
-<div class="mb-3" th:if="${fields.contains('status')}"><label for="status">Trạng thái</label><select class="form-select" id="status" th:field="*{status}"><option th:each="v : ${statusOptions}" th:value="${v}" th:text="${v.label}"></option></select></div>
+<div class="mb-3" th:if="${id == null and fields.contains('status')}"><label for="status">Trạng thái</label><select class="form-select" id="status" th:field="*{status}"><option th:each="v : ${statusOptions}" th:value="${v}" th:text="${v.label}"></option></select></div>
 <div class="mb-3" th:if="${fields.contains('brand')}"><label for="brand">Thương hiệu</label><input class="form-control" id="brand" th:field="*{brand}" type="text" ></div>
-<div class="mb-3" th:if="${fields.contains('stockQuantity')}"><label for="stockQuantity">Tồn kho</label><input class="form-control" id="stockQuantity" th:field="*{stockQuantity}" type="number" min="0"></div>
+<div class="mb-3" th:if="${id == null and fields.contains('stockQuantity')}"><label for="stockQuantity">Tồn kho</label><input class="form-control" id="stockQuantity" th:field="*{stockQuantity}" type="number" min="0"></div>
+<p class="text-muted" th:if="${id != null and (fields.contains('status') or fields.contains('stockQuantity'))}">Tồn kho và trạng thái thú cưng được cập nhật qua xác nhận/hủy đơn hàng.</p>
 <div class="mb-3" th:if="${fields.contains('category')}"><label for="category">Nhóm phụ kiện</label><input class="form-control" id="category" th:field="*{category}" type="text" ></div>
 <div class="mb-3" th:if="${fields.contains('petSizeSurcharge')}"><label for="petSizeSurcharge">Phụ phí kích thước</label><input class="form-control" id="petSizeSurcharge" th:field="*{petSizeSurcharge}" type="number" step="0.01" min="0"></div>
 <div class="mb-3" th:if="${fields.contains('doctorName')}"><label for="doctorName">Bác sĩ phụ trách</label><input class="form-control" id="doctorName" th:field="*{doctorName}" type="text" ></div>

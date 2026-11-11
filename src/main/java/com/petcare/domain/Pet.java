@@ -33,6 +33,11 @@ import com.petcare.dto.ProductForm;
         return ProductType.PET;
     }
     @Override public void update(ProductForm f) {
+        updateCatalog(f);
+        status=f.getStatus();
+    }
+    /** Sửa thông tin thú cưng, giữ nguyên trạng thái do đơn hàng quản lý. */
+    @Override public void updateCatalog(ProductForm f) {
         super.update(f);
         species=f.getSpecies();
         breed=f.getBreed();
@@ -40,7 +45,6 @@ import com.petcare.dto.ProductForm;
         gender=f.getGender();
         size=f.getSize();
         healthNote=f.getHealthNote();
-        status=f.getStatus();
     }
     @Override public ProductForm toForm() {
         var f=super.toForm();

@@ -1,6 +1,7 @@
 - [x] GĐ1 Khởi tạo, bảo mật, layout
 - [x] GĐ2 Sản phẩm (kế thừa + Factory)
 - [ ] GĐ3 Giỏ hàng, đơn hàng (State)
+  - [x] GĐ3A Backend và kiểm thử giỏ hàng, đơn hàng
 - [ ] GĐ4 Đặt lịch dịch vụ (State)
 - [ ] GĐ5 Sức khỏe, tiêm phòng (State + Scheduler)
 - [ ] GĐ6 Quiz ghép đôi (Strategy)

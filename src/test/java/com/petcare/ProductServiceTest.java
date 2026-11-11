@@ -4,6 +4,7 @@ import com.petcare.domain.*;
 import com.petcare.domain.factory.ProductFactory;
 import com.petcare.repository.ProductRepository;
 import com.petcare.service.ProductService;
+import com.petcare.service.CommerceLocks;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 import java.util.List;
@@ -14,7 +15,7 @@ import static org.mockito.Mockito.*;
 class ProductServiceTest {
     private final ProductRepository repository = mock(ProductRepository.class);
     private final ProductFactory factory = new ProductFactory();
-    private final ProductService service = new ProductService(repository, factory);
+    private final ProductService service = new ProductService(repository, factory, mock(CommerceLocks.class));
 
     private Product product(long id, ProductType type, String name, String price) {
         var p = factory.create(ProductFactoryTest.form(type, name, price));
