@@ -13,6 +13,7 @@ import java.util.*;
 @Service @RequiredArgsConstructor @Transactional public class ProductService  {
     private final ProductRepository repository;
     private final ProductFactory factory;
+    private final CommerceLocks locks;
     public Page<ProductView> search(String group,String q,int page,boolean descending,boolean staff) {
         var comparator=Comparator.comparing(ProductView::price).thenComparing(ProductView::id);
         if(descending) comparator=comparator.reversed();
@@ -37,9 +38,11 @@ import java.util.*;
             repository.save(factory.create(f));
             return;
         }
-        var p=get(id);
+        get(id);
+        var p=locks.lock(Product.class,id);
+        if(!Objects.equals(f.getVersion(),p.getVersion()))throw new ProductVersionConflictException();
         if(p.getType()!=f.getType())throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Không thể đổi loại sản phẩm.");
-        p.update(f);
+        p.updateCatalog(f);
     }
     public void hide(Long id) {
         get(id).hide();

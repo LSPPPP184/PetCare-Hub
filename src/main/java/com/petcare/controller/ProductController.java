@@ -49,12 +49,18 @@ import java.util.*;
         return "products/form";
     }
     @PostMapping("/staff/products/save") String save(@RequestParam(required=false) Long id,@Valid @ModelAttribute("form") ProductForm f,BindingResult errors,Model m) {
+        if(!errors.hasErrors()) {
+            try {
+                service.save(id,f);
+            } catch(ProductVersionConflictException ex) {
+                errors.reject("product.version.conflict",ex.getMessage());
+            }
+        }
         if(errors.hasErrors()) {
             m.addAttribute("id",id);
             m.addAttribute("fields", f.getType() == null ? List.of() : FIELDS.getOrDefault(f.getType(), List.of()));
             return "products/form";
         }
-        service.save(id,f);
         return "redirect:/staff/products";
     }
     @PostMapping("/staff/products/{id}/hide") String hide(@PathVariable Long id) {

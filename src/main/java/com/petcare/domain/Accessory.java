@@ -25,9 +25,13 @@ import com.petcare.dto.ProductForm;
         return ProductType.ACCESSORY;
     }
     @Override public void update(ProductForm f) {
+        updateCatalog(f);
+        stockQuantity=f.getStockQuantity();
+    }
+    /** Sửa thông tin phụ kiện, giữ nguyên tồn kho do đơn hàng quản lý. */
+    @Override public void updateCatalog(ProductForm f) {
         super.update(f);
         brand=f.getBrand();
-        stockQuantity=f.getStockQuantity();
         category=f.getCategory();
     }
     @Override public ProductForm toForm() {

@@ -39,11 +39,11 @@ class ProductFlowTest {
             assertThat(f.getGender()).isEqualTo("Cái");
             assertThat(f.getSize()).isEqualTo("Nhỏ");
             assertThat(f.getHealthNote()).isEqualTo("Khỏe mạnh");
-            assertThat(f.getStatus()).isEqualTo(PetStatus.RESERVED);
+            assertThat(f.getStatus()).isEqualTo(PetStatus.AVAILABLE);
         },
         ProductType.ACCESSORY, f -> {
             assertThat(f.getBrand()).isEqualTo("PetCare");
-            assertThat(f.getStockQuantity()).isEqualTo(15);
+            assertThat(f.getStockQuantity()).isEqualTo(5);
             assertThat(f.getCategory()).isEqualTo("toy");
         },
         ProductType.GROOMING, f -> {
@@ -77,6 +77,7 @@ class ProductFlowTest {
             .andExpect(status().isOk());
         mvc.perform(post("/staff/products/save").with(user("staff").roles("STAFF")).with(csrf())
             .param("type", type.name()).param("name", "Sản phẩm mới").param("basePrice", "100")
+            .param("stockQuantity", "5")
             .param("durationMinutes", "30").param("doctorName", "Bác sĩ An")
             .param("durationMonths", "1").param("includedUses", "4").param("includedServices", "Tắm"))
             .andExpect(redirectedUrl("/staff/products"));
@@ -87,10 +88,15 @@ class ProductFlowTest {
         p = repository.findById(id).orElseThrow();
         assertThat(p.getType()).isEqualTo(type);
         mvc.perform(get("/products/" + id)).andExpect(status().isOk());
-        mvc.perform(get("/staff/products/" + id + "/edit").with(user("admin").roles("ADMIN")))
-            .andExpect(status().isOk());
+        String editHtml = mvc.perform(get("/staff/products/" + id + "/edit").with(user("admin").roles("ADMIN")))
+            .andExpect(status().isOk())
+            .andReturn().getResponse().getContentAsString();
+        assertThat(editHtml)
+            .containsPattern("<input(?=[^>]*name=\"version\")(?=[^>]*value=\"" + p.getVersion() + "\")[^>]*>")
+            .doesNotContain("name=\"stockQuantity\"", "name=\"status\"");
         mvc.perform(post("/staff/products/save").with(user("admin").roles("ADMIN")).with(csrf())
             .param("id", id.toString()).param("type", type.name()).param("name", "Đã sửa").param("basePrice", "200")
+            .param("version", Long.toString(p.getVersion()))
             .param("durationMinutes", "40").param("doctorName", "Bác sĩ Bình")
             .param("durationMonths", "2").param("includedUses", "8").param("includedServices", "Khám")
             .param("species", "CAT").param("breed", "Anh lông ngắn").param("ageMonths", "12")
