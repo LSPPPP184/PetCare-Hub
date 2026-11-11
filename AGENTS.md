@@ -13,3 +13,6 @@
 - Mật khẩu luôn mã hóa BCrypt. Thông tin kết nối database lấy từ biến môi trường (DB_URL, DB_USERNAME, DB_PASSWORD), không hard-code.
 - Mỗi giai đoạn: không phá code cũ, mọi test phải xanh trước khi kết thúc, cuối cùng tóm tắt thay đổi, giả định đã đặt ra và cách chạy.
 - Không tự ý đổi cấu trúc package hoặc đổi tên class đã có ở giai đoạn trước.
+- Mỗi giai đoạn có thêm trang giao diện mới phải cập nhật menu (header) và trang chủ để có liên kết tới trang đó, hiển thị đúng theo vai trò (khách / CUSTOMER / STAFF / ADMIN). Không để trang nào chỉ truy cập được bằng cách gõ URL.
+- Không bao giờ ghi mật khẩu thật vào code hoặc vào giá trị mặc định của application.properties (ví dụ ${DB_PASSWORD:} phải để trống sau dấu hai chấm).
+- Với phần cần SQL Server thật để kiểm chứng (bạn không có thông tin đăng nhập), cuối mỗi giai đoạn hãy liệt kê rõ các bước để người dùng tự kiểm tra thủ công, kèm lệnh chạy ứng dụng với profile demo.
