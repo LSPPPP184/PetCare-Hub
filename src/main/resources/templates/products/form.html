@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Thông tin sản phẩm')}"></head>
+<body><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container"><nav><a th:href="@{/products}">Danh mục sản phẩm</a> · <a sec:authorize="hasAnyRole('ADMIN','STAFF')" th:href="@{/staff/products}">Quản lý sản phẩm</a></nav>
+<h1>Thông tin sản phẩm</h1><form th:if="${id == null}" th:action="@{/staff/products/new}" method="get"><label>Chọn loại <select name="type"><option th:each="t : ${types}" th:value="${t}" th:text="${t.label}" th:selected="${t == form.type}"></option></select></label><button>Đổi loại</button></form>
+<form th:action="@{/staff/products/save}" th:object="${form}" method="post">
+<input type="hidden" name="id" th:value="${id}"><input type="hidden" th:field="*{type}">
+<div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}"><p th:each="e : ${#fields.allErrors()}" th:text="${e}"></p></div>
+<div class="mb-3" ><label for="name">Tên sản phẩm</label><input class="form-control" id="name" th:field="*{name}" type="text" ></div>
+<div class="mb-3" ><label for="description">Mô tả</label><input class="form-control" id="description" th:field="*{description}" type="text" ></div>
+<div class="mb-3" ><label for="basePrice">Giá niêm yết</label><input class="form-control" id="basePrice" th:field="*{basePrice}" type="number" step="0.01" min="0"></div>
+<div class="mb-3" ><label for="imageUrl">Đường dẫn ảnh</label><input class="form-control" id="imageUrl" th:field="*{imageUrl}" type="text" ></div>
+<div class="mb-3" th:if="${fields.contains('durationMinutes')}"><label for="durationMinutes">Thời lượng (phút)</label><input class="form-control" id="durationMinutes" th:field="*{durationMinutes}" type="number" min="0"></div>
+<div class="mb-3" th:if="${fields.contains('species')}"><label for="species">Loài</label><select class="form-select" id="species" th:field="*{species}"><option th:each="v : ${speciesOptions}" th:value="${v}" th:text="${v.label}"></option></select></div>
+<div class="mb-3" th:if="${fields.contains('breed')}"><label for="breed">Giống</label><input class="form-control" id="breed" th:field="*{breed}" type="text" ></div>
+<div class="mb-3" th:if="${fields.contains('ageMonths')}"><label for="ageMonths">Tuổi (tháng)</label><input class="form-control" id="ageMonths" th:field="*{ageMonths}" type="number" min="0"></div>
+<div class="mb-3" th:if="${fields.contains('gender')}"><label for="gender">Giới tính</label><input class="form-control" id="gender" th:field="*{gender}" type="text" ></div>
+<div class="mb-3" th:if="${fields.contains('size')}"><label for="size">Kích thước</label><input class="form-control" id="size" th:field="*{size}" type="text" ></div>
+<div class="mb-3" th:if="${fields.contains('healthNote')}"><label for="healthNote">Ghi chú sức khỏe</label><input class="form-control" id="healthNote" th:field="*{healthNote}" type="text" ></div>
+<div class="mb-3" th:if="${fields.contains('status')}"><label for="status">Trạng thái</label><select class="form-select" id="status" th:field="*{status}"><option th:each="v : ${statusOptions}" th:value="${v}" th:text="${v.label}"></option></select></div>
+<div class="mb-3" th:if="${fields.contains('brand')}"><label for="brand">Thương hiệu</label><input class="form-control" id="brand" th:field="*{brand}" type="text" ></div>
+<div class="mb-3" th:if="${fields.contains('stockQuantity')}"><label for="stockQuantity">Tồn kho</label><input class="form-control" id="stockQuantity" th:field="*{stockQuantity}" type="number" min="0"></div>
+<div class="mb-3" th:if="${fields.contains('category')}"><label for="category">Nhóm phụ kiện</label><input class="form-control" id="category" th:field="*{category}" type="text" ></div>
+<div class="mb-3" th:if="${fields.contains('petSizeSurcharge')}"><label for="petSizeSurcharge">Phụ phí kích thước</label><input class="form-control" id="petSizeSurcharge" th:field="*{petSizeSurcharge}" type="number" step="0.01" min="0"></div>
+<div class="mb-3" th:if="${fields.contains('doctorName')}"><label for="doctorName">Bác sĩ phụ trách</label><input class="form-control" id="doctorName" th:field="*{doctorName}" type="text" ></div>
+<div class="mb-3" th:if="${fields.contains('durationMonths')}"><label for="durationMonths">Số tháng</label><input class="form-control" id="durationMonths" th:field="*{durationMonths}" type="number" min="0"></div>
+<div class="mb-3" th:if="${fields.contains('includedUses')}"><label for="includedUses">Số lượt</label><input class="form-control" id="includedUses" th:field="*{includedUses}" type="number" min="0"></div>
+<div class="mb-3" th:if="${fields.contains('includedServices')}"><label for="includedServices">Dịch vụ trong gói</label><input class="form-control" id="includedServices" th:field="*{includedServices}" type="text" ></div>
+<button class="btn btn-primary">Lưu sản phẩm</button></form></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

@@ -1,1 +1,20 @@
-<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Chào mừng đến PetCare Hub')}"></head><body><header th:replace="~{fragments/layout :: header}"></header><main class="container"><div th:replace="~{fragments/layout :: flash}"></div><h1>Chào mừng đến PetCare Hub</h1><p class="lead">Người bạn đồng hành trong hành trình chăm sóc thú cưng.</p><p>Khám phá sản phẩm, dịch vụ chăm sóc và các chương trình dành cho thú cưng tại cửa hàng.</p></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Chào mừng đến PetCare Hub')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="container">
+    <div th:replace="~{fragments/layout :: flash}"></div>
+    <h1>Chào mừng đến PetCare Hub</h1>
+    <p class="lead">Người bạn đồng hành trong hành trình chăm sóc thú cưng.</p>
+    <p>Khám phá sản phẩm, dịch vụ chăm sóc và các chương trình dành cho thú cưng tại cửa hàng.</p>
+    <a class="btn btn-primary mb-3" th:href="@{/products}">Xem danh mục</a>
+    <nav class="d-flex flex-wrap gap-2" aria-label="Lọc nhanh theo nhóm sản phẩm">
+        <a class="btn btn-outline-primary" th:href="@{/products(group='PET')}">Thú cưng</a>
+        <a class="btn btn-outline-primary" th:href="@{/products(group='ACCESSORY')}">Phụ kiện</a>
+        <a class="btn btn-outline-primary" th:href="@{/products(group='SERVICE')}">Dịch vụ</a>
+    </nav>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
