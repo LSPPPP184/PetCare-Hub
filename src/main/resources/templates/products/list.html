@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Sản phẩm')}"></head>
+<body><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container"><nav><a th:href="@{/products}">Danh mục sản phẩm</a> · <a sec:authorize="hasAnyRole('ADMIN','STAFF')" th:href="@{/staff/products}">Quản lý sản phẩm</a></nav>
+<h1>Sản phẩm</h1><a th:if="${staff == true}" th:href="@{/staff/products/new}">Thêm sản phẩm</a>
+<form method="get"><input name="q" placeholder="Tìm theo tên" th:value="${param.q}"><select name="group"><option value="">Tất cả nhóm</option><option value="PET" th:selected="${param.group != null and param.group[0] == 'PET'}">Thú cưng</option><option value="ACCESSORY" th:selected="${param.group != null and param.group[0] == 'ACCESSORY'}">Phụ kiện</option><option value="SERVICE" th:selected="${param.group != null and param.group[0] == 'SERVICE'}">Dịch vụ</option></select><select name="descending"><option value="false">Giá tăng dần</option><option value="true" th:selected="${param.descending != null and param.descending[0] == 'true'}">Giá giảm dần</option></select><button>Lọc</button></form>
+<p th:if="${products.empty}">Không có sản phẩm phù hợp.</p>
+<div class="row"><article class="col-md-4 border p-3" th:each="p : ${products.content}">
+<div th:replace="~{products/image :: image(${p})}"></div>
+<h2 th:text="${p.name}"></h2><p th:text="${p.price + ' VNĐ'}"></p><a th:href="@{/products/{id}(id=${p.id})}">Chi tiết</a>
+<div th:if="${staff == true}"><span th:text="${p.active ? 'Đang hiển thị' : 'Đã ẩn'}"></span><a th:href="@{/staff/products/{id}/edit(id=${p.id})}">Sửa</a><form th:action="@{/staff/products/{id}/hide(id=${p.id})}" method="post"><button>Ẩn sản phẩm</button></form></div></article></div>
+<nav><a th:if="${products.hasPrevious()}" th:href="@{''(page=${products.number-1},group=${param.group},q=${param.q},descending=${param.descending})}">Trang trước</a> <span th:text="${products.number+1}"></span> <a th:if="${products.hasNext()}" th:href="@{''(page=${products.number+1},group=${param.group},q=${param.q},descending=${param.descending})}">Trang sau</a></nav></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>
