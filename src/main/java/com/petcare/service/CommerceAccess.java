@@ -34,6 +34,11 @@ public class CommerceAccess {
         var role = actor().getRole();
         if (role != Role.ADMIN && role != Role.STAFF) throw denied();
     }
+    public User currentStaff() {
+        var actor = actor();
+        if (actor.getRole() != Role.ADMIN && actor.getRole() != Role.STAFF) throw denied();
+        return actor;
+    }
     public void ownerOrStaff(Order order) {
         var actor = actor();
         if (actor.getRole() == Role.ADMIN || actor.getRole() == Role.STAFF) return;

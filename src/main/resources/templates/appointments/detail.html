@@ -1,0 +1,19 @@
+<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Chi tiết lịch hẹn')}"></head><body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="container">
+    <div th:replace="~{fragments/layout :: flash}"></div>
+    <a th:href="${staff} ? @{/staff/appointments(date=${appointment.startTime.toLocalDate()})} : @{/appointments}">Quay lại danh sách lịch</a>
+    <h1 th:text="${'Lịch hẹn #' + appointment.id}"></h1><p><span th:replace="~{appointments/fragments :: badge(${appointment})}"></span></p>
+    <dl class="row">
+        <dt class="col-sm-3">Khách hàng</dt><dd class="col-sm-9" th:text="${appointment.customerName}"></dd>
+        <dt class="col-sm-3">Thú cưng</dt><dd class="col-sm-9" th:text="${appointment.petName + ' — ' + appointment.petSpecies}"></dd>
+        <dt class="col-sm-3">Dịch vụ</dt><dd class="col-sm-9" th:text="${appointment.serviceName}"></dd>
+        <dt class="col-sm-3">Nhân viên</dt><dd class="col-sm-9" th:text="${appointment.staffName}"></dd>
+        <dt class="col-sm-3">Thời gian (Việt Nam)</dt><dd class="col-sm-9" th:text="${#temporals.format(appointment.startTime, 'dd/MM/yyyy HH:mm') + ' – ' + #temporals.format(appointment.endTime, 'HH:mm')}"></dd>
+        <dt class="col-sm-3">Giá lúc đặt</dt><dd class="col-sm-9" th:text="${appointment.price + ' VNĐ'}"></dd>
+        <dt class="col-sm-3">Ghi chú</dt><dd class="col-sm-9" th:text="${appointment.note}"></dd>
+    </dl>
+    <p th:unless="${staff}">Chỉ có thể hủy lịch đã đặt khi còn cách giờ hẹn ít nhất 2 tiếng.</p>
+    <div th:replace="~{appointments/fragments :: actions(${appointment}, ${staff})}"></div>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

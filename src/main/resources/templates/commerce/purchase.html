@@ -8,6 +8,7 @@
             <button class="btn btn-primary">Thêm vào giỏ</button>
         </form>
         <p class="text-muted" th:unless="${product.purchasable}" th:text="${product.purchaseProblem}"></p>
+        <a th:if="${product.appointmentService}" th:href="@{/appointments/slots(serviceId=${product.id})}">Đặt lịch dịch vụ này</a>
     </th:block>
     <a sec:authorize="isAnonymous()" th:href="@{/login}">Đăng nhập để mua hàng</a>
 </div>

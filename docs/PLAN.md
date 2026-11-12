@@ -3,7 +3,7 @@
 - [x] GĐ3 Giỏ hàng, đơn hàng (State)
   - [x] GĐ3A Backend và kiểm thử giỏ hàng, đơn hàng
   - [x] GĐ3B Giao diện, điều hướng và kiểm thử luồng mua hàng
-- [ ] GĐ4 Đặt lịch dịch vụ (State)
+- [x] GĐ4 Đặt lịch dịch vụ (State)
 - [ ] GĐ5 Sức khỏe, tiêm phòng (State + Scheduler)
 - [ ] GĐ6 Quiz ghép đôi (Strategy)
 - [ ] GĐ7 Khách hàng thân thiết (Strategy + Observer)

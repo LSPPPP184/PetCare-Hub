@@ -1,0 +1,22 @@
+<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${staff ? 'Lịch làm việc' : 'Lịch hẹn của tôi'})}"></head><body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="container">
+    <div th:replace="~{fragments/layout :: flash}"></div>
+    <h1 th:text="${staff ? 'Lịch làm việc' : 'Lịch hẹn của tôi'}"></h1><p>Tất cả thời gian theo giờ Việt Nam.</p>
+    <p th:unless="${staff}"><a th:href="@{/appointments/services}">Đặt lịch mới</a></p>
+    <form th:if="${staff}" th:action="@{/staff/appointments}" method="get" class="d-flex gap-2 align-items-end mb-3">
+        <label>Ngày <input class="form-control" type="date" name="date" th:value="${date}" required></label><button class="btn btn-outline-primary">Xem lịch</button>
+    </form>
+    <p th:if="${appointments.empty}">Chưa có lịch hẹn phù hợp.</p>
+    <div class="table-responsive" th:unless="${appointments.empty}"><table class="table align-middle">
+        <thead><tr><th>Mã lịch</th><th>Thời gian</th><th>Thú cưng</th><th>Dịch vụ</th><th>Nhân viên</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+        <tbody><tr th:each="appointment : ${appointments}">
+            <td><a th:href="${staff} ? @{/staff/appointments/{id}(id=${appointment.id})} : @{/appointments/{id}(id=${appointment.id})}" th:text="${'#' + appointment.id}"></a></td>
+            <td th:text="${#temporals.format(appointment.startTime, 'dd/MM/yyyy HH:mm') + ' – ' + #temporals.format(appointment.endTime, 'HH:mm')}"></td>
+            <td th:text="${appointment.petName}"></td><td th:text="${appointment.serviceName}"></td><td th:text="${appointment.staffName}"></td>
+            <td><span th:replace="~{appointments/fragments :: badge(${appointment})}"></span></td>
+            <td><div th:replace="~{appointments/fragments :: actions(${appointment}, ${staff})}"></div></td>
+        </tr></tbody>
+    </table></div>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>
