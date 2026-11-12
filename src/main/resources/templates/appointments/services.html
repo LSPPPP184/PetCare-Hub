@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Đặt lịch dịch vụ')}"></head><body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="container">
+    <div th:replace="~{fragments/layout :: flash}"></div>
+    <h1>Đặt lịch dịch vụ</h1><p>Chọn dịch vụ, ngày và nhân viên có khung giờ phù hợp. Tất cả thời gian theo giờ Việt Nam.</p>
+    <p th:if="${services.empty}">Chưa có dịch vụ đặt lịch.</p>
+    <div class="row g-3"><article class="col-md-6" th:each="service : ${services}"><div class="card h-100"><div class="card-body">
+        <h2 class="h4" th:text="${service.name}"></h2><p th:text="${service.description}"></p>
+        <p th:text="${service.durationMinutes + ' phút — ' + service.price + ' VNĐ'}"></p>
+        <a class="btn btn-primary" sec:authorize="hasRole('CUSTOMER')" th:href="@{/appointments/slots(serviceId=${service.id})}">Chọn ngày và khung giờ</a>
+        <a sec:authorize="isAnonymous()" th:href="@{/login}">Đăng nhập để đặt lịch</a>
+        <a class="ms-2" th:href="@{/products/{id}(id=${service.id})}">Chi tiết dịch vụ</a>
+    </div></div></article></div>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

@@ -1,4 +1,5 @@
 # PetCare Hub
+GĐ4: đặt lịch dịch vụ và lịch làm việc — xem [quy tắc, tài khoản demo và các bước thử tay](docs/STAGE4.md).
 GĐ3B: giao diện giỏ hàng, đặt hàng và quản lý đơn đã có; xem [hướng dẫn và kịch bản thử tay](docs/STAGE3B.md).
 GĐ1: Java 21, Maven, Spring Boot 3.5.16, SQL Server.
 

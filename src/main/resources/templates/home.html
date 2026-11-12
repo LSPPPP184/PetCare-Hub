@@ -15,6 +15,9 @@
         <a class="btn btn-outline-primary" th:href="@{/products(group='SERVICE')}">Dịch vụ</a>
     </nav>
     <nav class="d-flex flex-wrap gap-2 mt-4" aria-label="Giỏ hàng và đơn hàng">
+        <a class="btn btn-outline-primary" th:href="@{/appointments/services}">Đặt lịch dịch vụ</a>
+        <a class="btn btn-outline-primary" sec:authorize="hasRole('CUSTOMER')" th:href="@{/appointments}">Lịch hẹn của tôi</a>
+        <a class="btn btn-outline-primary" sec:authorize="hasAnyRole('STAFF','ADMIN')" th:href="@{/staff/appointments}">Lịch làm việc</a>
         <a class="btn btn-outline-primary" sec:authorize="hasRole('CUSTOMER')" th:href="@{/cart}">Giỏ hàng</a>
         <a class="btn btn-outline-primary" sec:authorize="hasRole('CUSTOMER')" th:href="@{/checkout}">Đặt hàng</a>
         <a class="btn btn-outline-primary" sec:authorize="hasRole('CUSTOMER')" th:href="@{/orders}">Đơn hàng của tôi</a>
