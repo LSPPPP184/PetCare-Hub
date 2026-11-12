@@ -4,6 +4,9 @@ import com.petcare.domain.Order;
 
 /** State đã xác nhận: chỉ chấp nhận các bước được ghi trong bảng OrderState. */
 public final class ConfirmedState extends AbstractOrderState {
+    @Override public java.util.Set<OrderAction> getAllowedActions() {
+        return java.util.Set.of(OrderAction.SHIP, OrderAction.CANCEL);
+    }
     @Override public String getName() { return "CONFIRMED"; }
     @Override public String getLabel() { return "Đã xác nhận"; }
     @Override public OrderStatus ship(Order order) { return OrderStatus.SHIPPING; }

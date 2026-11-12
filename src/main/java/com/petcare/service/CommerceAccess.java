@@ -24,6 +24,12 @@ public class CommerceAccess {
         if (actor.getRole() != Role.CUSTOMER || !actor.getId().equals(customerId)) throw denied();
         return actor;
     }
+    /** Lấy khách hiện tại từ phiên đăng nhập, không nhận ID khách từ form. */
+    public User currentCustomer() {
+        var actor = actor();
+        if (actor.getRole() != Role.CUSTOMER) throw denied();
+        return actor;
+    }
     public void staff() {
         var role = actor().getRole();
         if (role != Role.ADMIN && role != Role.STAFF) throw denied();

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"><body>
+<span th:fragment="badge(order)" class="badge" th:classappend="${order.status.badgeClass}" th:text="${order.status.label}"></span>
+<div th:fragment="actions(order, staff)" class="d-flex flex-wrap gap-2">
+    <th:block th:if="${staff}">
+        <form th:each="action : ${order.actions}" th:action="@{/staff/orders/{id}/{action}(id=${order.id},action=${action.path})}" method="post">
+            <button class="btn btn-outline-primary btn-sm" th:text="${action.label}"></button>
+        </form>
+    </th:block>
+    <form th:if="${!staff and order.cancellable}" th:action="@{/orders/{id}/cancel(id=${order.id})}" method="post">
+        <button class="btn btn-outline-danger btn-sm">Hủy đơn</button>
+    </form>
+</div>
+</body></html>

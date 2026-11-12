@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments/layout :: head('Chào mừng đến PetCare Hub')}"></head>
 <body>
 <header th:replace="~{fragments/layout :: header}"></header>
@@ -13,6 +13,13 @@
         <a class="btn btn-outline-primary" th:href="@{/products(group='PET')}">Thú cưng</a>
         <a class="btn btn-outline-primary" th:href="@{/products(group='ACCESSORY')}">Phụ kiện</a>
         <a class="btn btn-outline-primary" th:href="@{/products(group='SERVICE')}">Dịch vụ</a>
+    </nav>
+    <nav class="d-flex flex-wrap gap-2 mt-4" aria-label="Giỏ hàng và đơn hàng">
+        <a class="btn btn-outline-primary" sec:authorize="hasRole('CUSTOMER')" th:href="@{/cart}">Giỏ hàng</a>
+        <a class="btn btn-outline-primary" sec:authorize="hasRole('CUSTOMER')" th:href="@{/checkout}">Đặt hàng</a>
+        <a class="btn btn-outline-primary" sec:authorize="hasRole('CUSTOMER')" th:href="@{/orders}">Đơn hàng của tôi</a>
+        <a class="btn btn-outline-primary" sec:authorize="hasAnyRole('STAFF','ADMIN')" th:href="@{/staff/orders}">Quản lý đơn hàng</a>
+        <a class="btn btn-outline-primary" sec:authorize="isAnonymous()" th:href="@{/login}">Đăng nhập để mua hàng</a>
     </nav>
 </main>
 <footer th:replace="~{fragments/layout :: footer}"></footer>

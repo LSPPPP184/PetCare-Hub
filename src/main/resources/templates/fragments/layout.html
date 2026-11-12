@@ -3,6 +3,10 @@
 <a class="navbar-brand fw-bold" th:href="@{/}">PetCare Hub</a>
 <a th:href="@{/products}">Danh mục</a>
 <a sec:authorize="hasAnyRole('STAFF','ADMIN')" th:href="@{/staff/products}">Quản lý sản phẩm</a>
+<a sec:authorize="hasRole('CUSTOMER')" th:href="@{/cart}">Giỏ hàng</a>
+<a sec:authorize="hasRole('CUSTOMER')" th:href="@{/checkout}">Đặt hàng</a>
+<a sec:authorize="hasRole('CUSTOMER')" th:href="@{/orders}">Đơn hàng của tôi</a>
+<a sec:authorize="hasAnyRole('STAFF','ADMIN')" th:href="@{/staff/orders}">Quản lý đơn hàng</a>
 <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/dashboard}">Quản trị</a>
 <a sec:authorize="hasAnyRole('STAFF','ADMIN')" th:href="@{/staff/dashboard}">Nhân viên</a>
 <span sec:authorize="hasRole('CUSTOMER')">Khách hàng thân thiết</span>
@@ -11,6 +15,6 @@
 <span sec:authorize="isAuthenticated()" sec:authentication="name"></span>
 <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post"><button class="btn btn-outline-secondary">Đăng xuất</button></form>
 </nav></header>
-<div th:fragment="flash" role="status"><p class="alert alert-success" th:if="${success}" th:text="${success}"></p></div>
+<div th:fragment="flash" role="status"><p class="alert alert-success" th:if="${success}" th:text="${success}"></p><p class="alert alert-danger" role="alert" th:if="${error}" th:text="${error}"></p></div>
 <footer th:fragment="footer" class="container border-top py-4 mt-5 text-muted">PetCare Hub — Chăm sóc thú cưng bằng cả trái tim.</footer>
 </body></html>

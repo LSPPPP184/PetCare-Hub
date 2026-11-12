@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Chi tiết đơn hàng')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="container">
+    <div th:replace="~{fragments/layout :: flash}"></div>
+    <p><a th:href="${staff} ? @{/staff/orders} : @{/orders}">Quay lại danh sách đơn hàng</a></p>
+    <h1 th:text="${'Đơn hàng #' + order.id}"></h1>
+    <p><span th:replace="~{commerce/order-fragments :: badge(${order})}"></span></p>
+    <dl class="row">
+        <dt class="col-sm-3">Khách hàng</dt><dd class="col-sm-9" th:text="${order.customerName + ' — ' + order.customerEmail}"></dd>
+        <dt class="col-sm-3">Ngày đặt</dt><dd class="col-sm-9" th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm')}"></dd>
+        <dt class="col-sm-3">Địa chỉ giao hàng</dt><dd class="col-sm-9" th:text="${order.shippingAddress}"></dd>
+    </dl>
+    <div class="table-responsive"><table class="table">
+        <thead><tr><th>Sản phẩm</th><th>Số lượng</th><th>Đơn giá khi mua</th><th>Thành tiền</th></tr></thead>
+        <tbody><tr th:each="item : ${order.items}">
+            <td><a th:if="${item.active}" th:href="@{/products/{id}(id=${item.productId})}" th:text="${item.name}"></a>
+                <span th:unless="${item.active}" th:text="${item.name}"></span></td>
+            <td th:text="${item.quantity}"></td><td th:text="${item.unitPrice + ' VNĐ'}"></td><td th:text="${item.total + ' VNĐ'}"></td>
+        </tr></tbody>
+    </table></div>
+    <p th:text="${'Tổng tiền: ' + order.totalAmount + ' VNĐ'}"></p>
+    <p th:text="${'Giảm giá: ' + order.discountAmount + ' VNĐ'}"></p>
+    <p class="fw-bold" th:text="${'Thanh toán: ' + order.finalAmount + ' VNĐ'}"></p>
+    <div th:replace="~{commerce/order-fragments :: actions(${order}, ${staff})}"></div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body></html>

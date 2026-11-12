@@ -51,6 +51,8 @@ class OrderStateTest {
         SETUP.get(source).accept(order);
         var expected = VALID.get(source.name() + ":" + action);
         var state = OrderStateFactory.from(source);
+        assertThat(state.getAllowedActions().contains(OrderAction.valueOf(action.toUpperCase(Locale.ROOT))))
+            .isEqualTo(expected != null);
         assertThat(state.getName()).isEqualTo(source.name());
         assertThat(state.getLabel()).isNotBlank();
         if (expected == null) {
