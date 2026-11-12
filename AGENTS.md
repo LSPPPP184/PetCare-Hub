@@ -16,3 +16,5 @@
 - Mỗi giai đoạn có thêm trang giao diện mới phải cập nhật menu (header) và trang chủ để có liên kết tới trang đó, hiển thị đúng theo vai trò (khách / CUSTOMER / STAFF / ADMIN). Không để trang nào chỉ truy cập được bằng cách gõ URL.
 - Không bao giờ ghi mật khẩu thật vào code hoặc vào giá trị mặc định của application.properties (ví dụ ${DB_PASSWORD:} phải để trống sau dấu hai chấm).
 - Với phần cần SQL Server thật để kiểm chứng (bạn không có thông tin đăng nhập), cuối mỗi giai đoạn hãy liệt kê rõ các bước để người dùng tự kiểm tra thủ công, kèm lệnh chạy ứng dụng với profile demo.
+-    - Mọi logic liên quan ngày giờ (tiêm phòng, lịch hẹn, gói tháng) dùng java.time.Clock được inject, không gọi LocalDate.now() hay LocalDateTime.now() trực tiếp. Mỗi ca biên về thời gian phải có test với Clock giả.
+   - Thao tác có thể chạy đồng thời trên cùng dữ liệu (tồn kho, trạng thái thú cưng, lịch hẹn) phải nằm trong giao dịch và có cơ chế chống ghi đè hoặc chống trùng (khóa, @Version); form sửa không được ghi đè trực tiếp trường mà luồng nghiệp vụ khác quản lý.
