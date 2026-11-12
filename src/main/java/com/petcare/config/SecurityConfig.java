@@ -11,6 +11,7 @@ public class SecurityConfig {
   return http.authorizeHttpRequests(auth->auth
    .requestMatchers("/admin/**").hasRole("ADMIN")
    .requestMatchers("/staff/**").hasAnyRole("STAFF","ADMIN")
+   .requestMatchers("/cart", "/cart/**", "/checkout", "/orders", "/orders/**").hasRole("CUSTOMER")
    .requestMatchers("/","/login","/register","/403","/error").permitAll()
    .anyRequest().authenticated())
    .formLogin(form->form.loginPage("/login").usernameParameter("email").defaultSuccessUrl("/",true).permitAll())

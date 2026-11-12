@@ -24,5 +24,7 @@ public interface OrderState {
     OrderStatus cancel(Order order);
     String getName();
     String getLabel();
+    /** Chỉ mô tả thao tác cho giao diện; các phương thức chuyển trạng thái vẫn kiểm tra lại. */
+    default java.util.Set<OrderAction> getAllowedActions() { return java.util.Set.of(); }
     default boolean restoresStockOnCancel() { return false; }
 }

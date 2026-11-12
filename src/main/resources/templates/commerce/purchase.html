@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"><body>
+<div th:fragment="purchase(product)" class="mt-3">
+    <th:block sec:authorize="hasRole('CUSTOMER')">
+        <form th:if="${product.purchasable}" th:action="@{/cart/items}" method="post" class="d-flex gap-2 align-items-end">
+            <input type="hidden" name="productId" th:value="${product.id}">
+            <label>Số lượng <input class="form-control" type="number" name="quantity" value="1" min="1" max="2147483647" required></label>
+            <button class="btn btn-primary">Thêm vào giỏ</button>
+        </form>
+        <p class="text-muted" th:unless="${product.purchasable}" th:text="${product.purchaseProblem}"></p>
+    </th:block>
+    <a sec:authorize="isAnonymous()" th:href="@{/login}">Đăng nhập để mua hàng</a>
+</div>
+</body></html>

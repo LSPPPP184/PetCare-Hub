@@ -9,5 +9,6 @@
 <div class="row"><article class="col-md-4 border p-3" th:each="p : ${products.content}">
 <div th:replace="~{products/image :: image(${p})}"></div>
 <h2 th:text="${p.name}"></h2><p th:text="${p.price + ' VNĐ'}"></p><a th:href="@{/products/{id}(id=${p.id})}">Chi tiết</a>
+<div th:replace="~{commerce/purchase :: purchase(${p})}"></div>
 <div th:if="${staff == true}"><span th:text="${p.active ? 'Đang hiển thị' : 'Đã ẩn'}"></span><a th:href="@{/staff/products/{id}/edit(id=${p.id})}">Sửa</a><form th:action="@{/staff/products/{id}/hide(id=${p.id})}" method="post"><button>Ẩn sản phẩm</button></form></div></article></div>
 <nav><a th:if="${products.hasPrevious()}" th:href="@{''(page=${products.number-1},group=${param.group},q=${param.q},descending=${param.descending})}">Trang trước</a> <span th:text="${products.number+1}"></span> <a th:if="${products.hasNext()}" th:href="@{''(page=${products.number+1},group=${param.group},q=${param.q},descending=${param.descending})}">Trang sau</a></nav></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

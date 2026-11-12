@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${staff ? 'Quản lý đơn hàng' : 'Lịch sử đơn hàng'})}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="container">
+    <div th:replace="~{fragments/layout :: flash}"></div>
+    <h1 th:text="${staff ? 'Quản lý đơn hàng' : 'Lịch sử đơn hàng'}"></h1>
+    <p th:unless="${staff}"><a th:href="@{/products}">Tiếp tục mua sắm</a> · <a th:href="@{/cart}">Giỏ hàng</a></p>
+    <form class="d-flex gap-2 mb-3" th:if="${staff}" th:action="@{/staff/orders}" method="get">
+        <label for="status">Trạng thái</label>
+        <select class="form-select w-auto" id="status" name="status">
+            <option value="">Tất cả trạng thái</option>
+            <option th:each="s : ${statuses}" th:value="${s.value}" th:text="${s.label}" th:selected="${s.value == selectedStatus}"></option>
+        </select><button class="btn btn-outline-primary">Lọc</button>
+    </form>
+    <p th:if="${orders.empty}">Chưa có đơn hàng phù hợp.</p>
+    <div class="table-responsive" th:unless="${orders.empty}"><table class="table align-middle">
+        <thead><tr><th>Mã đơn</th><th>Ngày đặt</th><th th:if="${staff}">Khách hàng</th><th>Thành tiền</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+        <tbody><tr th:each="order : ${orders}">
+            <td><a th:href="${staff} ? @{/staff/orders/{id}(id=${order.id})} : @{/orders/{id}(id=${order.id})}" th:text="${'#' + order.id}"></a></td>
+            <td th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm')}"></td>
+            <td th:if="${staff}" th:text="${order.customerName}"></td>
+            <td th:text="${order.finalAmount + ' VNĐ'}"></td>
+            <td><span th:replace="~{commerce/order-fragments :: badge(${order})}"></span></td>
+            <td><div th:replace="~{commerce/order-fragments :: actions(${order}, ${staff})}"></div></td>
+        </tr></tbody>
+    </table></div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body></html>

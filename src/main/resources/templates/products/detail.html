@@ -4,4 +4,6 @@
 <body><header th:replace="~{fragments/layout :: header}"></header>
 <div class="container" th:insert="~{products/image :: image(${product})}"></div>
 <main class="container"><nav><a th:href="@{/products}">Danh mục sản phẩm</a> · <a sec:authorize="hasAnyRole('ADMIN','STAFF')" th:href="@{/staff/products}">Quản lý sản phẩm</a></nav>
-<h1>Chi tiết sản phẩm</h1><h2 th:text="${product.name}"></h2><p th:text="${product.description}"></p><p th:text="${product.price + ' VNĐ'}"></p><dl><div th:each="d : ${product.details}"><dt th:text="${d.key}"></dt><dd th:text="${d.value}"></dd></div></dl></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>
+<h1>Chi tiết sản phẩm</h1><h2 th:text="${product.name}"></h2><p th:text="${product.description}"></p><p th:text="${product.price + ' VNĐ'}"></p><dl><div th:each="d : ${product.details}"><dt th:text="${d.key}"></dt><dd th:text="${d.value}"></dd></div></dl>
+<div th:replace="~{commerce/purchase :: purchase(${product})}"></div>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>
