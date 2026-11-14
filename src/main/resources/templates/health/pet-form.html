@@ -1,0 +1,19 @@
+<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Thông tin thú cưng')}"></head><body>
+<header th:replace="~{fragments/layout :: header}"></header><main class="container">
+<h1 th:text="${editing ? 'Sửa thông tin thú cưng' : 'Thêm thú cưng'}"></h1>
+<p>Lịch mẫu cho chó/mèo được sinh một lần khi thêm. Các loài khác chưa có lịch mẫu. Dữ liệu mẫu không phải tư vấn thú y.</p>
+<p th:if="${editing}">Loài và ngày sinh được giữ cố định để bảo toàn lịch tiêm đã tạo.</p>
+<form class="col-lg-7" method="post" th:action="${editing} ? @{/my-pets/{id}/edit(id=${petId})} : @{/my-pets}" th:object="${form}">
+<div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}"><p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p></div>
+<input type="hidden" th:field="*{version}">
+<label for="name" class="form-label">Tên thú cưng</label><input class="form-control mb-3" th:field="*{name}" maxlength="100" required>
+<label for="species" class="form-label">Loài</label>
+<select class="form-select mb-3" th:field="*{species}" th:disabled="${editing}" required><option value="">Chọn loài</option><option th:each="s : ${speciesOptions}" th:value="${s}" th:text="${s.label}"></option></select>
+<input th:if="${editing}" type="hidden" name="species" th:value="${form.species}">
+<label for="birthDate" class="form-label">Ngày sinh</label><input class="form-control mb-3" type="date" th:field="*{birthDate}" th:max="${today}" th:readonly="${editing}" required>
+<label for="breed" class="form-label">Giống</label><input class="form-control mb-3" th:field="*{breed}" maxlength="100">
+<label for="gender" class="form-label">Giới tính</label><input class="form-control mb-3" th:field="*{gender}" maxlength="30">
+<label for="note" class="form-label">Ghi chú</label><textarea class="form-control mb-3" th:field="*{note}" maxlength="2000" rows="3"></textarea>
+<button class="btn btn-primary">Lưu hồ sơ</button> <a class="btn btn-outline-secondary" th:href="${editing} ? @{/my-pets/{id}(id=${petId})} : @{/my-pets}">Quay lại</a>
+</form></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

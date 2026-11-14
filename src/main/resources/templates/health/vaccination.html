@@ -1,0 +1,17 @@
+<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><body>
+<article th:fragment="record(v, staff)" class="card mb-3"><div class="card-body">
+<div class="d-flex flex-wrap justify-content-between gap-2"><h3 class="h5" th:text="${v.vaccineName}"></h3>
+<span class="badge align-self-start" th:classappend="${v.badgeClass}" th:text="${v.label}"></span></div>
+<p>Ngày hẹn: <strong th:text="${v.scheduledDate}"></strong><span th:if="${v.administeredDate != null}"> · Đã tiêm: <strong th:text="${v.administeredDate}"></strong></span></p>
+<p class="text-muted" th:text="${v.note}"></p>
+<div class="d-flex flex-wrap gap-4">
+<form th:if="${staff and v.canComplete}" method="post" th:action="@{/staff/health/vaccinations/{id}/complete(id=${v.id})}">
+<label th:for="${'complete-' + v.id}" class="form-label">Ngày đã tiêm</label>
+<div class="input-group"><input class="form-control" type="date" name="date" th:id="${'complete-' + v.id}" th:value="${today}" th:max="${today}" required><button class="btn btn-success">Đã tiêm</button></div>
+</form>
+<form th:if="${v.canReschedule}" method="post" th:action="${staff} ? @{/staff/health/vaccinations/{id}/reschedule(id=${v.id})} : @{/my-pets/vaccinations/{id}/reschedule(id=${v.id})}">
+<input type="hidden" name="version" th:value="${v.version}">
+<label th:for="${'reschedule-' + v.id}" class="form-label">Ngày hẹn mới</label>
+<div class="input-group"><input class="form-control" type="date" name="date" th:id="${'reschedule-' + v.id}" th:min="${today}" required><button class="btn btn-outline-primary">Dời lịch</button></div>
+</form></div></div></article>
+</body></html>

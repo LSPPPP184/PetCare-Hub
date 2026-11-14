@@ -1,0 +1,19 @@
+<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Hồ sơ thú cưng')}"></head><body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="container">
+<div th:replace="~{fragments/layout :: flash}"></div>
+<h1 th:text="${staff ? 'Hồ sơ sức khỏe cửa hàng' : 'Thú cưng của tôi'}"></h1>
+<p>Chọn hồ sơ để xem timeline tiêm phòng và lịch sử khám.</p>
+<a th:unless="${staff}" class="btn btn-primary mb-3" th:href="@{/my-pets/new}">Thêm thú cưng</a>
+<p th:if="${#lists.isEmpty(pets)}" class="alert alert-info">Chưa có hồ sơ thú cưng.</p>
+<div class="row g-3">
+<div class="col-md-6 col-lg-4" th:each="pet : ${pets}"><article class="card h-100"><div class="card-body">
+<h2 class="h4" th:text="${pet.name}"></h2>
+<p><span th:text="${pet.species.label}"></span> · Sinh ngày <span th:text="${pet.birthDate}"></span></p>
+<p th:if="${staff}">Chủ: <span th:text="${pet.ownerName}"></span></p>
+<a class="btn btn-outline-primary" th:href="${staff} ? @{/staff/health/pets/{id}(id=${pet.id})} : @{/my-pets/{id}(id=${pet.id})}">Xem hồ sơ</a>
+<a th:unless="${staff}" class="btn btn-outline-secondary" th:href="@{/my-pets/{id}/edit(id=${pet.id})}">Sửa thông tin</a>
+<a th:if="${staff}" class="btn btn-outline-secondary" th:href="@{/staff/health/pets/{id}/records/new(id=${pet.id})}">Thêm bản ghi khám</a>
+</div></article></div></div>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

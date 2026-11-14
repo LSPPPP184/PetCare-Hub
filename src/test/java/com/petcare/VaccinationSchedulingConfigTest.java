@@ -23,7 +23,7 @@ class VaccinationSchedulingConfigTest {
     @Import({VaccinationScheduler.class, VaccinationSchedulingConfig.class})
     @EnableConfigurationProperties(VaccinationProperties.class)
     static class Config {
-        @Bean Clock clock() { return Clock.systemUTC(); }
+        @Bean Clock healthClock() { return Clock.fixed(java.time.Instant.parse("2026-11-13T03:00:00Z"), java.time.ZoneOffset.UTC); }
         @Bean VaccinationRecordRepository records() { return mock(VaccinationRecordRepository.class); }
     }
 

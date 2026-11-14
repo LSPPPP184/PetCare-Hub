@@ -5,21 +5,30 @@ import com.petcare.domain.OwnedPet;
 import com.petcare.domain.vaccination.VaccinationScheduleTemplate;
 import com.petcare.repository.OwnedPetRepository;
 import com.petcare.repository.VaccinationRecordRepository;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.Clock;
 import java.time.LocalDate;
 
-/** Lưu thú cưng mới và lịch mẫu trong cùng giao dịch, dùng chung Clock của ứng dụng. */
+/** Lưu thú cưng mới và lịch mẫu trong cùng giao dịch, dùng Clock của phạm vi sức khỏe. */
 @Service
-@RequiredArgsConstructor
 public class OwnedPetService {
     private final OwnedPetRepository pets;
     private final VaccinationRecordRepository vaccinations;
     private final VaccinationProperties properties;
     private final CommerceAccess access;
     private final Clock clock;
+
+    public OwnedPetService(OwnedPetRepository pets, VaccinationRecordRepository vaccinations,
+                           VaccinationProperties properties, CommerceAccess access,
+                           @Qualifier("healthClock") Clock clock) {
+        this.pets = pets;
+        this.vaccinations = vaccinations;
+        this.properties = properties;
+        this.access = access;
+        this.clock = clock;
+    }
 
     @Transactional
     public OwnedPet register(OwnedPet pet) {
