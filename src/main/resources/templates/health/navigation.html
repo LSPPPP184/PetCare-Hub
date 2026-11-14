@@ -1,0 +1,11 @@
+<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"><body>
+<th:block th:fragment="links">
+    <a sec:authorize="hasRole('CUSTOMER')" th:href="@{/my-pets}">Thú cưng của tôi</a>
+    <a sec:authorize="hasRole('CUSTOMER')" th:href="@{/my-pets/new}">Thêm thú cưng</a>
+    <a sec:authorize="hasAnyRole('STAFF','ADMIN')" th:href="@{/staff/health}">Theo dõi tiêm phòng</a>
+    <a sec:authorize="hasAnyRole('STAFF','ADMIN')" th:href="@{/staff/health(status='DUE_SOON')}">Sắp đến hạn tiêm</a>
+    <a sec:authorize="hasAnyRole('STAFF','ADMIN')" th:href="@{/staff/health(status='OVERDUE')}">Quá hạn tiêm</a>
+    <a sec:authorize="hasAnyRole('STAFF','ADMIN')" th:href="@{/staff/health/pets}">Hồ sơ sức khỏe cửa hàng</a>
+    <a sec:authorize="hasRole('ADMIN')" th:if="${healthDemoEnabled}" th:href="@{/admin/demo/health}">Giả lập ngày tiêm phòng</a>
+</th:block>
+</body></html>

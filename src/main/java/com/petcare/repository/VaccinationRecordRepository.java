@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface VaccinationRecordRepository extends JpaRepository<VaccinationRecord, Long> {
+    List<VaccinationRecord> findByStateNameInOrderByScheduledDateAscIdAsc(java.util.Collection<VaccinationStatus> states);
     List<VaccinationRecord> findByStateNameNot(VaccinationStatus stateName);
     List<VaccinationRecord> findByOwnedPetIdOrderByScheduledDateAsc(Long ownedPetId);
     boolean existsByOwnedPetIdAndVaccineNameAndAnnualDoseYear(Long ownedPetId, String vaccineName, Integer annualDoseYear);

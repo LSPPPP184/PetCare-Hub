@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Hồ sơ sức khỏe')}"></head><body>
+<header th:replace="~{fragments/layout :: header}"></header><main class="container">
+<div th:replace="~{fragments/layout :: flash}"></div>
+<a th:href="${staff} ? @{/staff/health/pets} : @{/my-pets}">← Danh sách thú cưng</a>
+<h1 class="mt-3" th:text="${profile.pet.name}"></h1>
+<p>Ngày hiện tại: <strong th:text="${today}"></strong></p>
+<section class="card mb-4"><div class="card-body"><h2 class="h4">Thông tin</h2>
+<dl class="row"><dt class="col-sm-3">Chủ thú cưng</dt><dd class="col-sm-9" th:text="${profile.pet.ownerName}"></dd>
+<dt class="col-sm-3">Loài / giống</dt><dd class="col-sm-9"><span th:text="${profile.pet.species.label}"></span> / <span th:text="${profile.pet.breed}"></span></dd>
+<dt class="col-sm-3">Ngày sinh</dt><dd class="col-sm-9" th:text="${profile.pet.birthDate}"></dd>
+<dt class="col-sm-3">Giới tính</dt><dd class="col-sm-9" th:text="${profile.pet.gender}"></dd>
+<dt class="col-sm-3">Ghi chú</dt><dd class="col-sm-9" th:text="${profile.pet.note}"></dd></dl>
+<a th:unless="${staff}" class="btn btn-outline-primary" th:href="@{/my-pets/{id}/edit(id=${profile.pet.id})}">Sửa thông tin</a>
+<a th:if="${staff}" class="btn btn-primary" th:href="@{/staff/health/pets/{id}/records/new(id=${profile.pet.id})}">Thêm bản ghi khám</a>
+</div></section>
+<div class="row g-4"><section class="col-lg-7"><h2>Timeline tiêm phòng</h2>
+<p class="text-muted">Theo thứ tự ngày hẹn. Lịch mẫu không phải tư vấn thú y.</p>
+<p th:unless="${staff}">Nhân viên cửa hàng xác nhận ngày đã tiêm.</p>
+<p th:if="${#lists.isEmpty(profile.vaccinations)}">Chưa có lịch tiêm mẫu cho loài này.</p>
+<ol class="list-unstyled"><li th:each="v : ${profile.vaccinations}"><article th:replace="~{health/vaccination :: record(${v}, ${staff})}"></article></li></ol>
+</section><section class="col-lg-5"><h2>Lịch sử khám</h2>
+<p th:if="${#lists.isEmpty(profile.history)}">Chưa có bản ghi khám bệnh.</p>
+<article class="card mb-3" th:each="r : ${profile.history}"><div class="card-body">
+<h3 class="h5" th:text="${r.type}"></h3><p th:text="${r.date}"></p>
+<p style="white-space: pre-wrap" th:text="${r.description}"></p>
+<p th:if="${r.weight != null}">Cân nặng: <span th:text="${r.weight}"></span> kg</p>
+<p>Bác sĩ: <span th:text="${r.vetName}"></span></p></div></article>
+</section></div></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

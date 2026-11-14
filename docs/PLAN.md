@@ -4,9 +4,9 @@
   - [x] GĐ3A Backend và kiểm thử giỏ hàng, đơn hàng
   - [x] GĐ3B Giao diện, điều hướng và kiểm thử luồng mua hàng
 - [x] GĐ4 Đặt lịch dịch vụ (State)
-- [ ] GĐ5 Sức khỏe, tiêm phòng (State + Scheduler)
+- [x] GĐ5 Sức khỏe, tiêm phòng (State + Scheduler)
   - [x] GĐ5A Domain, State tiêm phòng, lịch mẫu, scheduler, Observer và kiểm thử
-  - [ ] GĐ5B Giao diện và điều hướng quản lý sức khỏe
+  - [x] GĐ5B Giao diện và điều hướng quản lý sức khỏe
 - [ ] GĐ6 Quiz ghép đôi (Strategy)
 - [ ] GĐ7 Khách hàng thân thiết (Strategy + Observer)
 - [ ] GĐ8 Gói chăm sóc theo tháng

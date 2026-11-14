@@ -15,6 +15,7 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OwnedPet {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
+    @Version @Column(nullable = false, columnDefinition = "bigint default 0") private long version;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "owner_id", nullable = false) private User owner;
     @Column(nullable = false, length = 100) private String name;
@@ -23,6 +24,21 @@ public class OwnedPet {
     @Column(nullable = false) private LocalDate birthDate;
     @Column(length = 30) private String gender;
     @Column(length = 2000) private String note;
+    /** Khóa dữ liệu demo ổn định; không nhận từ form, không phụ thuộc tên thú cưng. */
+    @Column(name = "seed_key", length = 80) private String seedKey;
+
+    public void assignSeedKey(String seedKey) {
+        if (this.seedKey != null) throw new IllegalStateException("Hồ sơ đã có khóa dữ liệu mẫu.");
+        this.seedKey = PetHealthValidation.required(seedKey, 80, "Khóa dữ liệu mẫu");
+    }
+
+    /** Chỉ sửa mô tả; giữ chủ, loài và ngày sinh làm căn cứ cho lịch tiêm đã sinh. */
+    public void updateDetails(String name, String breed, String gender, String note) {
+        this.name = PetHealthValidation.required(name, 100, "Tên thú cưng");
+        this.breed = PetHealthValidation.optional(breed, 100, "Giống");
+        this.gender = PetHealthValidation.optional(gender, 30, "Giới tính");
+        this.note = PetHealthValidation.optional(note, 2000, "Ghi chú");
+    }
 
     public static OwnedPet create(User owner, String name, Species species, String breed,
                                   LocalDate birthDate, String gender, String note, LocalDate today) {

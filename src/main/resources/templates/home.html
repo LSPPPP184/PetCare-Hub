@@ -7,6 +7,9 @@
     <div th:replace="~{fragments/layout :: flash}"></div>
     <h1>Chào mừng đến PetCare Hub</h1>
     <p class="lead">Người bạn đồng hành trong hành trình chăm sóc thú cưng.</p>
+    <nav class="d-flex flex-wrap gap-3 my-4" aria-label="Sức khỏe và tiêm phòng">
+        <th:block th:replace="~{health/navigation :: links}"></th:block>
+    </nav>
     <p>Khám phá sản phẩm, dịch vụ chăm sóc và các chương trình dành cho thú cưng tại cửa hàng.</p>
     <a class="btn btn-primary mb-3" th:href="@{/products}">Xem danh mục</a>
     <nav class="d-flex flex-wrap gap-2" aria-label="Lọc nhanh theo nhóm sản phẩm">

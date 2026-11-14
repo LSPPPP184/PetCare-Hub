@@ -1,4 +1,22 @@
 # PetCare Hub
+
+## Khi nâng cấp từ bản cũ
+
+Hibernate đã bật `hibernate.use_nationalized_character_data=true` để tạo cột String bằng `nvarchar` trên SQL Server. `@Column(length)` vẫn giữ giới hạn độ dài. H2 trong test giữ nguyên cấu hình kết nối.
+
+Database `petcare_hub` đã tạo bằng bản cũ cần được xử lý thủ công: **sao lưu trước**, rồi xóa và tạo lại database nếu chấp nhận mất dữ liệu demo; hoặc đổi các cột chuỗi hiện có từ `varchar` sang `nvarchar` để giữ dữ liệu. Không dựa vào `ddl-auto=update` để chuyển kiểu các cột đã tồn tại. Khi đổi thủ công, giữ đúng độ dài, NULL/NOT NULL và xử lý index/constraint phụ thuộc. Ví dụ cho một cột:
+
+```sql
+ALTER TABLE dbo.users ALTER COLUMN full_name nvarchar(100) NOT NULL;
+```
+
+Đây chỉ là ví dụ, không phải migration đầy đủ. Cần rà soát tất cả bảng, kể cả bảng sản phẩm kế thừa, hồ sơ, đơn hàng và lịch hẹn. Những ký tự đã lưu thành `?` không tự phục hồi sau khi đổi kiểu: phải khôi phục từ bản sao lưu đúng hoặc nhập lại dữ liệu. SQL viết tay có literal tiếng Việt phải dùng `N'...'`; với ứng dụng ưu tiên bind tham số.
+
+Sau khi cấu hình biến môi trường DB như bên dưới, chạy `mvn spring-boot:run '-Dspring-boot.run.profiles=demo'`. Trong SSMS kiểm tra `INFORMATION_SCHEMA.COLUMNS` cho thấy các cột văn bản là `nvarchar`; trên web lưu tên thú `Lucky lớn`, tên khách `Tuấn Đạt`, ghi chú `Đặt hàng`, rồi tải lại/khởi động lại để xác nhận còn nguyên dấu. Không có thao tác xóa database tự động trong bản sửa này.
+
+Danh sách rà soát mapping, SQL và encoding: [UNICODE-AUDIT.md](docs/UNICODE-AUDIT.md).
+
+GĐ5: hồ sơ sức khỏe, tiêm phòng và giả lập ngày — xem [hướng dẫn chạy demo và thử tay theo thứ tự](docs/STAGE5B.md).
 GĐ4: đặt lịch dịch vụ và lịch làm việc — xem [quy tắc, tài khoản demo và các bước thử tay](docs/STAGE4.md).
 GĐ3B: giao diện giỏ hàng, đặt hàng và quản lý đơn đã có; xem [hướng dẫn và kịch bản thử tay](docs/STAGE3B.md).
 GĐ1: Java 21, Maven, Spring Boot 3.5.16, SQL Server.

@@ -11,6 +11,7 @@ public class SecurityConfig {
   return http.authorizeHttpRequests(auth->auth
    .requestMatchers("/admin/**").hasRole("ADMIN")
    .requestMatchers("/staff/**").hasAnyRole("STAFF","ADMIN")
+   .requestMatchers("/my-pets", "/my-pets/**").hasRole("CUSTOMER")
    .requestMatchers("/appointments/services").permitAll()
    .requestMatchers("/appointments", "/appointments/**").hasRole("CUSTOMER")
    .requestMatchers("/cart", "/cart/**", "/checkout", "/orders", "/orders/**").hasRole("CUSTOMER")
