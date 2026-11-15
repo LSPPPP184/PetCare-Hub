@@ -17,4 +17,6 @@
 - Không bao giờ ghi mật khẩu thật vào code hoặc vào giá trị mặc định của application.properties (ví dụ ${DB_PASSWORD:} phải để trống sau dấu hai chấm).
 - Với phần cần SQL Server thật để kiểm chứng (bạn không có thông tin đăng nhập), cuối mỗi giai đoạn hãy liệt kê rõ các bước để người dùng tự kiểm tra thủ công, kèm lệnh chạy ứng dụng với profile demo.
 -    - Mọi logic liên quan ngày giờ (tiêm phòng, lịch hẹn, gói tháng) dùng java.time.Clock được inject, không gọi LocalDate.now() hay LocalDateTime.now() trực tiếp. Mỗi ca biên về thời gian phải có test với Clock giả.
-   - Thao tác có thể chạy đồng thời trên cùng dữ liệu (tồn kho, trạng thái thú cưng, lịch hẹn) phải nằm trong giao dịch và có cơ chế chống ghi đè hoặc chống trùng (khóa, @Version); form sửa không được ghi đè trực tiếp trường mà luồng nghiệp vụ khác quản lý.
+   - Thao tác có thể chạy đồng thời trên cùng dữ liệu (tồn kho, trạng thái thú cưng, lịch hẹn) phải nằm trong giao dịch và có cơ chế chống ghi đè hoặc chống trùng (khóa, @Version); form sửa không được ghi đè trực tiếp trường mà luồng nghiệp vụ khác quản lý
+- Mọi cột chuỗi trên SQL Server phải là nvarchar để lưu được tiếng Việt có dấu; mỗi giai đoạn có dữ liệu seed tiếng Việt phải kiểm tra không bị mất dấu.
+- Dữ liệu demo (seed) nhận diện bằng khóa ổn định, không dùng tên; chạy lại ứng dụng nhiều lần không được tạo bản sao.
