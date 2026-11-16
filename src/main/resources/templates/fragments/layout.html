@@ -2,6 +2,7 @@
 <header th:fragment="header" class="bg-light border-bottom mb-4"><nav class="container py-3 d-flex flex-wrap gap-3 align-items-center" aria-label="Menu chính">
 <a class="navbar-brand fw-bold" th:href="@{/}">PetCare Hub</a>
 <a th:href="@{/products}">Danh mục</a>
+<th:block th:replace="~{matching/navigation :: links}"></th:block>
 <a th:href="@{/appointments/services}">Đặt lịch dịch vụ</a>
 <th:block th:replace="~{health/navigation :: links}"></th:block>
 <a sec:authorize="hasRole('CUSTOMER')" th:href="@{/appointments}">Lịch hẹn của tôi</a>

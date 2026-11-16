@@ -18,8 +18,9 @@ class ProductDemoTest {
 
     @Test void seedsExpectedCountsAndDoesNotDuplicate() {
         var products = repository.findAll();
-        assertThat(products).hasSize(19);
-        assertThat(products).filteredOn(p -> p.getType() == ProductType.PET).hasSize(6);
+        // GĐ6 bổ sung 8 thú cưng có khóa seed ổn định, giữ nguyên 19 sản phẩm GĐ2.
+        assertThat(products).hasSize(27);
+        assertThat(products).filteredOn(p -> p.getType() == ProductType.PET).hasSize(14);
         assertThat(products).filteredOn(p -> p.getType() == ProductType.ACCESSORY).hasSize(8);
         assertThat(products).filteredOn(p -> p.getType() == ProductType.GROOMING).hasSize(2);
         assertThat(products).filteredOn(p -> p.getType() == ProductType.VET).hasSize(2);

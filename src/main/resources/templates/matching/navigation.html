@@ -1,0 +1,7 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body><th:block th:fragment="links">
+    <a th:href="@{/quiz}">Quiz chọn thú cưng</a>
+    <a th:href="@{/quiz/results}">Kết quả quiz gần nhất</a>
+    <a sec:authorize="isAuthenticated()" th:href="@{/quiz/history}">Lịch sử quiz của tôi</a>
+</th:block></body></html>

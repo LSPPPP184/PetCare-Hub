@@ -9,6 +9,8 @@ public class SecurityConfig {
  @Bean PasswordEncoder passwordEncoder() { return new BCryptPasswordEncoder(); }
  @Bean SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
   return http.authorizeHttpRequests(auth->auth
+   .requestMatchers("/quiz/history", "/quiz/history/**").authenticated()
+   .requestMatchers("/quiz", "/quiz/results").permitAll()
    .requestMatchers("/admin/**").hasRole("ADMIN")
    .requestMatchers("/staff/**").hasAnyRole("STAFF","ADMIN")
    .requestMatchers("/my-pets", "/my-pets/**").hasRole("CUSTOMER")

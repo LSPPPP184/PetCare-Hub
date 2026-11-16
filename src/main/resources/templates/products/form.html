@@ -29,4 +29,15 @@
 <div class="mb-3" th:if="${fields.contains('durationMonths')}"><label for="durationMonths">Số tháng</label><input class="form-control" id="durationMonths" th:field="*{durationMonths}" type="number" min="0"></div>
 <div class="mb-3" th:if="${fields.contains('includedUses')}"><label for="includedUses">Số lượt</label><input class="form-control" id="includedUses" th:field="*{includedUses}" type="number" min="0"></div>
 <div class="mb-3" th:if="${fields.contains('includedServices')}"><label for="includedServices">Dịch vụ trong gói</label><input class="form-control" id="includedServices" th:field="*{includedServices}" type="text" ></div>
+<fieldset class="card card-body mb-3" th:if="${fields.contains('species')}"><legend class="h4">Hồ sơ ghép đôi</legend><p>Các mức từ 1 (thấp) đến 5 (cao). Hồ sơ dùng để tính gợi ý quiz.</p>
+<input type="hidden" th:field="*{profile.version}">
+<label for="profile.sizeLevel">Kích thước (1–5)</label><input class="form-control mb-3" type="number" min="1" max="5" th:field="*{profile.sizeLevel}" required>
+<label for="profile.energyLevel">Năng lượng (1–5)</label><input class="form-control mb-3" type="number" min="1" max="5" th:field="*{profile.energyLevel}" required>
+<label for="profile.sheddingLevel">Rụng lông (1–5)</label><input class="form-control mb-3" type="number" min="1" max="5" th:field="*{profile.sheddingLevel}" required>
+<label for="profile.spaceNeed">Nhu cầu không gian (1–5)</label><input class="form-control mb-3" type="number" min="1" max="5" th:field="*{profile.spaceNeed}" required>
+<label for="profile.careCostLevel">Chi phí chăm sóc (1–5)</label><input class="form-control mb-3" type="number" min="1" max="5" th:field="*{profile.careCostLevel}" required>
+<label for="profile.experienceNeeded">Kinh nghiệm cần có (1–5)</label><input class="form-control mb-3" type="number" min="1" max="5" th:field="*{profile.experienceNeeded}" required>
+<label><input type="checkbox" th:field="*{profile.childFriendly}"> Thân thiện với trẻ em</label>
+<label for="profile.timeNeedHoursPerDay">Thời gian chăm sóc (giờ/ngày)</label><input class="form-control" type="number" min="0.25" max="24" step="0.25" th:field="*{profile.timeNeedHoursPerDay}" required>
+</fieldset>
 <button class="btn btn-primary">Lưu sản phẩm</button></form></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>
