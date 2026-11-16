@@ -7,7 +7,7 @@
 - [x] GĐ5 Sức khỏe, tiêm phòng (State + Scheduler)
   - [x] GĐ5A Domain, State tiêm phòng, lịch mẫu, scheduler, Observer và kiểm thử
   - [x] GĐ5B Giao diện và điều hướng quản lý sức khỏe
-- [ ] GĐ6 Quiz ghép đôi (Strategy)
+- [x] GĐ6 Quiz ghép đôi (Strategy)
 - [ ] GĐ7 Khách hàng thân thiết (Strategy + Observer)
 - [ ] GĐ8 Gói chăm sóc theo tháng
 - [ ] GĐ9 Dashboard, hoàn thiện, kiểm thử

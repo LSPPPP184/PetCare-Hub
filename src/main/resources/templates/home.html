@@ -6,6 +6,10 @@
 <main class="container">
     <div th:replace="~{fragments/layout :: flash}"></div>
     <h1>Chào mừng đến PetCare Hub</h1>
+    <nav class="d-flex flex-wrap gap-3 my-4" aria-label="Ghép đôi thú cưng">
+        <th:block th:replace="~{matching/navigation :: links}"></th:block>
+        <a sec:authorize="hasAnyRole('STAFF','ADMIN')" th:href="@{/staff/products}">Quản lý hồ sơ ghép đôi thú cưng</a>
+    </nav>
     <p class="lead">Người bạn đồng hành trong hành trình chăm sóc thú cưng.</p>
     <nav class="d-flex flex-wrap gap-3 my-4" aria-label="Sức khỏe và tiêm phòng">
         <th:block th:replace="~{health/navigation :: links}"></th:block>

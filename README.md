@@ -17,6 +17,7 @@ Sau khi cấu hình biến môi trường DB như bên dưới, chạy `mvn spri
 Danh sách rà soát mapping, SQL và encoding: [UNICODE-AUDIT.md](docs/UNICODE-AUDIT.md).
 
 GĐ5: hồ sơ sức khỏe, tiêm phòng và giả lập ngày — xem [hướng dẫn chạy demo và thử tay theo thứ tự](docs/STAGE5B.md).
+GĐ6: quiz ghép đôi (hai Strategy), hồ sơ thú cưng, giải thích điểm và lịch sử — xem [công thức, cấu hình và hướng dẫn thử tay](docs/matching-algorithm.md).
 GĐ4: đặt lịch dịch vụ và lịch làm việc — xem [quy tắc, tài khoản demo và các bước thử tay](docs/STAGE4.md).
 GĐ3B: giao diện giỏ hàng, đặt hàng và quản lý đơn đã có; xem [hướng dẫn và kịch bản thử tay](docs/STAGE3B.md).
 GĐ1: Java 21, Maven, Spring Boot 3.5.16, SQL Server.

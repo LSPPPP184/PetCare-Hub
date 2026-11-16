@@ -36,6 +36,7 @@ import java.util.*;
     }
     @GetMapping("/staff/products/new") String create(@RequestParam(defaultValue="PET") ProductType type,Model m) {
         var f=new ProductForm();
+        f.setProfile(new PetProfileForm());
         f.setType(type);
         m.addAttribute("form",f);
         m.addAttribute("fields",FIELDS.get(type));
@@ -57,6 +58,7 @@ import java.util.*;
             }
         }
         if(errors.hasErrors()) {
+            if (f.getProfile() == null) f.setProfile(new PetProfileForm());
             m.addAttribute("id",id);
             m.addAttribute("fields", f.getType() == null ? List.of() : FIELDS.getOrDefault(f.getType(), List.of()));
             return "products/form";

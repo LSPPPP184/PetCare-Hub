@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Quiz chọn thú cưng')}"></head>
+<body><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container" style="max-width: 850px">
+    <h1>Tìm người bạn phù hợp</h1>
+    <p>Hoàn thành ba bước dưới đây. Kết quả gợi ý tối đa 3 thú cưng đang sẵn sàng tại cửa hàng.</p>
+    <p sec:authorize="isAnonymous()"><a th:href="@{/login}">Đăng nhập</a> trước khi làm quiz để lưu lịch sử. Khách vẫn có thể xem kết quả trong phiên này.</p>
+    <form th:action="@{/quiz}" th:object="${answers}" method="post">
+        <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+            <p th:each="e : ${#fields.allErrors()}" th:text="${e}"></p>
+        </div>
+        <fieldset class="card card-body mb-3">
+            <legend class="h4">Bước 1 · Không gian và gia đình</legend>
+            <label for="homeSize">Diện tích nhà</label>
+            <select class="form-select mb-3" th:field="*{homeSize}" required>
+                <option value="">Chọn diện tích</option>
+                <option th:each="s : ${homeSizes}" th:value="${s}" th:text="${s.label}"></option>
+            </select>
+            <label for="hasChildren">Nhà có trẻ em?</label>
+            <select class="form-select mb-3" th:field="*{hasChildren}" required><option value="">Chọn câu trả lời</option><option value="true">Có</option><option value="false">Không</option></select>
+            <label for="furAllergy">Bạn có dị ứng lông?</label>
+            <select class="form-select" th:field="*{furAllergy}" required><option value="">Chọn câu trả lời</option><option value="true">Có</option><option value="false">Không</option></select>
+        </fieldset>
+        <fieldset class="card card-body mb-3">
+            <legend class="h4">Bước 2 · Nhịp sống của bạn</legend>
+            <label for="activityLevel">Mức vận động (1: ít, 5: rất thường xuyên)</label>
+            <input class="form-control mb-3" type="number" min="1" max="5" th:field="*{activityLevel}" required>
+            <label for="freeHoursPerDay">Thời gian rảnh mỗi ngày (giờ, từ 0 đến 24)</label>
+            <input class="form-control" type="number" min="0" max="24" step="0.25" th:field="*{freeHoursPerDay}" required>
+        </fieldset>
+        <fieldset class="card card-body mb-3">
+            <legend class="h4">Bước 3 · Khả năng chăm sóc</legend>
+            <label for="budgetLevel">Ngân sách chăm sóc (1: thấp, 5: cao; không phải giá mua)</label>
+            <input class="form-control mb-3" type="number" min="1" max="5" th:field="*{budgetLevel}" required>
+            <label for="experienceLevel">Kinh nghiệm nuôi (1: mới bắt đầu, 5: nhiều kinh nghiệm)</label>
+            <input class="form-control mb-3" type="number" min="1" max="5" th:field="*{experienceLevel}" required>
+            <label for="strategy">Cách ưu tiên khi ghép đôi</label>
+            <select class="form-select" id="strategy" name="strategy">
+                <option th:each="s : ${strategies}" th:value="${s.key}" th:text="${s.value}" th:selected="${s.key == strategy}"></option>
+            </select>
+        </fieldset>
+        <button class="btn btn-primary">Xem top 3 phù hợp</button>
+    </form>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>
