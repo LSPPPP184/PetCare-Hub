@@ -25,6 +25,9 @@ public class Appointment {
     @Column(nullable = false) private LocalDateTime endTime;
     @Column(length = 1000) private String note;
     @Column(nullable = false, precision = 19, scale = 2) private BigDecimal price;
+    // Cho phép null ở DB để nâng cấp lịch cũ; getter diễn giải là chưa giảm giá.
+    @Column(precision = 19, scale = 2) private BigDecimal discountAmount;
+    @Column(precision = 19, scale = 2) private BigDecimal finalAmount;
     @Enumerated(EnumType.STRING) @Column(nullable = false, length = 20) private AppointmentStatus stateName;
 
     /** Chụp giá và thời lượng lúc đặt; thời điểm truyền vào là giờ Việt Nam. */
@@ -49,6 +52,15 @@ public class Appointment {
         return a;
     }
     @Transient public AppointmentState getState() { return AppointmentStateFactory.from(stateName); }
+    public BigDecimal getDiscountAmount() { return discountAmount == null ? BigDecimal.ZERO : discountAmount; }
+    public BigDecimal getFinalAmount() { return finalAmount == null ? price : finalAmount; }
+    /** Chụp giảm giá lúc tạo, không cho thay đổi sau khi lịch hẹn đã lưu. */
+    public void snapshotDiscount(BigDecimal discount) {
+        if (id != null || discount == null || discount.signum() < 0 || discount.compareTo(price) > 0)
+            throw new AppointmentException("Khoản giảm giá không hợp lệ hoặc lịch hẹn đã được lưu.");
+        discountAmount = discount.setScale(2, RoundingMode.UNNECESSARY);
+        finalAmount = price.subtract(discountAmount);
+    }
     public void book() { stateName = getState().book(this); }
     public void start() { stateName = getState().start(this); }
     public void finish() { stateName = getState().finish(this); }

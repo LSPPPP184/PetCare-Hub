@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.tuple;
 @DataJpaTest(properties = "spring.datasource.url=jdbc:h2:mem:seed_test;MODE=MSSQLServer;DB_CLOSE_DELAY=-1")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ActiveProfiles("test")
-@Import({DataSeeder.class, DataSeederTest.EncoderConfig.class})
+@Import({DataSeeder.class, DataSeederTest.EncoderConfig.class, AppointmentClockConfig.class})
 class DataSeederTest {
     @Autowired private DataSeeder seeder;
     @Autowired private UserRepository users;

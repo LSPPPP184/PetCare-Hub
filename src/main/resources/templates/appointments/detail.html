@@ -12,6 +12,8 @@
         <dt class="col-sm-3">Nhân viên</dt><dd class="col-sm-9" th:text="${appointment.staffName}"></dd>
         <dt class="col-sm-3">Thời gian (Việt Nam)</dt><dd class="col-sm-9" th:text="${#temporals.format(appointment.startTime, 'dd/MM/yyyy HH:mm') + ' – ' + #temporals.format(appointment.endTime, 'HH:mm')}"></dd>
         <dt class="col-sm-3">Giá lúc đặt</dt><dd class="col-sm-9" th:text="${appointment.price + ' VNĐ'}"></dd>
+        <dt class="col-sm-3">Giảm theo hạng</dt><dd class="col-sm-9" th:text="${appointment.discountAmount + ' VNĐ'}"></dd>
+        <dt class="col-sm-3">Thanh toán</dt><dd class="col-sm-9" th:text="${appointment.finalAmount + ' VNĐ'}"></dd>
         <dt class="col-sm-3">Ghi chú</dt><dd class="col-sm-9" th:text="${appointment.note}"></dd>
     </dl>
     <p th:unless="${staff}">Chỉ có thể hủy lịch đã đặt khi còn cách giờ hẹn ít nhất 2 tiếng.</p>

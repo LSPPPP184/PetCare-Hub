@@ -1,0 +1,9 @@
+<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><body>
+<div th:fragment="quote" class="card card-body bg-light mb-3" th:if="${quote != null}">
+    <p th:text="${'Hạng ' + quote.tierName + ' — giảm: ' + quote.tierDiscount + ' VNĐ'}"></p>
+    <p th:if="${quote.voucherDiscount.signum() > 0}" th:text="${'Voucher điểm: −' + quote.voucherDiscount + ' VNĐ'}"></p>
+    <p class="fw-bold" th:text="${'Thanh toán dự kiến: ' + quote.finalAmount + ' VNĐ'}"></p>
+    <p class="small text-muted">Quyền lợi được chốt khi xác nhận đặt. Cứ 10.000đ thanh toán được 1 điểm khi hoàn tất.</p>
+    <a th:href="@{/membership}">Xem thẻ thành viên và đổi điểm</a>
+</div>
+</body></html>

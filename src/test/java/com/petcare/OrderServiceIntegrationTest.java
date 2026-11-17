@@ -36,6 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 class OrderServiceIntegrationTest {
+    @Autowired com.petcare.repository.PointTransactionRepository pointTransactions;
     @Autowired MockMvc mvc;
     @Autowired ProductService productService;
     @Autowired CartService carts;
@@ -66,7 +67,7 @@ class OrderServiceIntegrationTest {
 
     @BeforeEach void setup() {
         db(() -> {
-            orderRepository.deleteAll();
+            pointTransactions.deleteAll(); orderRepository.deleteAll();
             cartRepository.deleteAll();
             products.deleteAll();
             return null;

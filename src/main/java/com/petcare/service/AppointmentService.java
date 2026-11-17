@@ -29,6 +29,8 @@ public class AppointmentService {
     private final CommerceLocks locks;
     private final AppointmentPolicy policy;
     private final AppointmentHours hours;
+    private final LoyaltyPricingService pricing;
+    private final org.springframework.context.ApplicationEventPublisher events;
 
     public LocalDate today() { return policy.today(); }
     public List<AppointmentServiceView> services() { return services.findBookable().stream().map(AppointmentServiceView::from).toList(); }
@@ -79,20 +81,25 @@ public class AppointmentService {
     }
     @Transactional public Long book(AppointmentForm form) {
         var customer = access.currentCustomer();
+        locks.lock(User.class, customer.getId());
         staff(form.getStaffId());
         var employee = locks.lock(User.class, form.getStaffId());
         if (employee.getRole() != Role.STAFF) throw new AppointmentException("Người thực hiện phải là nhân viên STAFF.");
         if (form.getServiceId() == null) throw new AppointmentException("Vui lòng chọn dịch vụ.");
         var service = AppointmentServices.require(locks.lock(Product.class, form.getServiceId()));
         validateSlot(service, employee.getId(), form.getStartTime());
-        return appointments.save(Appointment.create(customer, form.getPetName(), form.getPetSpecies(), service,
-            employee, form.getStartTime(), form.getNote())).getId();
+        var appointment = Appointment.create(customer, form.getPetName(), form.getPetSpecies(), service,
+            employee, form.getStartTime(), form.getNote());
+        appointment.snapshotDiscount(pricing.snapshot(customer.getId(), appointment.getPrice(), false).discountAmount());
+        return appointments.save(appointment).getId();
     }
     private Appointment find(Long id) {
         return appointments.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy lịch hẹn."));
     }
     private Appointment locked(Long id) {
         var appointment = find(id);
+        // Cùng thứ tự khách -> nhân viên -> lịch, tránh khóa chéo với đặt lịch và đổi điểm.
+        locks.lock(User.class, appointment.getCustomer().getId());
         locks.lock(User.class, appointment.getStaff().getId());
         return locks.lock(Appointment.class, id);
     }
@@ -135,7 +142,11 @@ public class AppointmentService {
         return a;
     }
     @Transactional public void start(Long id) { assignedAndLocked(id).start(); }
-    @Transactional public void finish(Long id) { assignedAndLocked(id).finish(); }
+    @Transactional public void finish(Long id) {
+        var appointment = assignedAndLocked(id);
+        appointment.finish();
+        events.publishEvent(new com.petcare.event.AppointmentCompletedEvent(appointment.getId()));
+    }
     /** Nhân viên có thể hủy lịch BOOKED để xử lý sự cố; mốc hai tiếng chỉ áp dụng cho khách. */
     @Transactional public void cancelByStaff(Long id) { assignedAndLocked(id).cancel(); }
 }

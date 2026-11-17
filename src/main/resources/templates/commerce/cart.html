@@ -26,6 +26,7 @@
             </tr></tbody>
         </table>
         <p class="fw-bold" th:text="${'Tạm tính: ' + cart.total + ' VNĐ'}"></p>
+        <div th:replace="~{loyalty/fragments :: quote}"></div>
         <a class="btn btn-primary" th:if="${cart.checkoutAllowed}" th:href="@{/checkout}">Tiến hành đặt hàng</a>
         <p class="text-danger" th:unless="${cart.checkoutAllowed}">Vui lòng cập nhật hoặc xóa các sản phẩm chưa thể mua trước khi đặt hàng.</p>
     </div>

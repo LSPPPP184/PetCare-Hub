@@ -52,8 +52,14 @@ Chỉ tạo khi bảng users rỗng:
 - customer@petcare.vn / Customer@123
 
 Đổi mật khẩu mẫu trước khi đưa lên môi trường thực tế. Đăng ký công khai chỉ tạo CUSTOMER.
-ADMIN thấy menu quản trị và nhân viên; STAFF thấy menu nhân viên; CUSTOMER thấy nhãn khách hàng thân thiết.
+ADMIN thấy menu quản trị và nhân viên; STAFF thấy menu nhân viên; CUSTOMER thấy liên kết Thẻ thành viên; ADMIN thấy Quản lý thành viên.
 Đăng xuất bằng POST có CSRF. Khách chưa đăng nhập được chuyển tới đăng nhập; tài khoản thiếu quyền nhận trang 403 tiếng Việt.
 Email được chuẩn hóa chữ thường. Điện thoại tùy chọn. Mật khẩu đăng ký dùng 8–72 ký tự ASCII để phù hợp giới hạn BCrypt.
 Các pattern nghiệp vụ sẽ triển khai ở giai đoạn tương ứng; chưa có nghiệp vụ sản phẩm/đơn hàng trong GĐ1.
 
+
+## GĐ7 — Thẻ thành viên
+
+Đã bổ sung tích điểm qua Observer, giảm giá theo hạng bằng Strategy, đổi voucher và quản trị điểm. Xem [hướng dẫn chạy demo và kiểm thử thủ công GĐ7](docs/GD7-MANUAL.md), bao gồm luồng hoàn tất đơn để tăng điểm và lên hạng.
+
+Kiểm chứng: `mvn test` — 387 test xanh trên Java 21 và Spring Boot 3.5.16.
