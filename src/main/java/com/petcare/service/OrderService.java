@@ -19,6 +19,8 @@ public class OrderService {
     private final CartRepository carts;
     private final CommerceAccess access;
     private final CommerceLocks locks;
+    private final LoyaltyPricingService pricing;
+    private final org.springframework.context.ApplicationEventPublisher events;
 
     public Order placeOrderFromCart(Long customerId, String shippingAddress) {
         access.customer(customerId);
@@ -26,7 +28,9 @@ public class OrderService {
         var cart = carts.findByCustomerId(customerId)
             .orElseThrow(() -> new PurchaseException("Giỏ hàng đang trống."));
         locks.products(cart.getItems().stream().map(i -> i.getProduct().getId()).toList());
-        var order = orders.save(Order.fromCart(cart, shippingAddress));
+        var order = Order.fromCart(cart, shippingAddress);
+        order.snapshotDiscount(pricing.snapshot(customerId, order.getTotalAmount(), true).discountAmount());
+        orders.save(order);
         cart.clear();
         return order;
     }
@@ -50,6 +54,7 @@ public class OrderService {
         access.staff();
         var order = locks.lock(Order.class, orderId);
         order.complete();
+        events.publishEvent(new com.petcare.event.OrderCompletedEvent(order.getId()));
         return order;
     }
     public Order cancel(Long orderId) {

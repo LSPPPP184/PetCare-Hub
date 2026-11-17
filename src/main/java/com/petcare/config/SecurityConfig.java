@@ -12,6 +12,7 @@ public class SecurityConfig {
    .requestMatchers("/quiz/history", "/quiz/history/**").authenticated()
    .requestMatchers("/quiz", "/quiz/results").permitAll()
    .requestMatchers("/admin/**").hasRole("ADMIN")
+   .requestMatchers("/membership", "/membership/**").hasRole("CUSTOMER")
    .requestMatchers("/staff/**").hasAnyRole("STAFF","ADMIN")
    .requestMatchers("/my-pets", "/my-pets/**").hasRole("CUSTOMER")
    .requestMatchers("/appointments/services").permitAll()

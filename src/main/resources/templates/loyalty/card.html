@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Thẻ thành viên')}"></head><body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="container">
+    <div th:replace="~{fragments/layout :: flash}"></div>
+    <a th:if="${admin}" th:href="@{/admin/members}">Danh sách thành viên</a>
+    <h1>Thẻ thành viên</h1>
+    <p th:text="${member.customerName + ' — ' + member.email}"></p>
+    <div class="card card-body mb-4">
+        <h2 th:text="${'Hạng ' + member.tierName}"></h2>
+        <p><strong th:text="${member.currentPoints}"></strong> điểm hiện có · <span th:text="${member.totalPoints}"></span> điểm tích lũy</p>
+        <p th:if="${member.nextTierName != null}" th:text="${'Còn ' + member.pointsToNext + ' điểm để lên hạng ' + member.nextTierName}"></p>
+        <p th:unless="${member.nextTierName != null}">Bạn đã đạt hạng cao nhất.</p>
+        <div class="progress" role="progressbar" aria-label="Tiến độ lên hạng" aria-valuemin="0" aria-valuemax="100" th:attr="aria-valuenow=${member.progress}">
+            <div class="progress-bar" th:style="${'width: ' + member.progress + '%'}" th:text="${member.progress + '%'}"></div>
+        </div>
+        <p class="mt-3">Điểm tích lũy dùng để xét hạng, không giảm khi đổi điểm hoặc điều chỉnh trừ điểm.</p>
+        <p th:if="${member.voucherAvailable}" class="alert alert-success">Có voucher 10.000đ đang chờ áp dụng cho đơn hàng kế tiếp.</p>
+        <div th:unless="${admin}">
+            <form method="post" th:action="@{/membership/redeem}"><button class="btn btn-primary" th:disabled="${member.currentPoints < 100 or member.voucherAvailable}">Đổi 100 điểm lấy voucher 10.000đ</button></form>
+            <p class="small mt-2">Mỗi lần giữ một voucher. Tự áp dụng sau giảm theo hạng cho đơn kế tiếp; tối đa bằng tiền đơn. Phần dư và voucher của đơn bị hủy không được hoàn. Voucher không áp dụng cho lịch hẹn.</p>
+            <a th:href="@{/cart}">Đến giỏ hàng</a>
+        </div>
+    </div>
+    <section th:if="${admin}" class="mb-4">
+        <h2>Điều chỉnh điểm</h2>
+        <form method="post" th:action="@{/admin/members/{id}/adjust(id=${member.customerId})}">
+            <label for="points" class="form-label">Số điểm cộng hoặc trừ (khác 0)</label><input id="points" name="points" type="number" step="1" class="form-control mb-2" required>
+            <label for="reason" class="form-label">Lý do</label><textarea id="reason" name="reason" maxlength="800" class="form-control mb-2" required></textarea>
+            <button class="btn btn-primary">Lưu điều chỉnh</button>
+        </form>
+    </section>
+    <h2>Quyền lợi từng hạng</h2>
+    <div class="table-responsive"><table class="table"><thead><tr><th>Hạng</th><th>Điểm tích lũy từ</th><th>Giảm giá</th><th>Quyền lợi</th></tr></thead>
+        <tbody><tr th:each="benefit : ${member.benefits}"><td th:text="${benefit.name}"></td><td th:text="${benefit.threshold}"></td><td th:text="${benefit.percent + '%'}"></td><td th:text="${benefit.description}"></td></tr></tbody>
+    </table></div>
+    <h2>Lịch sử điểm</h2>
+    <p th:if="${member.history.empty}">Chưa có giao dịch điểm.</p>
+    <div class="table-responsive"><table class="table"><thead><tr><th>Thời gian (Việt Nam)</th><th>Loại</th><th>Điểm</th><th>Nội dung</th><th>Nguồn</th></tr></thead><tbody>
+        <tr th:each="entry : ${member.history}"><td th:text="${#temporals.format(entry.createdAt, 'dd/MM/yyyy HH:mm')}"></td><td th:text="${entry.type}"></td><td th:text="${entry.points}"></td><td th:text="${entry.description}"></td><td>
+            <a th:if="${entry.orderId != null}" th:href="${admin} ? @{/staff/orders/{id}(id=${entry.orderId})} : @{/orders/{id}(id=${entry.orderId})}" th:text="${'Đơn #' + entry.orderId}"></a>
+            <a th:if="${entry.appointmentId != null}" th:href="${admin} ? @{/staff/appointments/{id}(id=${entry.appointmentId})} : @{/appointments/{id}(id=${entry.appointmentId})}" th:text="${'Lịch #' + entry.appointmentId}"></a>
+        </td></tr>
+    </tbody></table></div>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

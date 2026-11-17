@@ -16,6 +16,13 @@ import java.time.*;
 @Controller @RequiredArgsConstructor @RequestMapping("/appointments")
 public class AppointmentController {
     private final AppointmentService service;
+    private final com.petcare.service.LoyaltyPricingService pricing;
+
+    private void selectionModel(Long serviceId, Long staffId, LocalDateTime start, Model model) {
+        var selection = service.selection(serviceId, staffId, start);
+        model.addAttribute("selection", selection);
+        model.addAttribute("quote", pricing.preview(selection.price(), false));
+    }
     @ModelAttribute("speciesOptions") Species[] species() { return Species.values(); }
     @GetMapping("/services") String services(Model model) {
         model.addAttribute("services", service.services());
@@ -31,13 +38,13 @@ public class AppointmentController {
         var form = new AppointmentForm();
         form.setServiceId(serviceId); form.setStaffId(staffId); form.setStartTime(startTime);
         model.addAttribute("form", form);
-        model.addAttribute("selection", service.selection(serviceId, staffId, startTime));
+        selectionModel(serviceId, staffId, startTime, model);
         return "appointments/confirm";
     }
     @PostMapping String book(@Valid @ModelAttribute("form") AppointmentForm form, BindingResult errors,
                             Model model, RedirectAttributes flash) {
         if (errors.hasErrors()) {
-            model.addAttribute("selection", service.selection(form.getServiceId(), form.getStaffId(), form.getStartTime()));
+            selectionModel(form.getServiceId(), form.getStaffId(), form.getStartTime(), model);
             return "appointments/confirm";
         }
         Long id = service.book(form);

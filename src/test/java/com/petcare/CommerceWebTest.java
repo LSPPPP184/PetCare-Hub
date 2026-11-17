@@ -26,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     "spring.jpa.open-in-view=false"})
 @AutoConfigureMockMvc @ActiveProfiles("test")
 class CommerceWebTest {
+    @Autowired com.petcare.repository.PointTransactionRepository pointTransactions;
     @Autowired MockMvc mvc;
     @Autowired ProductRepository products;
     @Autowired OrderRepository orders;
@@ -39,7 +40,7 @@ class CommerceWebTest {
         return new TransactionTemplate(transactionManager).execute(status -> work.get());
     }
     @BeforeEach void setup() {
-        db(() -> { orders.deleteAll(); carts.deleteAll(); products.deleteAll(); return null; });
+        db(() -> { pointTransactions.deleteAll(); orders.deleteAll(); carts.deleteAll(); products.deleteAll(); return null; });
         customerId = users.findByEmail("customer@petcare.vn").orElseThrow().getId();
         if (users.findByEmail("other-web@petcare.vn").isEmpty()) {
             users.saveAndFlush(new User("Khách khác", "other-web@petcare.vn", encoder.encode("TestOnly@123"), "", Role.CUSTOMER));

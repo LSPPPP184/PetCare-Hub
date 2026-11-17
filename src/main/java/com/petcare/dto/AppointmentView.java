@@ -10,7 +10,7 @@ import java.util.*;
 public record AppointmentView(Long id, String customerName, String petName, String petSpecies, String serviceName,
                               String staffName, LocalDateTime startTime, LocalDateTime endTime, String note,
                               BigDecimal price, String label, String badgeClass, List<AppointmentAction> actions,
-                              boolean customerCanCancel) {
+                              boolean customerCanCancel, BigDecimal discountAmount, BigDecimal finalAmount) {
     private static final Map<AppointmentStatus, String> COLORS = Map.of(
         AppointmentStatus.BOOKED, "text-bg-warning", AppointmentStatus.IN_PROGRESS, "text-bg-primary",
         AppointmentStatus.DONE, "text-bg-success", AppointmentStatus.CANCELLED, "text-bg-secondary");
@@ -19,6 +19,6 @@ public record AppointmentView(Long id, String customerName, String petName, Stri
         return new AppointmentView(a.getId(), a.getCustomer().getFullName(), a.getPetName(), a.getPetSpecies().getLabel(),
             a.getService().getName(), a.getStaff().getFullName(), a.getStartTime(), a.getEndTime(), a.getNote(), a.getPrice(),
             a.getState().getLabel(), COLORS.get(a.getStateName()), actions,
-            beforeCutoff && actions.contains(AppointmentAction.CANCEL));
+            beforeCutoff && actions.contains(AppointmentAction.CANCEL), a.getDiscountAmount(), a.getFinalAmount());
     }
 }

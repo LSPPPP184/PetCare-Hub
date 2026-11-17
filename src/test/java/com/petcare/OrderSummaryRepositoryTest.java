@@ -27,6 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 }, showSql = false)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ActiveProfiles("test")
+@org.springframework.context.annotation.Import(com.petcare.config.AppointmentClockConfig.class)
 class OrderSummaryRepositoryTest {
     @Autowired OrderRepository orders;
     @Autowired UserRepository users;

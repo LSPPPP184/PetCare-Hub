@@ -9,6 +9,7 @@
     <p th:text="${'Nhân viên: ' + selection.staffName}"></p>
     <p th:text="${#temporals.format(selection.startTime, 'dd/MM/yyyy HH:mm') + ' – ' + #temporals.format(selection.endTime, 'HH:mm') + ' (giờ Việt Nam)'}"></p>
     <p th:text="${'Giá: ' + selection.price + ' VNĐ'}"></p>
+    <div th:replace="~{loyalty/fragments :: quote}"></div>
     <form method="post" th:action="@{/appointments}" th:object="${form}">
         <input type="hidden" th:field="*{serviceId}"><input type="hidden" th:field="*{staffId}">
         <input type="hidden" th:field="*{startTime}">

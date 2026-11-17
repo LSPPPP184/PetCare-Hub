@@ -14,9 +14,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller @RequiredArgsConstructor
 public class CartController {
     private final CommerceService service;
+    private final com.petcare.service.LoyaltyPricingService pricing;
+
+    private void cartModel(Model model) {
+        var cart = service.cart();
+        model.addAttribute("cart", cart);
+        model.addAttribute("quote", pricing.preview(cart.total(), true));
+    }
 
     @GetMapping("/cart") String cart(Model model) {
-        model.addAttribute("cart", service.cart());
+        cartModel(model);
         return "commerce/cart";
     }
     @PostMapping("/cart/items") String add(@RequestParam Long productId, @Valid @ModelAttribute QuantityForm form,
@@ -38,13 +45,13 @@ public class CartController {
     }
     @GetMapping("/checkout") String checkout(Model model) {
         model.addAttribute("checkoutForm", new CheckoutForm());
-        model.addAttribute("cart", service.cart());
+        cartModel(model);
         return "commerce/checkout";
     }
     @PostMapping("/checkout") String place(@Valid @ModelAttribute CheckoutForm checkoutForm,
             BindingResult errors, Model model, RedirectAttributes flash) {
         if (errors.hasErrors()) {
-            model.addAttribute("cart", service.cart());
+            cartModel(model);
             return "commerce/checkout";
         }
         Long id = service.placeOrder(checkoutForm.getShippingAddress());

@@ -14,7 +14,7 @@
 <a sec:authorize="hasAnyRole('STAFF','ADMIN')" th:href="@{/staff/orders}">Quản lý đơn hàng</a>
 <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/dashboard}">Quản trị</a>
 <a sec:authorize="hasAnyRole('STAFF','ADMIN')" th:href="@{/staff/dashboard}">Nhân viên</a>
-<span sec:authorize="hasRole('CUSTOMER')">Khách hàng thân thiết</span>
+<th:block th:replace="~{loyalty/navigation :: links}"></th:block>
 <a sec:authorize="isAnonymous()" th:href="@{/register}">Đăng ký</a>
 <a sec:authorize="isAnonymous()" th:href="@{/login}">Đăng nhập</a>
 <span sec:authorize="isAuthenticated()" sec:authentication="name"></span>

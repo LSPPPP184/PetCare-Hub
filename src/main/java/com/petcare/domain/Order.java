@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
+@EntityListeners(com.petcare.event.OrderTimestampListener.class)
 @Table(name = "orders")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -41,7 +42,14 @@ public class Order {
         order.finalAmount = order.totalAmount.subtract(order.discountAmount);
         return order;
     }
-    @PrePersist void onCreate() { createdAt = LocalDateTime.now(); }
+    public void recordCreatedAt(LocalDateTime time) { if (createdAt == null) createdAt = time; }
+    /** Chỉ chốt giảm giá khi tạo mới, hạng thay đổi không cập nhật lại đơn đã lưu. */
+    public void snapshotDiscount(BigDecimal discount) {
+        if (id != null || discount == null || discount.signum() < 0 || discount.compareTo(totalAmount) > 0)
+            throw new PurchaseException("Khoản giảm giá không hợp lệ hoặc đơn đã được lưu.");
+        discountAmount = OrderItem.money(discount);
+        finalAmount = totalAmount.subtract(discountAmount);
+    }
     public List<OrderItem> getItems() { return Collections.unmodifiableList(items); }
     @Transient public OrderState getState() { return OrderStateFactory.from(stateName); }
     public void confirm() { stateName = getState().confirm(this); }

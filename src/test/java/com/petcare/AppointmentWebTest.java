@@ -39,6 +39,7 @@ class AppointmentWebTest {
     @TestConfiguration static class FixedTime {
         @Bean @Primary Clock fixedClock() { return Clock.fixed(Instant.parse("2026-01-05T01:00:00Z"), ZoneId.of("Asia/Ho_Chi_Minh")); }
     }
+    @Autowired com.petcare.repository.PointTransactionRepository pointTransactions;
     @Autowired MockMvc mvc;
     @Autowired AppointmentService service;
     @Autowired AppointmentRepository appointments;
@@ -56,7 +57,7 @@ class AppointmentWebTest {
         try { return work.get(); } finally { SecurityContextHolder.setContext(previous); }
     }
     @BeforeEach void setup() {
-        db(() -> { appointments.deleteAll(); products.deleteAll(); return null; });
+        db(() -> { pointTransactions.deleteAll(); appointments.deleteAll(); products.deleteAll(); return null; });
         staffId = users.findByEmail("staff@petcare.vn").orElseThrow().getId();
         otherStaffId = users.findByEmail("other-staff@petcare.vn").orElseGet(() -> users.saveAndFlush(new User("Nhân viên khác",
             "other-staff@petcare.vn", encoder.encode("TestOnly@123"), "", Role.STAFF))).getId();
