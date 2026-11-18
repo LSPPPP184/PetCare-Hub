@@ -71,7 +71,7 @@ class MatchingWebTest {
             .andExpect(redirectedUrl("/quiz/results"));
         var reports = matching.history(email);
         assertThat(reports).hasSize(1);
-        var report = reports.getFirst();
+        var report = matching.detail(reports.getFirst().id(), email);
         assertThat(report.strategyLabel()).isEqualTo("Ưu tiên ngân sách");
         var petId = report.matches().getFirst().petId();
         var edit = products.get(petId).toForm(); edit.setName("Tên đã sửa sau quiz"); edit.getProfile().setEnergyLevel(5);

@@ -4,15 +4,13 @@ import com.petcare.domain.*;
 import com.petcare.repository.*;
 import com.petcare.service.AppointmentPolicy;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
-import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 
-/** Seed demo sau các CommandLineRunner cũ bằng sự kiện Spring; chạy lại không nhân đôi lịch. */
+/** Tạo lịch mẫu theo yêu cầu của DemoDataRunner; bảng đã có lịch được giữ nguyên. */
 @Component @Profile("demo") @RequiredArgsConstructor
 public class AppointmentDemoSeeder {
     private final UserRepository users;
@@ -22,7 +20,7 @@ public class AppointmentDemoSeeder {
     private final AppointmentPolicy policy;
     private final AppointmentHours hours;
 
-    @EventListener(ApplicationReadyEvent.class) @Transactional
+    @Transactional
     public void seed() {
         for (int i = 1; i <= 2; i++) {
             String email = "appointment.staff" + i + "@petcare.vn";
@@ -39,7 +37,7 @@ public class AppointmentDemoSeeder {
         if (service.isEmpty()) return;
         var day = workingDay(policy.today().plusDays(1), 1);
         var history = workingDay(policy.today().minusDays(1), -1);
-        var later = workingDay(day.plusDays(1), 1);
+        var later = workingDay(policy.today(), 1);
         var customer = customers.getFirst();
         var a = Appointment.create(customer, "Milo", Species.CAT, service.get(), staff.get(0), day.atTime(hours.getOpen()), "Lịch mẫu nhân viên thứ nhất");
         var b = Appointment.create(customer, "Bông", Species.DOG, service.get(), staff.get(1), day.atTime(hours.getOpen()), "Cùng giờ, khác nhân viên");
@@ -49,7 +47,9 @@ public class AppointmentDemoSeeder {
         done.start(); done.finish();
         var inProgress = Appointment.create(customer, "Cún", Species.DOG, service.get(), staff.get(0), later.atTime(hours.getOpen()), "Minh họa trạng thái đang thực hiện");
         inProgress.start();
-        appointments.saveAll(java.util.List.of(a, b, cancelled, done, inProgress));
+        var samples = java.util.List.of(a, b, cancelled, done, inProgress);
+        for (int i = 0; i < samples.size(); i++) samples.get(i).assignSeedKey("DEMO:APPOINTMENT:" + i);
+        appointments.saveAll(samples);
     }
     private LocalDate workingDay(LocalDate day, int direction) {
         while (!policy.isWorkingDay(day)) day = day.plusDays(direction);

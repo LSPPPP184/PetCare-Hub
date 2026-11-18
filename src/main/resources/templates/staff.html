@@ -1,1 +1,9 @@
-<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Khu vực nhân viên')}"></head><body><header th:replace="~{fragments/layout :: header}"></header><main class="container"><div th:replace="~{fragments/layout :: flash}"></div><h1>Khu vực nhân viên</h1><p>Chào mừng nhân viên cửa hàng.</p></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>
+<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Tổng quan công việc')}"></head><body><header th:replace="~{fragments/layout :: header}"></header><main class="container">
+<h1>Tổng quan công việc</h1>
+<h2>Đơn chờ xử lý</h2><p th:text="${work.pendingOrders}"></p><a th:href="@{/staff/orders}">Quản lý đơn hàng</a>
+<h2>Lịch hẹn hôm nay</h2><p th:text="${work.appointmentsToday}"></p><a th:href="@{/staff/appointments}">Lịch làm việc</a>
+<h2>Mũi tiêm sắp đến hạn</h2><p th:text="${work.dueSoon}"></p><a th:href="@{/staff/health(status='DUE_SOON')}">Xem các mũi sắp đến hạn</a>
+<h2>Mũi tiêm quá hạn</h2><p th:text="${work.overdue}"></p><a th:href="@{/staff/health(status='OVERDUE')}">Xem các mũi quá hạn</a><a th:href="@{/staff/health}">Theo dõi tiêm phòng</a>
+<p>Đơn chờ xử lý gồm đơn đang chờ xác nhận. Lịch hôm nay không gồm lịch hủy. Mũi tiêm chưa hoàn tất được đếm theo ngày sức khỏe.</p>
+<p><a th:href="@{/staff/products}">Quản lý sản phẩm</a></p>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

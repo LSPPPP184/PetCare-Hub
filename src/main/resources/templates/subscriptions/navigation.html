@@ -1,0 +1,5 @@
+<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"><body>
+<th:block th:fragment="links">
+    <a sec:authorize="hasRole('CUSTOMER')" th:href="@{/subscriptions}">Gói của tôi</a>
+    <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/subscriptions}">Gói đang hoạt động</a>
+</th:block></body></html>

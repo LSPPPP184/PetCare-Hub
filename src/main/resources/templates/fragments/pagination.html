@@ -1,0 +1,4 @@
+<nav xmlns:th="http://www.thymeleaf.org" th:fragment="pages" th:if="${pageResult != null}" aria-label="Phân trang">
+<a th:if="${pageResult.hasPrevious()}" th:href="@{''(page=${pageResult.number - 1},status=${param.status})}">Trang trước</a>
+<span th:text="${pageResult.number + 1}"></span>
+<a th:if="${pageResult.hasNext()}" th:href="@{''(page=${pageResult.number + 1},status=${param.status})}">Trang sau</a></nav>

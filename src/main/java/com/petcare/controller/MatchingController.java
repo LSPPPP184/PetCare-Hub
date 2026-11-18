@@ -42,8 +42,8 @@ public class MatchingController {
         return "matching/results";
     }
 
-    @GetMapping("/history") String history(Principal principal, Model model) {
-        model.addAttribute("history", service.history(principal.getName()));
+    @GetMapping("/history") String history(@RequestParam(defaultValue = "0") @jakarta.validation.constraints.Min(0) @jakarta.validation.constraints.Max(10000) int page, Principal principal, Model model) {
+        var result = service.history(principal.getName(), org.springframework.data.domain.PageRequest.of(page, 20)); model.addAttribute("pageResult", result); model.addAttribute("history", result.getContent());
         return "matching/history";
     }
 

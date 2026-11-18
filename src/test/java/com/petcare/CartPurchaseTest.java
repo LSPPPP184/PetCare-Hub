@@ -66,6 +66,7 @@ class CartPurchaseTest {
     }
     @Test void monthlyPackageCanBePurchasedWithoutPhysicalStock() {
         var product = product(ProductType.MONTHLY);
+        product.configureCoveredServices(java.util.List.of((ServiceItem) product(ProductType.GROOMING)));
         var cart = cart();
         cart.add(product, 2);
         var policy = PurchasePolicies.forProduct(product);

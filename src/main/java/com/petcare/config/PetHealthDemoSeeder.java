@@ -5,9 +5,7 @@ import com.petcare.domain.vaccination.VaccinationScheduleTemplate;
 import com.petcare.repository.*;
 import com.petcare.service.CommerceLocks;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.*;
@@ -37,7 +35,7 @@ public class PetHealthDemoSeeder {
         this.locks = locks;
     }
 
-    @EventListener(ApplicationReadyEvent.class) @Transactional
+    @Transactional
     public void seed() {
         var owner = users.findByEmail("customer@petcare.vn");
         if (owner.isEmpty()) return;

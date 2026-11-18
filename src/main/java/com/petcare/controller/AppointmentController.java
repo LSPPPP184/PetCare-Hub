@@ -16,12 +16,12 @@ import java.time.*;
 @Controller @RequiredArgsConstructor @RequestMapping("/appointments")
 public class AppointmentController {
     private final AppointmentService service;
-    private final com.petcare.service.LoyaltyPricingService pricing;
 
     private void selectionModel(Long serviceId, Long staffId, LocalDateTime start, Model model) {
-        var selection = service.selection(serviceId, staffId, start);
-        model.addAttribute("selection", selection);
-        model.addAttribute("quote", pricing.preview(selection.price(), false));
+        var confirmation = service.confirmation(serviceId, staffId, start);
+        model.addAttribute("selection", confirmation.selection());
+        model.addAttribute("subscriptionPreview", confirmation.subscriptionPreview());
+        model.addAttribute("quote", confirmation.quote());
     }
     @ModelAttribute("speciesOptions") Species[] species() { return Species.values(); }
     @GetMapping("/services") String services(Model model) {

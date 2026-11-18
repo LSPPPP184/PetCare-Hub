@@ -1,1 +1,22 @@
-<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Khu vực quản trị')}"></head><body><header th:replace="~{fragments/layout :: header}"></header><main class="container"><div th:replace="~{fragments/layout :: flash}"></div><h1>Khu vực quản trị</h1><p>Chào mừng quản trị viên.</p></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Bảng điều khiển quản trị')}"></head>
+<body><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container">
+<h1>Bảng điều khiển quản trị</h1>
+<nav aria-label="Liên kết nhanh"><a th:href="@{/staff/products}">Quản lý sản phẩm</a> | <a th:href="@{/admin/members}">Thành viên thân thiết</a> <a th:if="${healthDemoEnabled}" th:href="@{/admin/demo/health}">Giả lập ngày</a></nav>
+<p>Ngày thống kê: <strong th:text="${dashboard.today}"></strong>. Ngày sức khỏe: <strong th:text="${dashboard.healthDate}"></strong>.</p>
+<div class="row g-3 mb-4">
+<div class="col-md-4"><div class="card h-100"><div class="card-body"><h2 class="h5">Lịch hẹn hôm nay</h2><p class="display-6" th:text="${dashboard.appointmentsToday}"></p><a th:href="@{/staff/appointments}">Xem lịch làm việc</a><p class="small text-muted">Không gồm lịch đã hủy.</p></div></div></div>
+<div class="col-md-4"><div class="card h-100"><div class="card-body"><h2 class="h5">Thú sắp đến hạn tiêm</h2><p class="display-6" th:text="${dashboard.petsDueSoon}"></p><a th:href="@{/staff/health(status='DUE_SOON')}">Xem lịch sắp đến hạn</a></div></div></div>
+<div class="col-md-4"><div class="card h-100"><div class="card-body"><h2 class="h5">Thú quá hạn tiêm</h2><p class="display-6" th:text="${dashboard.petsOverdue}"></p><a th:href="@{/staff/health(status='OVERDUE')}">Xem lịch quá hạn</a></div></div></div>
+</div>
+<p class="text-muted">Mỗi nhóm tiêm phòng đếm thú riêng biệt; một thú có thể thuộc cả hai nhóm. Ngày sức khỏe theo Clock giả lập khi dùng demo.</p>
+<div class="row g-4"><section class="col-lg-6"><h2 class="h4">Doanh thu theo tháng</h2>
+<p>Tổng tiền sau giảm giá của đơn đã hoàn tất, nhóm theo tháng tạo đơn trong 12 tháng gần nhất. Chưa bao gồm tiền lịch hẹn.</p>
+<table class="table table-striped"><caption>Doanh thu đơn hàng (VNĐ)</caption><thead><tr><th scope="col">Tháng</th><th scope="col" class="text-end">Doanh thu</th></tr></thead><tbody><tr th:each="row : ${dashboard.revenue}"><th scope="row" th:text="${row.month}"></th><td class="text-end" th:text="${#numbers.formatDecimal(row.amount, 1, 'POINT', 0, 'COMMA')} + ' đ'"></td></tr></tbody></table>
+<a th:href="@{/staff/orders}">Xem đơn hàng</a></section>
+<div class="col-lg-6"><section><h2 class="h4">Top 5 sản phẩm bán chạy</h2><p>Theo số lượng trong đơn hoàn tất, toàn bộ thời gian.</p>
+<table class="table"><thead><tr><th scope="col">Sản phẩm</th><th scope="col">Số lượng</th></tr></thead><tbody><tr th:each="row : ${dashboard.bestSellers}"><td><a th:href="@{/staff/products/{id}/edit(id=${row.productId})}" th:text="${row.name}"></a></td><td th:text="${row.quantity}"></td></tr><tr th:if="${#lists.isEmpty(dashboard.bestSellers)}"><td colspan="2">Chưa có sản phẩm bán ra từ đơn hoàn tất.</td></tr></tbody></table></section>
+<section class="mt-4"><h2 class="h4">Thành viên theo hạng</h2><p>Đếm các thẻ đã mở, theo tổng điểm tích lũy và ngưỡng hạng hiện hành.</p><table class="table"><thead><tr><th scope="col">Hạng</th><th scope="col">Số thành viên</th></tr></thead><tbody><tr th:each="row : ${dashboard.members}"><td th:text="${row.name}"></td><td th:text="${row.count}"></td></tr></tbody></table><a th:href="@{/admin/members}">Quản lý thành viên</a></section></div></div>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

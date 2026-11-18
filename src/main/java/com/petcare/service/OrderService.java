@@ -20,6 +20,7 @@ public class OrderService {
     private final CommerceAccess access;
     private final CommerceLocks locks;
     private final LoyaltyPricingService pricing;
+    private final SubscriptionService subscriptions;
     private final org.springframework.context.ApplicationEventPublisher events;
 
     public Order placeOrderFromCart(Long customerId, String shippingAddress) {
@@ -60,7 +61,9 @@ public class OrderService {
     public Order cancel(Long orderId) {
         var order = locks.lock(Order.class, orderId);
         access.ownerOrStaff(order);
-        if (order.cancel()) {
+        var restoreStock = order.cancel();
+        subscriptions.releaseRenewal(order);
+        if (restoreStock) {
             lockProducts(order);
             order.getItems().forEach(i -> PurchasePolicies.forProduct(i.getProduct()).restore(i.getProduct(), i.getQuantity()));
         }

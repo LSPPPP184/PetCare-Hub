@@ -19,11 +19,11 @@ public class StaffPetHealthController {
     private final VaccinationService vaccinations;
     @ModelAttribute("staff") boolean staff() { return true; }
     @ModelAttribute("today") LocalDate today() { return service.today(); }
-    @GetMapping String alerts(@RequestParam(required = false) VaccinationStatus status, Model model) {
-        model.addAttribute("records", service.alerts(status)); model.addAttribute("selectedStatus", status);
+    @GetMapping String alerts(@RequestParam(defaultValue = "0") @jakarta.validation.constraints.Min(0) @jakarta.validation.constraints.Max(10000) int page, @RequestParam(required = false) VaccinationStatus status, Model model) {
+        var result = service.alerts(status, org.springframework.data.domain.PageRequest.of(page, 20)); model.addAttribute("pageResult", result); model.addAttribute("records", result.getContent()); model.addAttribute("selectedStatus", status);
         return "health/alerts";
     }
-    @GetMapping("/pets") String pets(Model model) { model.addAttribute("pets", service.allPets()); return "health/pets"; }
+    @GetMapping("/pets") String pets(@RequestParam(defaultValue = "0") @jakarta.validation.constraints.Min(0) @jakarta.validation.constraints.Max(10000) int page, Model model) { var result = service.allPets(org.springframework.data.domain.PageRequest.of(page, 20)); model.addAttribute("pageResult", result); model.addAttribute("pets", result.getContent()); return "health/pets"; }
     @GetMapping("/pets/{id}") String detail(@PathVariable Long id, Model model) {
         model.addAttribute("profile", service.staffDetail(id)); return "health/detail";
     }

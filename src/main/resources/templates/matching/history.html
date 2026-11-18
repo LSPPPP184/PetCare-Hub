@@ -6,7 +6,7 @@
     <p th:if="${#lists.isEmpty(history)}">Bạn chưa có lịch sử quiz.</p>
     <div class="table-responsive" th:unless="${#lists.isEmpty(history)}"><table class="table">
         <thead><tr><th>Thời gian</th><th>Chiến lược</th><th>Số gợi ý</th><th>Kết quả</th></tr></thead>
-        <tbody><tr th:each="r : ${history}"><td th:text="${#temporals.format(r.createdAt, 'dd/MM/yyyy HH:mm')}"></td><td th:text="${r.strategyLabel}"></td><td th:text="${#lists.size(r.matches)}"></td><td><a th:href="@{/quiz/history/{id}(id=${r.id})}">Xem điểm và giải thích</a></td></tr></tbody>
+        <tbody><tr th:each="r : ${history}"><td th:text="${#temporals.format(r.createdAt, 'dd/MM/yyyy HH:mm')}"></td><td th:text="${r.strategyLabel}"></td><td th:text="${r.matchCount}"></td><td><a th:href="@{/quiz/history/{id}(id=${r.id})}">Xem điểm và giải thích</a></td></tr></tbody>
     </table></div>
     <a class="btn btn-primary" th:href="@{/quiz}">Làm quiz mới</a>
-</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>
+<div th:replace="~{fragments/pagination :: pages}"></div></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

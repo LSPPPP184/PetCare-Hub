@@ -8,6 +8,17 @@ import com.petcare.dto.ProductForm;
     private Integer durationMonths;
     private Integer includedUses;
     private String includedServices;
+    @ManyToMany @JoinTable(name = "monthly_package_services", joinColumns = @JoinColumn(name = "package_id"),
+        inverseJoinColumns = @JoinColumn(name = "service_id"))
+    private java.util.Set<ServiceItem> coveredServices = new java.util.HashSet<>();
+    public java.util.Set<ServiceItem> getCoveredServices() { return java.util.Collections.unmodifiableSet(coveredServices); }
+    @Override public java.util.Optional<MonthlyCarePackage> subscriptionPackage() { return java.util.Optional.of(this); }
+    @Override public void configureCoveredServices(java.util.Collection<ServiceItem> services) {
+        if (services == null || services.isEmpty())
+            throw new com.petcare.domain.appointment.AppointmentException("Gói tháng phải có ít nhất một dịch vụ áp dụng hợp lệ.");
+        services.forEach(com.petcare.domain.appointment.AppointmentServices::require);
+        coveredServices.clear(); coveredServices.addAll(services);
+    }
     @Override public BigDecimal calculatePrice() {
         return basePrice;
     }
@@ -35,6 +46,7 @@ import com.petcare.dto.ProductForm;
         f.setDurationMonths(durationMonths);
         f.setIncludedUses(includedUses);
         f.setIncludedServices(includedServices);
+        f.setCoveredServiceIds(coveredServices.stream().map(ServiceItem::getId).toList());
         return f;
     }
 }

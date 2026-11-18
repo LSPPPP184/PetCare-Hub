@@ -51,14 +51,14 @@ class StageOneTest {
  }
  @Test void rolesAndPublicPages() throws Exception {
   for(String path:new String[]{"/","/login","/register"}) mvc.perform(get(path)).andExpect(status().isOk());
-  mvc.perform(get("/admin/dashboard")).andExpect(status().is3xxRedirection());
+  mvc.perform(get("/admin")).andExpect(status().is3xxRedirection());
   for(String role:new String[]{"ADMIN","STAFF","CUSTOMER"}) {
-   mvc.perform(get("/admin/dashboard").with(user("tester").roles(role)))
+   mvc.perform(get("/admin").with(user("tester").roles(role)))
     .andExpect(status().is(role.equals("ADMIN")?200:403));
-   mvc.perform(get("/staff/dashboard").with(user("tester").roles(role)))
+   mvc.perform(get("/staff").with(user("tester").roles(role)))
     .andExpect(status().is(role.equals("CUSTOMER")?403:200));
   }
-  mvc.perform(get("/admin/dashboard").with(user("customer").roles("CUSTOMER"))).andExpect(forwardedUrl("/403"));
+  mvc.perform(get("/admin").with(user("customer").roles("CUSTOMER"))).andExpect(forwardedUrl("/403"));
   mvc.perform(get("/403")).andExpect(status().isForbidden()).andExpect(content().string(org.hamcrest.Matchers.containsString("Không có quyền truy cập")));
  }
  @Test void seededLoginAndMenus() throws Exception {
@@ -72,18 +72,18 @@ class StageOneTest {
    var result = mvc.perform(get("/").session(session))
     .andExpect(status().isOk()).andExpect(authenticated().withRoles(account[2]))
     .andReturn().getResponse().getContentAsString();
-   assertThat(result.contains("href=\"/admin/dashboard\"")).isEqualTo(account[2].equals("ADMIN"));
-   assertThat(result.contains("href=\"/staff/dashboard\"")).isEqualTo(!account[2].equals("CUSTOMER"));
-   mvc.perform(get("/admin/dashboard").session(session))
+   assertThat(result.contains("href=\"/admin\"")).isEqualTo(account[2].equals("ADMIN"));
+   assertThat(result.contains("href=\"/staff\"")).isEqualTo(!account[2].equals("CUSTOMER"));
+   mvc.perform(get("/admin").session(session))
     .andExpect(status().is(account[2].equals("ADMIN") ? 200 : 403));
-   mvc.perform(get("/staff/dashboard").session(session))
+   mvc.perform(get("/staff").session(session))
     .andExpect(status().is(account[2].equals("CUSTOMER") ? 403 : 200));
 
    mvc.perform(post("/logout").session(session).with(csrf()))
     .andExpect(redirectedUrl("/login?logout")).andExpect(unauthenticated());
    assertThat(session.isInvalid()).isTrue();
    // Session cũ đã bị hủy; cookie cũ không cấp lại quyền truy cập.
-   for (String path : new String[]{"/admin/dashboard", "/staff/dashboard"}) {
+   for (String path : new String[]{"/admin", "/staff"}) {
     mvc.perform(get(path).cookie(new Cookie("JSESSIONID", sessionId)))
      .andExpect(unauthenticated()).andExpect(redirectedUrl("http://localhost/login"));
    }

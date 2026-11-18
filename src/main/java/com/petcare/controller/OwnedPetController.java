@@ -21,7 +21,7 @@ public class OwnedPetController {
     @ModelAttribute("staff") boolean staff() { return false; }
     @ModelAttribute("today") LocalDate today() { return service.today(); }
 
-    @GetMapping String list(Model model) { model.addAttribute("pets", service.mine()); return "health/pets"; }
+    @GetMapping String list(@RequestParam(defaultValue = "0") @jakarta.validation.constraints.Min(0) @jakarta.validation.constraints.Max(10000) int page, Model model) { var result = service.mine(org.springframework.data.domain.PageRequest.of(page, 20)); model.addAttribute("pageResult", result); model.addAttribute("pets", result.getContent()); return "health/pets"; }
     @GetMapping("/new") String create(Model model) {
         model.addAttribute("form", new OwnedPetForm()); model.addAttribute("editing", false);
         return "health/pet-form";
