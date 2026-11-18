@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
+    long countByStartTimeGreaterThanEqualAndStartTimeLessThanAndStateNameNot(
+        LocalDateTime start, LocalDateTime end, AppointmentStatus excluded);
     @Query("""
         select a from Appointment a where a.stateName <> :cancelled
         and a.startTime < :end and a.endTime > :start

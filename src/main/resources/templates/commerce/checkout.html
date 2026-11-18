@@ -6,6 +6,7 @@
 <main class="container">
     <div th:replace="~{fragments/layout :: flash}"></div>
     <h1>Đặt hàng</h1>
+    <p>Mỗi đơn có thể chứa một loại gói tháng. Mỗi suất mua tạo một gói riêng với đủ quyền lợi đã chốt; các loại gói khác nhau cần đặt thành đơn riêng.</p>
     <p><a th:href="@{/cart}">Quay lại giỏ hàng</a> · <a th:href="@{/products}">Xem danh mục</a></p>
     <p th:unless="${cart.checkoutAllowed}" class="alert alert-warning">Giỏ hàng trống hoặc có sản phẩm chưa thể mua. Vui lòng kiểm tra giỏ hàng.</p>
     <div th:if="${cart.checkoutAllowed}">

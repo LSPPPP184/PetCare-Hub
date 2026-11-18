@@ -8,8 +8,16 @@
     <h2 class="h4" th:text="${selection.serviceName}"></h2>
     <p th:text="${'Nhân viên: ' + selection.staffName}"></p>
     <p th:text="${#temporals.format(selection.startTime, 'dd/MM/yyyy HH:mm') + ' – ' + #temporals.format(selection.endTime, 'HH:mm') + ' (giờ Việt Nam)'}"></p>
-    <p th:text="${'Giá: ' + selection.price + ' VNĐ'}"></p>
-    <div th:replace="~{loyalty/fragments :: quote}"></div>
+    <div class="alert alert-info" th:if="${subscriptionPreview != null}">
+        <p th:text="${'Dự kiến dùng gói #' + subscriptionPreview.id + ' — Lượt còn lại: ' + subscriptionPreview.remainingUses}"></p>
+        <p>Giá lịch hẹn dự kiến: <strong>0đ</strong> (dùng 1 lượt).</p>
+        <p>Xem trang không trừ lượt. Gói được kiểm tra lại khi xác nhận; nếu không còn áp dụng, lịch sẽ tính giá thông thường.</p>
+        <a th:href="@{/subscriptions}">Kiểm tra Gói của tôi</a>
+    </div>
+    <th:block th:if="${subscriptionPreview == null}">
+        <p th:text="${'Giá: ' + selection.price + ' VNĐ'}"></p>
+        <div th:replace="~{loyalty/fragments :: quote}"></div>
+    </th:block>
     <form method="post" th:action="@{/appointments}" th:object="${form}">
         <input type="hidden" th:field="*{serviceId}"><input type="hidden" th:field="*{staffId}">
         <input type="hidden" th:field="*{startTime}">

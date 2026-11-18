@@ -12,6 +12,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /** Chuyển lỗi lịch hẹn thành thông báo tiếng Việt, không điều hướng theo URL do khách truyền. */
+@org.springframework.core.annotation.Order(0)
 @ControllerAdvice(assignableTypes = {AppointmentController.class, StaffAppointmentController.class})
 public class AppointmentExceptionHandler {
     @ExceptionHandler({AppointmentException.class, InvalidStateTransitionException.class, PurchaseException.class})

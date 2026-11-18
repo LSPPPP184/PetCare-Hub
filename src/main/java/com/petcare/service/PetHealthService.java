@@ -21,10 +21,12 @@ public class PetHealthService {
     private final CommerceAccess access;
     private final CommerceLocks locks;
     private final Clock clock;
+    private final com.petcare.config.VaccinationProperties properties;
 
     public PetHealthService(OwnedPetRepository pets, VaccinationRecordRepository vaccinations,
                             HealthRecordRepository health, OwnedPetService registration, CommerceAccess access,
-                            CommerceLocks locks, @Qualifier("healthClock") Clock clock) {
+                            CommerceLocks locks, @Qualifier("healthClock") Clock clock, com.petcare.config.VaccinationProperties properties) {
+        this.properties = properties;
         this.pets = pets;
         this.vaccinations = vaccinations;
         this.health = health;
@@ -36,11 +38,17 @@ public class PetHealthService {
 
     public LocalDate today() { return LocalDate.now(clock); }
     public List<OwnedPetView> mine() {
-        return pets.findByOwnerIdOrderByIdAsc(access.currentCustomer().getId()).stream().map(OwnedPetView::from).toList();
+        return mine(org.springframework.data.domain.Pageable.unpaged()).getContent();
     }
     public List<OwnedPetView> allPets() {
         access.staff();
-        return pets.findAllByOrderByIdAsc().stream().map(OwnedPetView::from).toList();
+        return allPets(org.springframework.data.domain.Pageable.unpaged()).getContent();
+    }
+    public org.springframework.data.domain.Page<OwnedPetView> mine(org.springframework.data.domain.Pageable pageable) {
+        return pets.findList(access.currentCustomer().getId(), pageable).map(OwnedPetView::from);
+    }
+    public org.springframework.data.domain.Page<OwnedPetView> allPets(org.springframework.data.domain.Pageable pageable) {
+        access.staff(); return pets.findList(null, pageable).map(OwnedPetView::from);
     }
     private OwnedPet pet(Long id) {
         return pets.findById(id).orElseThrow(() -> new IllegalArgumentException("Không tìm thấy thú cưng."));
@@ -74,8 +82,14 @@ public class PetHealthService {
     }
     public List<VaccinationView> alerts(VaccinationStatus status) {
         access.staff();
-        var states = status == null ? List.of(VaccinationStatus.DUE_SOON, VaccinationStatus.OVERDUE) : List.of(status);
-        return vaccinations.findByStateNameInOrderByScheduledDateAscIdAsc(states).stream().map(VaccinationView::from).toList();
+        return alerts(status, org.springframework.data.domain.Pageable.unpaged()).getContent();
+    }
+    public org.springframework.data.domain.Page<VaccinationView> alerts(VaccinationStatus status, org.springframework.data.domain.Pageable pageable) {
+        access.staff();
+        var date = today();
+        return vaccinations.findAlerts(status == null ? "ALERTS" : status.name(), date,
+            date.plusDays(properties.getDueSoonDays()), pageable)
+            .map(v -> VaccinationView.from(v, date, properties.getDueSoonDays()));
     }
     @Transactional
     public void addHealthRecord(Long petId, HealthRecordForm form) {

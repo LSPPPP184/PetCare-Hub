@@ -21,7 +21,7 @@ import java.util.*;
     @ModelAttribute("statusOptions") PetStatus[] statuses() {
         return PetStatus.values();
     }
-    @GetMapping("/products") String catalog(@RequestParam(defaultValue="") String group,@RequestParam(defaultValue="") String q,@RequestParam(defaultValue="0") int page,@RequestParam(defaultValue="false") boolean descending,Model m) {
+    @GetMapping("/products") String catalog(@RequestParam(defaultValue="") String group,@RequestParam(defaultValue="") String q,@RequestParam(defaultValue="0") @jakarta.validation.constraints.Min(0) @jakarta.validation.constraints.Max(10000) int page,@RequestParam(defaultValue="false") boolean descending,Model m) {
         m.addAttribute("products",service.search(group,q,page,descending,false));
         return "products/list";
     }
@@ -29,7 +29,7 @@ import java.util.*;
         m.addAttribute("product",service.detail(id));
         return "products/detail";
     }
-    @GetMapping("/staff/products") String manage(@RequestParam(defaultValue="") String group,@RequestParam(defaultValue="") String q,@RequestParam(defaultValue="0") int page,@RequestParam(defaultValue="false") boolean descending,Model m) {
+    @GetMapping("/staff/products") String manage(@RequestParam(defaultValue="") String group,@RequestParam(defaultValue="") String q,@RequestParam(defaultValue="0") @jakarta.validation.constraints.Min(0) @jakarta.validation.constraints.Max(10000) int page,@RequestParam(defaultValue="false") boolean descending,Model m) {
         m.addAttribute("products",service.search(group,q,page,descending,true));
         m.addAttribute("staff",true);
         return "products/list";
@@ -40,13 +40,15 @@ import java.util.*;
         f.setType(type);
         m.addAttribute("form",f);
         m.addAttribute("fields",FIELDS.get(type));
+        m.addAttribute("bookableServices", service.bookableServices());
         return "products/form";
     }
     @GetMapping("/staff/products/{id}/edit") String edit(@PathVariable Long id,Model m) {
-        var f=service.get(id).toForm();
+        var f=service.form(id);
         m.addAttribute("form",f);
         m.addAttribute("fields",FIELDS.get(f.getType()));
         m.addAttribute("id",id);
+        m.addAttribute("bookableServices", service.bookableServices());
         return "products/form";
     }
     @PostMapping("/staff/products/save") String save(@RequestParam(required=false) Long id,@Valid @ModelAttribute("form") ProductForm f,BindingResult errors,Model m) {
@@ -55,11 +57,14 @@ import java.util.*;
                 service.save(id,f);
             } catch(ProductVersionConflictException ex) {
                 errors.reject("product.version.conflict",ex.getMessage());
+            } catch(com.petcare.domain.appointment.AppointmentException ex) {
+                errors.reject("product.services.invalid", ex.getMessage());
             }
         }
         if(errors.hasErrors()) {
             if (f.getProfile() == null) f.setProfile(new PetProfileForm());
             m.addAttribute("id",id);
+            m.addAttribute("bookableServices", service.bookableServices());
             m.addAttribute("fields", f.getType() == null ? List.of() : FIELDS.getOrDefault(f.getType(), List.of()));
             return "products/form";
         }

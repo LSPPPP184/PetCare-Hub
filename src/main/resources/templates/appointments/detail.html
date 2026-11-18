@@ -6,6 +6,7 @@
     <a th:href="${staff} ? @{/staff/appointments(date=${appointment.startTime.toLocalDate()})} : @{/appointments}">Quay lại danh sách lịch</a>
     <h1 th:text="${'Lịch hẹn #' + appointment.id}"></h1><p><span th:replace="~{appointments/fragments :: badge(${appointment})}"></span></p>
     <dl class="row">
+        <dt th:if="${appointment.subscriptionId != null}" class="col-sm-3">Lượt gói chăm sóc</dt><dd th:if="${appointment.subscriptionId != null}" class="col-sm-9" th:text="${'Gói #' + appointment.subscriptionId + (appointment.subscriptionUseRefunded ? ' — đã hoàn 1 lượt' : ' — đã dùng 1 lượt')}"></dd>
         <dt class="col-sm-3">Khách hàng</dt><dd class="col-sm-9" th:text="${appointment.customerName}"></dd>
         <dt class="col-sm-3">Thú cưng</dt><dd class="col-sm-9" th:text="${appointment.petName + ' — ' + appointment.petSpecies}"></dd>
         <dt class="col-sm-3">Dịch vụ</dt><dd class="col-sm-9" th:text="${appointment.serviceName}"></dd>

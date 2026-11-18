@@ -29,6 +29,10 @@
 <div class="mb-3" th:if="${fields.contains('durationMonths')}"><label for="durationMonths">Số tháng</label><input class="form-control" id="durationMonths" th:field="*{durationMonths}" type="number" min="0"></div>
 <div class="mb-3" th:if="${fields.contains('includedUses')}"><label for="includedUses">Số lượt</label><input class="form-control" id="includedUses" th:field="*{includedUses}" type="number" min="0"></div>
 <div class="mb-3" th:if="${fields.contains('includedServices')}"><label for="includedServices">Dịch vụ trong gói</label><input class="form-control" id="includedServices" th:field="*{includedServices}" type="text" ></div>
+<fieldset class="mb-3" th:if="${fields.contains('includedServices')}"><legend class="h5">Dịch vụ được dùng lượt của gói</legend>
+<input type="hidden" name="_coveredServiceIds" value="on">
+<label class="d-block" th:each="s : ${bookableServices}"><input type="checkbox" th:field="*{coveredServiceIds}" th:value="${s.id}"> <span th:text="${s.name}"></span></label>
+<p class="text-muted">Bắt buộc chọn ít nhất một dịch vụ đang hiển thị. Quyền lợi được chốt khi khách đặt đơn mua hoặc gia hạn.</p></fieldset>
 <fieldset class="card card-body mb-3" th:if="${fields.contains('species')}"><legend class="h4">Hồ sơ ghép đôi</legend><p>Các mức từ 1 (thấp) đến 5 (cao). Hồ sơ dùng để tính gợi ý quiz.</p>
 <input type="hidden" th:field="*{profile.version}">
 <label for="profile.sizeLevel">Kích thước (1–5)</label><input class="form-control mb-3" type="number" min="1" max="5" th:field="*{profile.sizeLevel}" required>

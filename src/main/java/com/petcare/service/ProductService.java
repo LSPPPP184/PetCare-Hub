@@ -15,16 +15,11 @@ import java.util.*;
     private final ProductFactory factory;
     private final CommerceLocks locks;
     public Page<ProductView> search(String group,String q,int page,boolean descending,boolean staff) {
-        var comparator=Comparator.comparing(ProductView::price).thenComparing(ProductView::id);
-        if(descending) comparator=comparator.reversed();
-        String name = q.toLowerCase(Locale.ROOT).strip();
-        var rows = repository.findForCatalog(name, staff).stream()
-            .filter(p -> group.isBlank() || p.getCategory().equals(group))
-            .map(ProductView::from).sorted(comparator).toList();
-        var pageable=PageRequest.of(Math.max(0,page),12);
-        int start=(int)Math.min(pageable.getOffset(),rows.size());
-        return new PageImpl<>(rows.subList(start,Math.min(start+12,rows.size())),pageable,rows.size());
+        var rows = repository.searchPage(q.toLowerCase(Locale.ROOT).strip(), group, staff, descending, PageRequest.of(page, 12));
+        if (!rows.isEmpty()) repository.fetchPackageCoverage(rows.stream().map(Product::getId).toList());
+        return rows.map(ProductView::summary);
     }
+
     public Product get(Long id) {
         return repository.findById(id).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Không tìm thấy sản phẩm."));
     }
@@ -35,7 +30,9 @@ import java.util.*;
     }
     public void save(Long id,ProductForm f) {
         if(id==null) {
-            repository.save(factory.create(f));
+            var p = factory.create(f);
+            configureServices(p, f);
+            repository.save(p);
             return;
         }
         get(id);
@@ -43,6 +40,22 @@ import java.util.*;
         if(!Objects.equals(f.getVersion(),p.getVersion()))throw new ProductVersionConflictException();
         if(p.getType()!=f.getType())throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Không thể đổi loại sản phẩm.");
         p.updateCatalog(f);
+        configureServices(p, f);
+    }
+    public ProductForm form(Long id) { return get(id).toForm(); }
+    public List<AppointmentServiceView> bookableServices() {
+        return repository.findAll().stream().filter(com.petcare.domain.appointment.AppointmentServices::supports)
+            .map(com.petcare.domain.appointment.AppointmentServices::require).map(AppointmentServiceView::from).toList();
+    }
+    private void configureServices(Product product, ProductForm form) {
+        var ids = form.getCoveredServiceIds() == null ? List.<Long>of() : form.getCoveredServiceIds();
+        var selected = ids.stream().distinct().map(id -> {
+            if (id == null || id <= 0) throw new com.petcare.domain.appointment.AppointmentException("Dịch vụ áp dụng không hợp lệ.");
+            return repository.findById(id).orElseThrow(() ->
+                new com.petcare.domain.appointment.AppointmentException("Dịch vụ áp dụng không tồn tại. Vui lòng chọn lại."));
+        })
+            .map(com.petcare.domain.appointment.AppointmentServices::require).toList();
+        product.configureCoveredServices(selected);
     }
     public void hide(Long id) {
         get(id).hide();

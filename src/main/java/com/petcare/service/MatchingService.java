@@ -51,8 +51,11 @@ public class MatchingService {
         return QuizReport.from(result);
     }
 
-    public List<QuizReport> history(String email) {
-        return history.findByOwnerEmailOrderByCreatedAtDescIdDesc(email).stream().map(QuizReport::from).toList();
+    public List<QuizSummary> history(String email) {
+        return history(email, org.springframework.data.domain.Pageable.unpaged()).getContent();
+    }
+    public org.springframework.data.domain.Page<QuizSummary> history(String email, org.springframework.data.domain.Pageable pageable) {
+        return history.findSummaries(email, pageable);
     }
     public QuizReport detail(Long id, String email) {
         return QuizReport.from(history.findByIdAndOwnerEmail(id, email)

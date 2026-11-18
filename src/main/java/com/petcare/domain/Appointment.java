@@ -14,6 +14,12 @@ import java.time.LocalDateTime;
     @Index(name = "idx_appointment_customer", columnList = "customer_id")})
 @Getter @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Appointment {
+    @Column(length = 100, updatable = false) private String seedKey;
+    public void assignSeedKey(String key) {
+        if (seedKey != null || id != null || key == null || key.isBlank() || key.length() > 100)
+            throw new IllegalArgumentException("Khóa dữ liệu mẫu không hợp lệ.");
+        seedKey = key;
+    }
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
     @Version private long version;
     @ManyToOne(fetch = FetchType.LAZY, optional = false) @JoinColumn(name = "customer_id") private User customer;
@@ -25,6 +31,8 @@ public class Appointment {
     @Column(nullable = false) private LocalDateTime endTime;
     @Column(length = 1000) private String note;
     @Column(nullable = false, precision = 19, scale = 2) private BigDecimal price;
+    @ManyToOne(fetch = FetchType.LAZY) private Subscription subscription;
+    @Column(nullable = false, columnDefinition = "bit default 0") private boolean subscriptionUseRefunded;
     // Cho phép null ở DB để nâng cấp lịch cũ; getter diễn giải là chưa giảm giá.
     @Column(precision = 19, scale = 2) private BigDecimal discountAmount;
     @Column(precision = 19, scale = 2) private BigDecimal finalAmount;
@@ -62,6 +70,19 @@ public class Appointment {
         finalAmount = price.subtract(discountAmount);
     }
     public void book() { stateName = getState().book(this); }
+    /** Ghi dấu lượt đã dùng để hoàn đúng gói; lịch miễn phí không tiếp tục giảm giá theo hạng. */
+    public void applySubscription(Subscription subscription) {
+        if (id != null || this.subscription != null || subscription == null
+                || !java.util.Objects.equals(customer.getId(), subscription.getCustomer().getId()))
+            throw new AppointmentException("Không thể áp dụng gói cho lịch hẹn này.");
+        this.subscription = subscription;
+        price = BigDecimal.ZERO.setScale(2); discountAmount = price; finalAmount = price;
+    }
+    public void markSubscriptionUseRefunded() {
+        if (stateName != AppointmentStatus.CANCELLED || subscription == null || subscriptionUseRefunded)
+            throw new AppointmentException("Lượt dùng gói không thể hoàn lại lần nữa.");
+        subscriptionUseRefunded = true;
+    }
     public void start() { stateName = getState().start(this); }
     public void finish() { stateName = getState().finish(this); }
     public void cancel() { stateName = getState().cancel(this); }

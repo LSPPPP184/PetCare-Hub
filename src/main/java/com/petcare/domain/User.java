@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import java.time.LocalDateTime;
 
 @Entity
+@EntityListeners(com.petcare.event.UserTimestampListener.class)
 @Table(name = "users")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -43,8 +44,7 @@ public class User {
         this.role = role;
     }
 
-    @PrePersist
-    void onCreate() {
-        createdAt = LocalDateTime.now();
+    public void recordCreatedAt(LocalDateTime time) {
+        if (createdAt == null) createdAt = time;
     }
 }

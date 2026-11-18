@@ -4,17 +4,24 @@ import lombok.Getter;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import com.petcare.dto.ProductForm;
-@Entity @Table(name="products") @Inheritance(strategy=InheritanceType.JOINED) @Getter public abstract class Product  {
+@Entity @EntityListeners(com.petcare.event.ProductTimestampListener.class)
+@Table(name="products") @Inheritance(strategy=InheritanceType.JOINED) @Getter public abstract class Product  {
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY) private Long id;
     @Version @Column(nullable=false,columnDefinition="bigint default 0") private long version;
+    @Column(length = 100, updatable = false) private String seedKey;
+    public void assignSeedKey(String key) {
+        if (seedKey != null || id != null || key == null || key.isBlank() || key.length() > 100)
+            throw new IllegalArgumentException("Khóa dữ liệu mẫu không hợp lệ.");
+        seedKey = key;
+    }
     @Column(nullable=false) protected String name;
     @Column(length=2000) protected String description;
     @Column(nullable=false,precision=19,scale=2) protected BigDecimal basePrice;
     protected String imageUrl;
     private boolean active=true;
     private LocalDateTime createdAt;
-    @PrePersist void created() {
-        createdAt=LocalDateTime.now();
+    public void recordCreatedAt(LocalDateTime time) {
+        if (createdAt == null) createdAt = time;
     }
     public void hide() {
         active=false;
@@ -49,4 +56,7 @@ import com.petcare.dto.ProductForm;
     }
     public abstract String getCategory();
     public abstract ProductType getType();
+    /** Mặc định sản phẩm không cấp gói; lớp gói tháng cung cấp quyền lợi bằng đa hình. */
+    public java.util.Optional<MonthlyCarePackage> subscriptionPackage() { return java.util.Optional.empty(); }
+    public void configureCoveredServices(java.util.Collection<ServiceItem> services) {}
 }

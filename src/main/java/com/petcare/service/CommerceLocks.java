@@ -14,7 +14,9 @@ public class CommerceLocks {
         if (id == null) throw new PurchaseException("Mã dữ liệu không được trống.");
         // Giữ các thay đổi trước đó nếu bên gọi ghép nhiều thao tác trong một transaction.
         entityManager.flush();
-        T entity = entityManager.find(type, id, LockModeType.PESSIMISTIC_WRITE);
+        // Không nâng khóa trên entity đã tải với version cũ: Hibernate có thể báo
+        // OptimisticLockException trước khi refresh. Refresh trực tiếp dưới khóa đọc bản mới nhất.
+        T entity = entityManager.find(type, id);
         if (entity == null) throw new PurchaseException("Không tìm thấy dữ liệu yêu cầu.");
         entityManager.refresh(entity, LockModeType.PESSIMISTIC_WRITE);
         return entity;

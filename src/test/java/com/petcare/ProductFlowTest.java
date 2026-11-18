@@ -73,15 +73,18 @@ class ProductFlowTest {
 
     @ParameterizedTest @EnumSource(ProductType.class)
     void staffCreatesEditsAndHidesEachSubtype(ProductType type) throws Exception {
+        var covered = repository.saveAndFlush(new com.petcare.domain.factory.ProductFactory().create(
+            ProductFactoryTest.form(ProductType.GROOMING, "Dịch vụ áp dụng", "50000")));
         mvc.perform(get("/staff/products/new").param("type", type.name()).with(user("staff").roles("STAFF")))
             .andExpect(status().isOk());
         mvc.perform(post("/staff/products/save").with(user("staff").roles("STAFF")).with(csrf())
             .param("type", type.name()).param("name", "Sản phẩm mới").param("basePrice", "100")
             .param("stockQuantity", "5")
+            .param("coveredServiceIds", covered.getId().toString())
             .param("durationMinutes", "30").param("doctorName", "Bác sĩ An")
             .param("durationMonths", "1").param("includedUses", "4").param("includedServices", "Tắm"))
             .andExpect(redirectedUrl("/staff/products"));
-        var p = repository.findAll().getFirst();
+        var p = repository.findAll().stream().filter(item -> !item.getId().equals(covered.getId())).findFirst().orElseThrow();
         Long id = p.getId();
         repository.flush();
         entityManager.clear();
@@ -97,6 +100,7 @@ class ProductFlowTest {
         mvc.perform(post("/staff/products/save").with(user("admin").roles("ADMIN")).with(csrf())
             .param("id", id.toString()).param("type", type.name()).param("name", "Đã sửa").param("basePrice", "200")
             .param("version", Long.toString(p.getVersion()))
+            .param("coveredServiceIds", covered.getId().toString())
             .param("durationMinutes", "40").param("doctorName", "Bác sĩ Bình")
             .param("durationMonths", "2").param("includedUses", "8").param("includedServices", "Khám")
             .param("species", "CAT").param("breed", "Anh lông ngắn").param("ageMonths", "12")
@@ -112,7 +116,7 @@ class ProductFlowTest {
         mvc.perform(post("/staff/products/" + id + "/hide").with(user("staff").roles("STAFF")).with(csrf()))
             .andExpect(redirectedUrl("/staff/products"));
         mvc.perform(get("/products/" + id)).andExpect(status().isNotFound());
-        assertThat(service.search("", "", 0, false, false)).isEmpty();
+        assertThat(service.search("", "Đã sửa", 0, false, false)).isEmpty();
     }
 
     @ParameterizedTest
@@ -132,6 +136,7 @@ class ProductFlowTest {
         params.set("durationMonths", "1");
         params.set("includedUses", "4");
         params.set("includedServices", "Tắm");
+        params.set("coveredServiceIds", "1");
         params.set(field, value);
         mvc.perform(post("/staff/products/save").with(user("staff").roles("STAFF")).with(csrf()).params(params))
             .andExpect(status().isOk()).andExpect(model().attributeHasFieldErrors("form", errorField))

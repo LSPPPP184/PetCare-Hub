@@ -5,14 +5,13 @@ import com.petcare.domain.factory.ProductFactory;
 import com.petcare.repository.ProductRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.context.annotation.Profile;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import java.math.BigDecimal;
-@Component @Profile("demo") @RequiredArgsConstructor public class ProductDemoSeeder implements CommandLineRunner  {
+@Component @Profile("demo") @RequiredArgsConstructor public class ProductDemoSeeder  {
     private final ProductRepository repository;
     private final ProductFactory factory;
-    @Override @Transactional public void run(String... args) {
+    @Transactional public void run(String... args) {
         if(repository.count()!=0)return;
         add(ProductType.PET,6,"Thú cưng");
         add(ProductType.ACCESSORY,8,"Phụ kiện");
@@ -35,7 +34,9 @@ import java.math.BigDecimal;
             f.setIncludedUses(4);
             f.setIncludedServices("Tắm và chăm sóc");
             f.setStockQuantity(10);
-            repository.save(factory.create(f));
+            var product = factory.create(f);
+            product.assignSeedKey("DEMO:PRODUCT:" + type.name() + ":" + i);
+            repository.save(product);
         }
     }
 }

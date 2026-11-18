@@ -9,6 +9,7 @@
   - [x] GĐ5B Giao diện và điều hướng quản lý sức khỏe
 - [x] GĐ6 Quiz ghép đôi (Strategy)
 - [x] GĐ7 Khách hàng thân thiết (Strategy + Observer)
-- [ ] GĐ8 Gói chăm sóc theo tháng
-- [ ] GĐ9 Dashboard, hoàn thiện, kiểm thử
+- [x] GĐ8 Gói chăm sóc theo tháng
+- [x] GĐ9 Dashboard, hoàn thiện, kiểm thử — mã nguồn, 470 test và tài liệu đã hoàn tất
+  - [ ] Kiểm chứng SQL Server thật/Unicode theo [STAGE9.md](STAGE9.md) — chưa có thông tin kết nối trong môi trường thực hiện
 - [ ] GĐ10 Tài liệu báo cáo

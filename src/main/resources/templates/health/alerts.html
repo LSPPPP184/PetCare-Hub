@@ -2,7 +2,7 @@
 <head th:replace="~{fragments/layout :: head('Theo dõi tiêm phòng')}"></head><body>
 <header th:replace="~{fragments/layout :: header}"></header><main class="container">
 <div th:replace="~{fragments/layout :: flash}"></div><h1>Theo dõi tiêm phòng toàn cửa hàng</h1>
-<p>Ngày hiện tại: <strong th:text="${today}"></strong>. Mặc định hiển thị các mũi sắp đến hạn và quá hạn.</p>
+<p>Ngày hiện tại: <strong th:text="${today}"></strong>. Mặc định hiển thị các mũi sắp đến hạn và quá hạn theo ngày hẹn. Mỗi dòng là một mũi tiêm; một thú có thể có nhiều mũi.</p>
 <div class="d-flex flex-wrap gap-3 mb-4"><form class="d-flex gap-2" method="get" th:action="@{/staff/health}">
 <label for="status" class="visually-hidden">Trạng thái tiêm</label>
 <select id="status" name="status" class="form-select">
@@ -16,4 +16,4 @@
 <p class="alert alert-info" th:if="${#lists.isEmpty(records)}">Không có lịch tiêm phù hợp.</p>
 <section th:each="v : ${records}"><h2 class="h5"><a th:href="@{/staff/health/pets/{id}(id=${v.petId})}" th:text="${v.petName}"></a> · <span th:text="${v.ownerName}"></span></h2>
 <article th:replace="~{health/vaccination :: record(${v}, true)}"></article></section>
-</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>
+<div th:replace="~{fragments/pagination :: pages}"></div></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

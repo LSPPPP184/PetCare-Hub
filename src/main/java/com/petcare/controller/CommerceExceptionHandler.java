@@ -12,6 +12,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /** Chuyển lỗi nghiệp vụ thành flash, chỉ điều hướng đến các đường dẫn nội bộ cố định. */
+@org.springframework.core.annotation.Order(0)
 @ControllerAdvice(assignableTypes = {CartController.class, OrderController.class, StaffOrderController.class})
 public class CommerceExceptionHandler {
     @ExceptionHandler({PurchaseException.class, InvalidStateTransitionException.class})

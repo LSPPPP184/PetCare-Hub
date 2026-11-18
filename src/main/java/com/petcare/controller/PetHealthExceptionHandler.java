@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+@org.springframework.core.annotation.Order(0)
 @ControllerAdvice(assignableTypes = {OwnedPetController.class, StaffPetHealthController.class, DemoDateController.class})
 public class PetHealthExceptionHandler {
     @ExceptionHandler({IllegalArgumentException.class, InvalidStateTransitionException.class, PurchaseException.class})

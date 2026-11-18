@@ -16,4 +16,4 @@
 <a th:unless="${staff}" class="btn btn-outline-secondary" th:href="@{/my-pets/{id}/edit(id=${pet.id})}">Sửa thông tin</a>
 <a th:if="${staff}" class="btn btn-outline-secondary" th:href="@{/staff/health/pets/{id}/records/new(id=${pet.id})}">Thêm bản ghi khám</a>
 </div></article></div></div>
-</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>
+<div th:replace="~{fragments/pagination :: pages}"></div></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

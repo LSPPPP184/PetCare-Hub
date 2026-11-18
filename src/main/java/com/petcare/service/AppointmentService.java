@@ -30,6 +30,7 @@ public class AppointmentService {
     private final AppointmentPolicy policy;
     private final AppointmentHours hours;
     private final LoyaltyPricingService pricing;
+    private final SubscriptionService subscriptions;
     private final org.springframework.context.ApplicationEventPublisher events;
 
     public LocalDate today() { return policy.today(); }
@@ -79,6 +80,15 @@ public class AppointmentService {
         return new AppointmentSelection(service.getId(), service.getName(), employee.getId(), employee.getFullName(),
             start, policy.endTime(start, service.getDurationMinutes()), service.calculatePrice());
     }
+    public Optional<SubscriptionPreview> previewSubscription(Long serviceId, LocalDate date) {
+        return subscriptions.preview(serviceId, date);
+    }
+    public AppointmentConfirmation confirmation(Long serviceId, Long staffId, LocalDateTime start) {
+        var selection = selection(serviceId, staffId, start);
+        var subscription = previewSubscription(serviceId, selection.startTime().toLocalDate());
+        return new AppointmentConfirmation(selection, subscription.orElse(null),
+            subscription.isEmpty() ? pricing.preview(selection.price(), false) : null);
+    }
     @Transactional public Long book(AppointmentForm form) {
         var customer = access.currentCustomer();
         locks.lock(User.class, customer.getId());
@@ -90,7 +100,9 @@ public class AppointmentService {
         validateSlot(service, employee.getId(), form.getStartTime());
         var appointment = Appointment.create(customer, form.getPetName(), form.getPetSpecies(), service,
             employee, form.getStartTime(), form.getNote());
-        appointment.snapshotDiscount(pricing.snapshot(customer.getId(), appointment.getPrice(), false).discountAmount());
+        var subscription = subscriptions.useOnce(customer, service, form.getStartTime().toLocalDate());
+        if (subscription.isPresent()) appointment.applySubscription(subscription.get());
+        else appointment.snapshotDiscount(pricing.snapshot(customer.getId(), appointment.getPrice(), false).discountAmount());
         return appointments.save(appointment).getId();
     }
     private Appointment find(Long id) {
@@ -117,6 +129,7 @@ public class AppointmentService {
         var a = locked(id);
         policy.validateCustomerCancellation(a.getStartTime());
         a.cancel();
+        subscriptions.restoreUse(a);
     }
     private void checkAssigned(User actor, Appointment a) {
         if (actor.getRole() != Role.ADMIN && !actor.getId().equals(a.getStaff().getId()))
@@ -148,5 +161,7 @@ public class AppointmentService {
         events.publishEvent(new com.petcare.event.AppointmentCompletedEvent(appointment.getId()));
     }
     /** Nhân viên có thể hủy lịch BOOKED để xử lý sự cố; mốc hai tiếng chỉ áp dụng cho khách. */
-    @Transactional public void cancelByStaff(Long id) { assignedAndLocked(id).cancel(); }
+    @Transactional public void cancelByStaff(Long id) {
+        var a = assignedAndLocked(id); a.cancel(); subscriptions.restoreUse(a);
+    }
 }

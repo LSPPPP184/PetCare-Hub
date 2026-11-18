@@ -7,6 +7,11 @@ import lombok.*;
     // Form cũ không gửi hồ sơ: giữ nguyên hồ sơ hiện có, không ghi đè bằng giá trị mặc định.
     @jakarta.validation.Valid private PetProfileForm profile;
     private Long version;
+    private java.util.List<@NotNull(message="Dịch vụ áp dụng không hợp lệ.") @Positive(message="Dịch vụ áp dụng không hợp lệ.") Long> coveredServiceIds;
+    @AssertTrue(message="Gói tháng phải có ít nhất một dịch vụ áp dụng hợp lệ.")
+    public boolean isCoveredServicesSelected() {
+        return type != ProductType.MONTHLY || (coveredServiceIds != null && !coveredServiceIds.isEmpty());
+    }
     private static final java.util.Map<ProductType, java.util.function.Predicate<ProductForm>> RULES = java.util.Map.of( ProductType.PET, f -> true, ProductType.ACCESSORY, f -> true, ProductType.GROOMING, f -> positive(f.durationMinutes), ProductType.VET, f -> positive(f.durationMinutes) && f.doctorName != null && !f.doctorName.isBlank(), ProductType.MONTHLY, f -> positive(f.durationMinutes) && positive(f.durationMonths) && positive(f.includedUses) && f.includedServices != null && !f.includedServices.isBlank());
     private static boolean positive(Integer value)  {
         return value != null && value > 0;

@@ -5,9 +5,7 @@ import com.petcare.dto.*;
 import com.petcare.repository.*;
 import com.petcare.service.CommerceLocks;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
@@ -41,7 +39,7 @@ public class MatchingDemoSeeder {
         new Sample("matching-rabbit", "Bông Gòn – thỏ lùn", Species.OTHER, "Thỏ lùn", 1, 2, true, 3, 2, 2, 2, 1.5),
         new Sample("matching-hamster", "Hạt Dẻ – chuột Hamster", Species.OTHER, "Hamster", 1, 1, false, 1, 1, 1, 1, 0.5));
 
-    @EventListener(ApplicationReadyEvent.class) @Transactional
+    @Transactional
     public void seed() {
         users.findByEmail("admin@petcare.vn").ifPresent(u -> locks.lock(User.class, u.getId()));
         for (var pet : pets.findAll()) {
@@ -62,6 +60,7 @@ public class MatchingDemoSeeder {
             form.setHealthNote("Hồ sơ minh họa, cần trao đổi thêm với cửa hàng.");
             form.setProfile(sample.profile());
             var pet = new Pet(); pet.update(form); pet.getProfile().assignSeedKey(sample.key());
+            pet.assignSeedKey(sample.key());
             pets.save(pet);
         }
     }

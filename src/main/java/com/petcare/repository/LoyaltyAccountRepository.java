@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 
 public interface LoyaltyAccountRepository extends JpaRepository<LoyaltyAccount, Long> {
+    @Query("select count(a) from LoyaltyAccount a where a.totalPoints >= :lower and (:upper is null or a.totalPoints < :upper)")
+    long countMembers(long lower, Long upper);
     Optional<LoyaltyAccount> findByCustomerId(Long customerId);
 
     /** Chỉ đọc các thẻ đã mở; fetch khách cùng trang để không phát sinh N+1 hoặc khóa ghi. */

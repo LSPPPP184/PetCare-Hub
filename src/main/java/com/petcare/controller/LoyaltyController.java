@@ -21,7 +21,7 @@ public class LoyaltyController {
         return "redirect:/membership";
     }
     @GetMapping("/admin/members") String members(@RequestParam(required = false) MembershipTier tier,
-                                               @RequestParam(defaultValue = "0") int page, Model model) {
+                                               @RequestParam(defaultValue = "0") @jakarta.validation.constraints.Min(0) @jakarta.validation.constraints.Max(10000) int page, Model model) {
         var members = loyalty.members(tier, page);
         model.addAttribute("members", members.getContent()); model.addAttribute("memberPage", members);
         model.addAttribute("tiers", MembershipTier.values()); model.addAttribute("benefits", loyalty.benefits());
