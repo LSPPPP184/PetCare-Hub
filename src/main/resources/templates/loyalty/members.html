@@ -1,17 +1,17 @@
 <!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Quản lý thành viên')}"></head><body>
-<header th:replace="~{fragments/layout :: header}"></header><main class="container">
-    <h1>Quản lý thành viên</h1>
-    <form method="get" th:action="@{/admin/members}" class="d-flex gap-2 mb-3">
+<header th:replace="~{fragments/layout :: header}"></header><main class="container pc-workspace"><div th:replace="~{fragments/layout :: flash}"></div>
+    <p class="pc-eyebrow">Gắn bó lâu dài, chăm sóc trọn vẹn</p><h1>Quản lý thành viên</h1>
+    <form method="get" th:action="@{/admin/members}" class="d-flex gap-2 mb-3 pc-panel pc-toolbar pc-member-filter">
         <label for="tier" class="form-label">Hạng</label><select id="tier" name="tier" class="form-select">
             <option value="">Tất cả hạng</option><option th:each="tier, status : ${tiers}" th:value="${tier}" th:text="${benefits[status.index].name}" th:selected="${tier == selectedTier}"></option>
         </select><button class="btn btn-primary">Lọc</button>
     </form>
-    <div class="table-responsive"><table class="table"><thead><tr><th>Khách hàng</th><th>Email</th><th>Hạng</th><th>Tích lũy</th><th>Hiện có</th><th>Thao tác</th></tr></thead><tbody>
+    <div class="table-responsive pc-table-wrap" tabindex="0" aria-label="Danh sách thành viên thân thiết"><table class="table pc-records-table"><thead><tr><th>Khách hàng</th><th>Email</th><th>Hạng</th><th>Tích lũy</th><th>Hiện có</th><th>Thao tác</th></tr></thead><tbody>
         <tr th:each="member : ${members}"><td th:text="${member.customerName}"></td><td th:text="${member.email}"></td><td th:text="${member.tierName}"></td><td th:text="${member.totalPoints}"></td><td th:text="${member.currentPoints}"></td>
             <td><a th:href="@{/admin/members/{id}(id=${member.customerId})}">Xem thẻ và điều chỉnh điểm</a></td></tr>
     </tbody></table></div>
-    <p th:if="${memberPage.empty}">Chưa có thành viên trong trang này.</p>
-    <nav aria-label="Phân trang thành viên" class="d-flex align-items-center gap-3 mb-3">
+    <p class="pc-empty" role="status" th:if="${memberPage.empty}">Chưa có thành viên trong trang này.</p>
+    <nav aria-label="Phân trang thành viên" class="d-flex align-items-center gap-3 mb-3 pc-pagination">
         <a th:if="${memberPage.hasPrevious()}" th:href="@{/admin/members(tier=${selectedTier},page=${memberPage.number - 1})}">Trang trước</a>
         <span th:if="${memberPage.totalPages > 0}" th:text="${'Trang ' + (memberPage.number + 1) + ' / ' + memberPage.totalPages}"></span>
         <a th:if="${memberPage.hasNext()}" th:href="@{/admin/members(tier=${selectedTier},page=${memberPage.number + 1})}">Trang sau</a>

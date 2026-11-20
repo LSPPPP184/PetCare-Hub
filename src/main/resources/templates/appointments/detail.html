@@ -1,11 +1,11 @@
 <!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/layout :: head('Chi tiết lịch hẹn')}"></head><body>
 <header th:replace="~{fragments/layout :: header}"></header>
-<main class="container">
+<main class="container pc-customer">
     <div th:replace="~{fragments/layout :: flash}"></div>
-    <a th:href="${staff} ? @{/staff/appointments(date=${appointment.startTime.toLocalDate()})} : @{/appointments}">Quay lại danh sách lịch</a>
-    <h1 th:text="${'Lịch hẹn #' + appointment.id}"></h1><p><span th:replace="~{appointments/fragments :: badge(${appointment})}"></span></p>
-    <dl class="row">
+    <a class="pc-back-link" th:href="${staff} ? @{/staff/appointments(date=${appointment.startTime.toLocalDate()})} : @{/appointments}">Quay lại danh sách lịch</a>
+    <p class="pc-eyebrow">Một buổi hẹn dành riêng cho thú cưng</p><h1 th:text="${'Lịch hẹn #' + appointment.id}"></h1><p><span th:replace="~{appointments/fragments :: badge(${appointment})}"></span></p>
+    <section class="pc-panel pc-section-compact"><h2>Thông tin buổi hẹn</h2><dl class="row pc-facts">
         <dt th:if="${appointment.subscriptionId != null}" class="col-sm-3">Lượt gói chăm sóc</dt><dd th:if="${appointment.subscriptionId != null}" class="col-sm-9" th:text="${'Gói #' + appointment.subscriptionId + (appointment.subscriptionUseRefunded ? ' — đã hoàn 1 lượt' : ' — đã dùng 1 lượt')}"></dd>
         <dt class="col-sm-3">Khách hàng</dt><dd class="col-sm-9" th:text="${appointment.customerName}"></dd>
         <dt class="col-sm-3">Thú cưng</dt><dd class="col-sm-9" th:text="${appointment.petName + ' — ' + appointment.petSpecies}"></dd>
@@ -16,7 +16,7 @@
         <dt class="col-sm-3">Giảm theo hạng</dt><dd class="col-sm-9" th:text="${appointment.discountAmount + ' VNĐ'}"></dd>
         <dt class="col-sm-3">Thanh toán</dt><dd class="col-sm-9" th:text="${appointment.finalAmount + ' VNĐ'}"></dd>
         <dt class="col-sm-3">Ghi chú</dt><dd class="col-sm-9" th:text="${appointment.note}"></dd>
-    </dl>
+    </dl></section><div class="pc-panel pc-action-panel">
     <p th:unless="${staff}">Chỉ có thể hủy lịch đã đặt khi còn cách giờ hẹn ít nhất 2 tiếng.</p>
     <div th:replace="~{appointments/fragments :: actions(${appointment}, ${staff})}"></div>
-</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>
+</div></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

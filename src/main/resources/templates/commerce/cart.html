@@ -3,20 +3,20 @@
 <head th:replace="~{fragments/layout :: head('Giỏ hàng')}"></head>
 <body>
 <header th:replace="~{fragments/layout :: header}"></header>
-<main class="container">
+<main class="container pc-customer">
     <div th:replace="~{fragments/layout :: flash}"></div>
-    <h1>Giỏ hàng</h1>
-    <p><a th:href="@{/products}">Tiếp tục mua sắm</a> · <a th:href="@{/orders}">Lịch sử đơn hàng</a></p>
-    <p th:if="${cart.items.empty}">Giỏ hàng đang trống. Hãy chọn sản phẩm từ danh mục.</p>
-    <div class="table-responsive" th:unless="${cart.items.empty}">
-        <table class="table align-middle">
+    <p class="pc-eyebrow">Những món quà nhỏ cho người bạn bốn chân</p><h1>Giỏ hàng</h1>
+    <p class="pc-page-links"><a th:href="@{/products}">Tiếp tục mua sắm</a> · <a th:href="@{/orders}">Lịch sử đơn hàng</a></p>
+    <p class="pc-empty" role="status" th:if="${cart.items.empty}">Giỏ hàng đang trống. Hãy chọn sản phẩm từ danh mục.</p>
+    <div class="table-responsive pc-cart-shell" th:unless="${cart.items.empty}">
+        <div class="table-responsive pc-table-wrap" tabindex="0" aria-label="Sản phẩm trong giỏ hàng"><table class="table align-middle pc-cart-table">
             <thead><tr><th>Sản phẩm</th><th>Đơn giá</th><th>Số lượng</th><th>Thành tiền</th><th>Thao tác</th></tr></thead>
             <tbody><tr th:each="item : ${cart.items}">
                 <td><a th:if="${item.active}" th:href="@{/products/{id}(id=${item.productId})}" th:text="${item.name}"></a>
                     <span th:unless="${item.active}" th:text="${item.name}"></span>
                     <p class="text-danger mb-0" th:if="${item.problem != null}" th:text="${item.problem}"></p></td>
                 <td th:text="${item.unitPrice + ' VNĐ'}"></td>
-                <td><form class="d-flex gap-2" th:action="@{/cart/items/{id}/quantity(id=${item.productId})}" method="post">
+                <td><form class="d-flex gap-2 pc-quantity" th:action="@{/cart/items/{id}/quantity(id=${item.productId})}" method="post">
                     <input class="form-control" type="number" name="quantity" min="1" max="2147483647" required
                            th:value="${item.quantity}" th:attr="aria-label=${'Số lượng ' + item.name}">
                     <button class="btn btn-outline-primary">Cập nhật</button></form></td>
@@ -24,12 +24,12 @@
                 <td><form th:action="@{/cart/items/{id}/remove(id=${item.productId})}" method="post">
                     <button class="btn btn-outline-danger">Xóa</button></form></td>
             </tr></tbody>
-        </table>
+        </table></div><aside class="pc-panel pc-summary"><h2>Đơn hàng của bạn</h2>
         <p class="fw-bold" th:text="${'Tạm tính: ' + cart.total + ' VNĐ'}"></p>
         <div th:replace="~{loyalty/fragments :: quote}"></div>
         <a class="btn btn-primary" th:if="${cart.checkoutAllowed}" th:href="@{/checkout}">Tiến hành đặt hàng</a>
         <p class="text-danger" th:unless="${cart.checkoutAllowed}">Vui lòng cập nhật hoặc xóa các sản phẩm chưa thể mua trước khi đặt hàng.</p>
-    </div>
+    </aside></div>
 </main>
 <footer th:replace="~{fragments/layout :: footer}"></footer>
 </body></html>

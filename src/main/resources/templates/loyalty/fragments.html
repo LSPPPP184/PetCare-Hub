@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><body>
-<div th:fragment="quote" class="card card-body bg-light mb-3" th:if="${quote != null}">
+<div th:fragment="quote" class="card card-body bg-light mb-3 pc-quote" th:if="${quote != null}">
     <p th:text="${'Hạng ' + quote.tierName + ' — giảm: ' + quote.tierDiscount + ' VNĐ'}"></p>
     <p th:if="${quote.voucherDiscount.signum() > 0}" th:text="${'Voucher điểm: −' + quote.voucherDiscount + ' VNĐ'}"></p>
     <p class="fw-bold" th:text="${'Thanh toán dự kiến: ' + quote.finalAmount + ' VNĐ'}"></p>

@@ -1,10 +1,10 @@
 <!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/layout :: head('Thông tin thú cưng')}"></head><body>
-<header th:replace="~{fragments/layout :: header}"></header><main class="container">
-<h1 th:text="${editing ? 'Sửa thông tin thú cưng' : 'Thêm thú cưng'}"></h1>
+<header th:replace="~{fragments/layout :: header}"></header><main class="container pc-customer">
+<p class="pc-eyebrow">Sổ chăm sóc của người bạn nhỏ</p><h1 th:text="${editing ? 'Sửa thông tin thú cưng' : 'Thêm thú cưng'}"></h1>
 <p>Lịch mẫu cho chó/mèo được sinh một lần khi thêm. Các loài khác chưa có lịch mẫu. Dữ liệu mẫu không phải tư vấn thú y.</p>
-<p th:if="${editing}">Loài và ngày sinh được giữ cố định để bảo toàn lịch tiêm đã tạo.</p>
-<form class="col-lg-7" method="post" th:action="${editing} ? @{/my-pets/{id}/edit(id=${petId})} : @{/my-pets}" th:object="${form}">
+<p class="pc-notice" th:if="${editing}">Loài và ngày sinh được giữ cố định để bảo toàn lịch tiêm đã tạo.</p>
+<form class="col-lg-7 pc-panel pc-pet-form" method="post" th:action="${editing} ? @{/my-pets/{id}/edit(id=${petId})} : @{/my-pets}" th:object="${form}">
 <div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}"><p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p></div>
 <input type="hidden" th:field="*{version}">
 <label for="name" class="form-label">Tên thú cưng</label><input class="form-control mb-3" th:field="*{name}" maxlength="100" required>

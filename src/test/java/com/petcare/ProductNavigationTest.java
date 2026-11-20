@@ -36,7 +36,7 @@ class ProductNavigationTest {
         var html = mvc.perform(get(path)).andExpect(status().isOk())
             .andReturn().getResponse().getContentAsString();
 
-        assertThat(header(html)).contains("href=\"/products\">Danh mục</a>")
+        assertThat(header(html)).containsPattern("<a\\b(?=[^>]*href=\"/products\")[^>]*>Danh mục</a>")
             .doesNotContain("href=\"/staff/products\"", "Quản lý sản phẩm");
     }
 
@@ -48,9 +48,9 @@ class ProductNavigationTest {
                 .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
             String menu = header(html);
 
-            assertThat(menu).contains("href=\"/products\">Danh mục</a>");
-            assertThat(menu.contains("href=\"/staff/products\">Quản lý sản phẩm</a>"))
-                .isEqualTo(managementVisible);
+            assertThat(menu).containsPattern("<a\\b(?=[^>]*href=\"/products\")[^>]*>Danh mục</a>");
+            assertThat(Pattern.compile("<a\\b(?=[^>]*href=\"/staff/products\")[^>]*>Quản lý sản phẩm</a>")
+                .matcher(menu).find()).isEqualTo(managementVisible);
             if (!managementVisible) {
                 assertThat(menu).doesNotContain("href=\"/staff/products\"");
             }

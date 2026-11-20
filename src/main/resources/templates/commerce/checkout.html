@@ -3,21 +3,21 @@
 <head th:replace="~{fragments/layout :: head('Đặt hàng')}"></head>
 <body>
 <header th:replace="~{fragments/layout :: header}"></header>
-<main class="container">
+<main class="container pc-customer">
     <div th:replace="~{fragments/layout :: flash}"></div>
-    <h1>Đặt hàng</h1>
+    <p class="pc-eyebrow">Thêm một chút yêu thương</p><h1>Đặt hàng</h1>
     <p>Mỗi đơn có thể chứa một loại gói tháng. Mỗi suất mua tạo một gói riêng với đủ quyền lợi đã chốt; các loại gói khác nhau cần đặt thành đơn riêng.</p>
-    <p><a th:href="@{/cart}">Quay lại giỏ hàng</a> · <a th:href="@{/products}">Xem danh mục</a></p>
+    <p class="pc-page-links"><a th:href="@{/cart}">Quay lại giỏ hàng</a> · <a th:href="@{/products}">Xem danh mục</a></p>
     <p th:unless="${cart.checkoutAllowed}" class="alert alert-warning">Giỏ hàng trống hoặc có sản phẩm chưa thể mua. Vui lòng kiểm tra giỏ hàng.</p>
-    <div th:if="${cart.checkoutAllowed}">
+    <div class="pc-two-column pc-checkout" th:if="${cart.checkoutAllowed}"><section class="pc-panel pc-summary"><h2>Kiểm tra đơn hàng</h2>
         <ul class="list-group mb-3"><li class="list-group-item d-flex justify-content-between" th:each="item : ${cart.items}">
             <span th:text="${item.name + ' × ' + item.quantity}"></span><span th:text="${item.total + ' VNĐ'}"></span>
         </li></ul>
         <p class="fw-bold" th:text="${'Tạm tính: ' + cart.total + ' VNĐ'}"></p>
         <div th:replace="~{loyalty/fragments :: quote}"></div>
         <p class="text-muted">Giá được chốt khi đặt hàng. Tồn kho được kiểm tra lại khi cửa hàng xác nhận đơn.</p>
-        <form th:action="@{/checkout}" th:object="${checkoutForm}" method="post">
-            <label class="form-label" for="shippingAddress">Địa chỉ giao hàng</label>
+        </section><form class="pc-panel pc-checkout-form" th:action="@{/checkout}" th:object="${checkoutForm}" method="post">
+            <h2>Gửi đến người bạn nhỏ</h2><p class="text-muted">Nhập đầy đủ địa chỉ để cửa hàng giao đúng nơi.</p><label class="form-label" for="shippingAddress">Địa chỉ giao hàng</label>
             <textarea class="form-control mb-2" id="shippingAddress" th:field="*{shippingAddress}" required maxlength="1000" rows="3"></textarea>
             <p class="text-danger" th:if="${#fields.hasErrors('shippingAddress')}" th:errors="*{shippingAddress}"></p>
             <button class="btn btn-primary">Đặt hàng</button>

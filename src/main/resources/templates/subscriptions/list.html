@@ -1,20 +1,20 @@
 <!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/layout :: head('Gói chăm sóc')}"></head><body>
 <header th:replace="~{fragments/layout :: header}"></header>
-<main class="container">
+<main class="container pc-customer">
     <div th:replace="~{fragments/layout :: flash}"></div>
-    <h1 th:text="${admin ? 'Gói đang hoạt động' : 'Gói của tôi'}"></h1>
+    <p class="pc-eyebrow">Chăm sóc đều đặn, an tâm mỗi ngày</p><h1 th:text="${admin ? 'Gói đang hoạt động' : 'Gói của tôi'}"></h1>
     <p th:unless="${admin}">Gói có hiệu lực hết ngày hết hạn. Khi đặt lịch, hệ thống ưu tiên gói phù hợp hết hạn sớm nhất. Hủy lịch hợp lệ sẽ hoàn một lượt.</p>
-    <nav class="d-flex gap-3 mb-3" th:unless="${admin}"><a th:href="@{/products(group='SERVICE')}">Mua gói chăm sóc</a><a th:href="@{/appointments/services}">Đặt lịch dùng gói</a><a th:href="@{/orders}">Đơn hàng của tôi</a></nav>
-    <p th:if="${#lists.isEmpty(subscriptions)}">Chưa có gói chăm sóc phù hợp.</p>
-    <div class="table-responsive" th:unless="${#lists.isEmpty(subscriptions)}"><table class="table align-middle">
+    <nav class="d-flex gap-3 mb-3 pc-page-links" th:unless="${admin}"><a th:href="@{/products(group='SERVICE')}">Mua gói chăm sóc</a><a th:href="@{/appointments/services}">Đặt lịch dùng gói</a><a th:href="@{/orders}">Đơn hàng của tôi</a></nav>
+    <p class="pc-empty" role="status" th:if="${#lists.isEmpty(subscriptions)}">Chưa có gói chăm sóc phù hợp.</p>
+    <div class="table-responsive pc-table-wrap" tabindex="0" aria-label="Các gói chăm sóc đã mua" th:unless="${#lists.isEmpty(subscriptions)}"><table class="table align-middle pc-subscriptions-table">
         <thead><tr><th>Gói</th><th th:if="${admin}">Khách hàng</th><th>Trạng thái</th><th>Thời hạn</th><th>Lượt còn lại</th><th>Dịch vụ</th><th th:unless="${admin}">Thao tác</th></tr></thead>
         <tbody><tr th:each="s : ${subscriptions}">
             <td><span th:text="${s.packageName}"></span><small class="d-block" th:text="${'Mã gói #' + s.id}"></small></td>
             <td th:if="${admin}" th:text="${s.customerName}"></td>
-            <td th:text="${s.stateLabel}"></td>
+            <td><span class="badge badge-subscription" th:attr="data-status-label=${s.stateLabel}" th:text="${s.stateLabel}"></span></td>
             <td th:text="${#temporals.format(s.startDate, 'dd/MM/yyyy') + ' – ' + #temporals.format(s.endDate, 'dd/MM/yyyy')}"></td>
-            <td th:text="${s.remainingUses}"></td><td><ul><li th:each="name : ${s.services}" th:text="${name}"></li></ul><span th:if="${#lists.isEmpty(s.services)}">Chưa cấu hình dịch vụ, vui lòng liên hệ nhân viên.</span></td>
+            <td class="pc-remaining-uses" th:text="${s.remainingUses}"></td><td><ul><li th:each="name : ${s.services}" th:text="${name}"></li></ul><span th:if="${#lists.isEmpty(s.services)}">Chưa cấu hình dịch vụ, vui lòng liên hệ nhân viên.</span></td>
             <td th:unless="${admin}"><form th:if="${s.renewable}" th:action="@{/subscriptions/{id}/renew(id=${s.id})}" method="post" class="mb-2"><button class="btn btn-primary btn-sm">Gia hạn (tạo đơn mô phỏng)</button></form>
                 <form th:if="${s.cancellable}" th:action="@{/subscriptions/{id}/cancel(id=${s.id})}" method="post"><button class="btn btn-outline-danger btn-sm">Hủy gói</button></form></td>
         </tr></tbody>

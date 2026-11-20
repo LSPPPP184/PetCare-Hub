@@ -1,9 +1,9 @@
 <!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/layout :: head('Theo dõi tiêm phòng')}"></head><body>
-<header th:replace="~{fragments/layout :: header}"></header><main class="container">
-<div th:replace="~{fragments/layout :: flash}"></div><h1>Theo dõi tiêm phòng toàn cửa hàng</h1>
+<header th:replace="~{fragments/layout :: header}"></header><main class="container pc-workspace">
+<div th:replace="~{fragments/layout :: flash}"></div><p class="pc-eyebrow">Theo sát từng mốc chăm sóc</p><h1>Theo dõi tiêm phòng toàn cửa hàng</h1>
 <p>Ngày hiện tại: <strong th:text="${today}"></strong>. Mặc định hiển thị các mũi sắp đến hạn và quá hạn theo ngày hẹn. Mỗi dòng là một mũi tiêm; một thú có thể có nhiều mũi.</p>
-<div class="d-flex flex-wrap gap-3 mb-4"><form class="d-flex gap-2" method="get" th:action="@{/staff/health}">
+<div class="d-flex flex-wrap gap-3 mb-4 pc-panel pc-health-toolbar"><form class="d-flex gap-2 pc-toolbar" method="get" th:action="@{/staff/health}">
 <label for="status" class="visually-hidden">Trạng thái tiêm</label>
 <select id="status" name="status" class="form-select">
 <option value="">Sắp đến hạn và quá hạn</option>
@@ -14,6 +14,6 @@
 </select><button class="btn btn-primary">Lọc</button></form>
 <a class="btn btn-outline-primary" th:href="@{/staff/health/pets}">Hồ sơ và thêm bản ghi khám</a></div>
 <p class="alert alert-info" th:if="${#lists.isEmpty(records)}">Không có lịch tiêm phù hợp.</p>
-<section th:each="v : ${records}"><h2 class="h5"><a th:href="@{/staff/health/pets/{id}(id=${v.petId})}" th:text="${v.petName}"></a> · <span th:text="${v.ownerName}"></span></h2>
+<div class="pc-alert-grid"><section class="pc-health-alert" th:each="v : ${records}"><h2 class="h5"><a th:href="@{/staff/health/pets/{id}(id=${v.petId})}" th:text="${v.petName}"></a> · <span th:text="${v.ownerName}"></span></h2>
 <article th:replace="~{health/vaccination :: record(${v}, true)}"></article></section>
-<div th:replace="~{fragments/pagination :: pages}"></div></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>
+</div><div th:replace="~{fragments/pagination :: pages}"></div></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

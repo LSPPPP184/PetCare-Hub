@@ -2,19 +2,19 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/layout :: head('Chọn khung giờ')}"></head><body>
 <header th:replace="~{fragments/layout :: header}"></header>
-<main class="container">
+<main class="container pc-customer">
     <div th:replace="~{fragments/layout :: flash}"></div>
-    <a th:href="@{/appointments/services}">Chọn dịch vụ khác</a>
-    <h1 th:text="${availability.serviceName}"></h1>
-    <p th:text="${availability.durationMinutes + ' phút — ' + availability.price + ' VNĐ'}"></p>
+    <a class="pc-back-link" th:href="@{/appointments/services}">Chọn dịch vụ khác</a>
+    <p class="pc-eyebrow">Dành một khoảng thời gian cho yêu thương</p><h1 th:text="${availability.serviceName}"></h1>
+    <p class="pc-price" th:text="${availability.durationMinutes + ' phút — ' + availability.price + ' VNĐ'}"></p>
     <p>Giờ Việt Nam (Asia/Ho_Chi_Minh). Khung giờ được kiểm tra lại khi xác nhận đặt lịch.</p>
-    <form method="get" th:action="@{/appointments/slots}" class="d-flex gap-2 align-items-end mb-3">
+    <ol class="pc-steps" aria-label="Các bước đặt lịch"><li><span aria-hidden="true">1</span>Chọn dịch vụ</li><li aria-current="step"><span aria-hidden="true">2</span>Chọn ngày và giờ</li><li><span aria-hidden="true">3</span>Xác nhận lịch hẹn</li></ol><form method="get" th:action="@{/appointments/slots}" class="d-flex gap-2 align-items-end mb-3 pc-panel pc-toolbar">
         <input type="hidden" name="serviceId" th:value="${availability.serviceId}">
         <label>Ngày hẹn <input class="form-control" type="date" name="date" required th:value="${availability.date}"></label>
         <button class="btn btn-outline-primary">Tìm giờ trống</button>
     </form>
     <p class="alert alert-info" th:if="${availability.slots.empty}">Không có khung giờ phù hợp trong ngày này. Vui lòng chọn ngày khác.</p>
-    <div class="table-responsive" th:unless="${availability.slots.empty}"><table class="table align-middle">
+    <div class="table-responsive pc-table-wrap" tabindex="0" aria-label="Các khung giờ còn trống" th:unless="${availability.slots.empty}"><table class="table align-middle pc-slot-table">
         <thead><tr><th>Nhân viên</th><th>Bắt đầu</th><th>Kết thúc</th><th>Chọn</th></tr></thead>
         <tbody><tr th:each="slot : ${availability.slots}">
             <td th:text="${slot.staffName}"></td><td th:text="${#temporals.format(slot.startTime, 'HH:mm')}"></td>

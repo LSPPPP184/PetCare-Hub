@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<body><th:block th:fragment="links">
-    <a th:href="@{/quiz}">Quiz chọn thú cưng</a>
-    <a th:href="@{/quiz/results}">Kết quả quiz gần nhất</a>
-    <a sec:authorize="isAuthenticated()" th:href="@{/quiz/history}">Lịch sử quiz của tôi</a>
+<body><th:block th:fragment="links" th:with="navPath=${#ctx.getExchange().getRequest().getPathWithinApplication()}">
+    <a th:href="@{/quiz}" th:with="navCurrent=${navPath == '/quiz'}" th:classappend="${navCurrent} ? 'pc-nav-current' : ''" th:attr="aria-current=${navCurrent ? 'page' : null}">Quiz chọn thú cưng</a>
+    <a th:href="@{/quiz/results}" th:with="navCurrent=${(navPath == '/quiz/results' or #strings.startsWith(navPath, '/quiz/results/'))}" th:classappend="${navCurrent} ? 'pc-nav-current' : ''" th:attr="aria-current=${navCurrent ? 'page' : null}">Kết quả quiz gần nhất</a>
+    <a sec:authorize="isAuthenticated()" th:href="@{/quiz/history}" th:with="navCurrent=${(navPath == '/quiz/history' or #strings.startsWith(navPath, '/quiz/history/'))}" th:classappend="${navCurrent} ? 'pc-nav-current' : ''" th:attr="aria-current=${navCurrent ? 'page' : null}">Lịch sử quiz của tôi</a>
 </th:block></body></html>

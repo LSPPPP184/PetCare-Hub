@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><body>
-<span th:fragment="badge(appointment)" class="badge" th:classappend="${appointment.badgeClass}" th:text="${appointment.label}"></span>
+<span th:fragment="badge(appointment)" class="badge badge-appointment" th:classappend="${appointment.badgeClass}" th:text="${appointment.label}"></span>
 <div th:fragment="actions(appointment, staff)" class="d-flex gap-2 flex-wrap">
     <th:block th:if="${staff}"><form th:each="action : ${appointment.actions}" method="post"
         th:action="@{/staff/appointments/{id}/{action}(id=${appointment.id},action=${action.path})}">

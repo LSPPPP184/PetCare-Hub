@@ -5,7 +5,33 @@
 <header th:replace="~{fragments/layout :: header}"></header>
 <main class="container">
     <div th:replace="~{fragments/layout :: flash}"></div>
-    <h1>Chào mừng đến PetCare Hub</h1>
+    <section class="pc-hero">
+        <div>
+            <p class="pc-eyebrow">Chăm sóc bằng cả trái tim</p>
+            <h1>Một mái nhà.<br>Nhiều yêu thương.</h1>
+            <p class="lead pc-lead">Người bạn đồng hành trong hành trình chăm sóc thú cưng.</p>
+            <p>Khám phá sản phẩm, dịch vụ chăm sóc và các chương trình dành cho thú cưng tại cửa hàng.</p>
+            <a class="btn btn-primary mb-3" th:href="@{/products}">Xem danh mục</a>
+            <nav class="d-flex flex-wrap gap-2" aria-label="Lọc nhanh theo nhóm sản phẩm">
+                <a class="btn btn-outline-primary" th:href="@{/products(group='PET')}">Thú cưng</a>
+                <a class="btn btn-outline-primary" th:href="@{/products(group='ACCESSORY')}">Phụ kiện</a>
+                <a class="btn btn-outline-primary" th:href="@{/products(group='SERVICE')}">Dịch vụ</a>
+            </nav>
+        </div>
+        <div class="pc-hero-art">
+            <img th:src="@{/images/friends.svg}" alt="Minh họa chú chó và mèo ngồi cạnh nhau" width="600" height="480">
+            <div class="pc-art-note"><strong>Một chút quan tâm</strong><span>Một ngày thật vui</span></div>
+        </div>
+    </section>
+    <div class="pc-benefits">
+        <div><strong>Chọn điều phù hợp</strong><span>Thú cưng, phụ kiện và dịch vụ</span></div>
+        <div><strong>Chăm sóc có kế hoạch</strong><span>Theo dõi lịch hẹn và tiêm phòng</span></div>
+        <div><strong>Gắn bó thêm quyền lợi</strong><span>Thành viên và gói chăm sóc</span></div>
+    </div>
+    <section class="pc-section pc-home-links">
+    <p class="pc-eyebrow">Góc chăm sóc của bạn</p>
+    <h2>Chào mừng đến PetCare Hub</h2>
+    <p>Mỗi lịch hẹn, một sự quan tâm. Khám phá các tiện ích dành cho bạn và thú cưng.</p>
     <a class="btn btn-outline-primary" sec:authorize="hasRole('ADMIN')" th:href="@{/admin}">Bảng điều khiển quản trị</a>
     <a class="btn btn-outline-primary" sec:authorize="hasAnyRole('STAFF','ADMIN')" th:href="@{/staff}">Khu vực nhân viên</a>
     <nav class="d-flex flex-wrap gap-3 my-4" aria-label="Gói chăm sóc"><th:block th:replace="~{subscriptions/navigation :: links}"></th:block></nav>
@@ -14,16 +40,8 @@
         <th:block th:replace="~{matching/navigation :: links}"></th:block>
         <a sec:authorize="hasAnyRole('STAFF','ADMIN')" th:href="@{/staff/products}">Quản lý hồ sơ ghép đôi thú cưng</a>
     </nav>
-    <p class="lead">Người bạn đồng hành trong hành trình chăm sóc thú cưng.</p>
     <nav class="d-flex flex-wrap gap-3 my-4" aria-label="Sức khỏe và tiêm phòng">
         <th:block th:replace="~{health/navigation :: links}"></th:block>
-    </nav>
-    <p>Khám phá sản phẩm, dịch vụ chăm sóc và các chương trình dành cho thú cưng tại cửa hàng.</p>
-    <a class="btn btn-primary mb-3" th:href="@{/products}">Xem danh mục</a>
-    <nav class="d-flex flex-wrap gap-2" aria-label="Lọc nhanh theo nhóm sản phẩm">
-        <a class="btn btn-outline-primary" th:href="@{/products(group='PET')}">Thú cưng</a>
-        <a class="btn btn-outline-primary" th:href="@{/products(group='ACCESSORY')}">Phụ kiện</a>
-        <a class="btn btn-outline-primary" th:href="@{/products(group='SERVICE')}">Dịch vụ</a>
     </nav>
     <nav class="d-flex flex-wrap gap-2 mt-4" aria-label="Giỏ hàng và đơn hàng">
         <a class="btn btn-outline-primary" th:href="@{/appointments/services}">Đặt lịch dịch vụ</a>
@@ -35,6 +53,7 @@
         <a class="btn btn-outline-primary" sec:authorize="hasAnyRole('STAFF','ADMIN')" th:href="@{/staff/orders}">Quản lý đơn hàng</a>
         <a class="btn btn-outline-primary" sec:authorize="isAnonymous()" th:href="@{/login}">Đăng nhập để mua hàng</a>
     </nav>
+    </section>
 </main>
 <footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>

@@ -1,14 +1,14 @@
 <!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/layout :: head('Giả lập ngày tiêm phòng')}"></head><body>
-<header th:replace="~{fragments/layout :: header}"></header><main class="container">
-<div th:replace="~{fragments/layout :: flash}"></div><h1>Giả lập ngày tiêm phòng</h1>
+<header th:replace="~{fragments/layout :: header}"></header><main class="container pc-workspace pc-demo-page">
+<div th:replace="~{fragments/layout :: flash}"></div><p class="pc-eyebrow">Không gian trình diễn · Profile demo</p><h1>Giả lập ngày tiêm phòng</h1><div class="pc-panel pc-demo-clock">
 <p class="lead">Ngày hiện tại của Clock: <strong th:text="${today}"></strong></p>
-<p>Chỉ có trong profile demo. Ngày giả chỉ áp dụng cho sức khỏe và tiêm phòng; đặt/hủy lịch hẹn vẫn dùng thời gian thật. Ngày mới được xác nhận sau khi scheduler lưu thành công.</p>
+</div><section class="pc-panel pc-section-compact"><h2>Ngày giả lập hoạt động thế nào?</h2><p>Chỉ có trong profile demo. Ngày giả chỉ áp dụng cho sức khỏe và tiêm phòng; đặt/hủy lịch hẹn vẫn dùng thời gian thật. Ngày mới được xác nhận sau khi scheduler lưu thành công.</p>
 <p>Chọn ngày thật hiện tại sẽ lấy cả giờ thật, không đưa về 00:00. Nếu đã giả lập tương lai, chọn lại ngày đó giữ nguyên thời điểm và không thể quay lùi.</p>
 <p>Chỉ tiến ngày: trạng thái quá hạn và đã tiêm không tự đảo ngược. Khởi động lại đưa Clock về thời gian hệ thống; các thay đổi hồ sơ đã lưu vẫn được giữ.</p>
-<form class="col-md-6 mb-4" method="post" th:action="@{/admin/demo/health}">
+</section><form class="col-md-6 mb-4 pc-panel pc-demo-form" method="post" th:action="@{/admin/demo/health}">
 <label for="date" class="form-label">Ngày giả lập</label><div class="input-group"><input class="form-control" id="date" name="date" type="date" th:value="${today}" th:min="${today}" required><button class="btn btn-primary">Giả lập ngày</button></div>
 </form>
-<p>Thử: mở hồ sơ Milo bé, chọn một mũi xám; đặt ngày giả bằng ngày hẹn trừ 7 ngày để thấy màu vàng, rồi ngày hẹn cộng 1 ngày để thấy màu đỏ. Mũi đã tiêm giữ màu xanh.</p>
-<nav class="d-flex flex-wrap gap-3"><a th:href="@{/staff/health}">Xem sắp đến hạn / quá hạn</a><a th:href="@{/staff/health/pets}">Mở hồ sơ thú cưng</a></nav>
+<section class="pc-panel pc-demo-guide"><h2>Quan sát thay đổi trên timeline</h2><p>Thử: mở hồ sơ Milo bé, chọn một mũi “Đã lên lịch” màu xanh dương. Nếu mốc cần thử không nằm trước ngày giả lập hiện tại, đặt ngày bằng ngày hẹn trừ 7 ngày để thấy “Sắp đến hạn” màu vàng, rồi ngày hẹn cộng 1 ngày để thấy “Quá hạn” màu đỏ. Mũi “Đã tiêm” giữ màu xanh lá.</p></section>
+<nav class="d-flex flex-wrap gap-3 pc-page-links"><a th:href="@{/staff/health}">Xem sắp đến hạn / quá hạn</a><a th:href="@{/staff/health/pets}">Mở hồ sơ thú cưng</a></nav>
 </main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/layout :: head('Lịch sử quiz của tôi')}"></head>
-<body><header th:replace="~{fragments/layout :: header}"></header><main class="container">
-    <h1>Lịch sử quiz của tôi</h1><p>Mỗi lần làm quiz đã đăng nhập lưu đáp án, chiến lược, điểm và giải thích tại thời điểm đó.</p>
-    <p th:if="${#lists.isEmpty(history)}">Bạn chưa có lịch sử quiz.</p>
-    <div class="table-responsive" th:unless="${#lists.isEmpty(history)}"><table class="table">
+<body><header th:replace="~{fragments/layout :: header}"></header><main class="container pc-customer">
+    <p class="pc-eyebrow">Nhìn lại những lần tìm bạn</p><h1>Lịch sử quiz của tôi</h1><p>Mỗi lần làm quiz đã đăng nhập lưu đáp án, chiến lược, điểm và giải thích tại thời điểm đó.</p>
+    <p class="pc-empty" role="status" th:if="${#lists.isEmpty(history)}">Bạn chưa có lịch sử quiz.</p>
+    <div class="table-responsive pc-table-wrap pc-section-compact" tabindex="0" aria-label="Lịch sử các lần làm quiz" th:unless="${#lists.isEmpty(history)}"><table class="table pc-records-table">
         <thead><tr><th>Thời gian</th><th>Chiến lược</th><th>Số gợi ý</th><th>Kết quả</th></tr></thead>
         <tbody><tr th:each="r : ${history}"><td th:text="${#temporals.format(r.createdAt, 'dd/MM/yyyy HH:mm')}"></td><td th:text="${r.strategyLabel}"></td><td th:text="${r.matchCount}"></td><td><a th:href="@{/quiz/history/{id}(id=${r.id})}">Xem điểm và giải thích</a></td></tr></tbody>
     </table></div>

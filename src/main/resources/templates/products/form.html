@@ -2,17 +2,17 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments/layout :: head('Thông tin sản phẩm')}"></head>
 <body><header th:replace="~{fragments/layout :: header}"></header>
-<main class="container"><nav><a th:href="@{/products}">Danh mục sản phẩm</a> · <a sec:authorize="hasAnyRole('ADMIN','STAFF')" th:href="@{/staff/products}">Quản lý sản phẩm</a></nav>
-<h1>Thông tin sản phẩm</h1><form th:if="${id == null}" th:action="@{/staff/products/new}" method="get"><label>Chọn loại <select name="type"><option th:each="t : ${types}" th:value="${t}" th:text="${t.label}" th:selected="${t == form.type}"></option></select></label><button>Đổi loại</button></form>
-<form th:action="@{/staff/products/save}" th:object="${form}" method="post">
+<main class="container pc-workspace"><nav class="pc-breadcrumb" aria-label="Điều hướng sản phẩm"><a th:href="@{/products}">Danh mục sản phẩm</a> · <a sec:authorize="hasAnyRole('ADMIN','STAFF')" th:href="@{/staff/products}">Quản lý sản phẩm</a></nav>
+<p class="pc-eyebrow">Chăm chút từng thông tin trong cửa hàng</p><h1>Thông tin sản phẩm</h1><form class="pc-panel pc-type-picker" th:if="${id == null}" th:action="@{/staff/products/new}" method="get"><label>Chọn loại <select class="form-select" name="type"><option th:each="t : ${types}" th:value="${t}" th:text="${t.label}" th:selected="${t == form.type}"></option></select></label><button class="btn btn-outline-primary">Đổi loại</button></form>
+<form class="pc-panel pc-product-form" th:action="@{/staff/products/save}" th:object="${form}" method="post">
 <input type="hidden" name="id" th:value="${id}"><input type="hidden" th:field="*{type}">
 <input type="hidden" th:field="*{version}">
 <div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}"><p th:each="e : ${#fields.allErrors()}" th:text="${e}"></p></div>
-<div class="mb-3" ><label for="name">Tên sản phẩm</label><input class="form-control" id="name" th:field="*{name}" type="text" ></div>
+<section class="pc-form-section"><h2>Thông tin chung</h2><div class="pc-form-grid"><div class="mb-3" ><label for="name">Tên sản phẩm</label><input class="form-control" id="name" th:field="*{name}" type="text" ></div>
 <div class="mb-3" ><label for="description">Mô tả</label><input class="form-control" id="description" th:field="*{description}" type="text" ></div>
 <div class="mb-3" ><label for="basePrice">Giá niêm yết</label><input class="form-control" id="basePrice" th:field="*{basePrice}" type="number" step="0.01" min="0"></div>
 <div class="mb-3" ><label for="imageUrl">Đường dẫn ảnh</label><input class="form-control" id="imageUrl" th:field="*{imageUrl}" type="text" ></div>
-<div class="mb-3" th:if="${fields.contains('durationMinutes')}"><label for="durationMinutes">Thời lượng (phút)</label><input class="form-control" id="durationMinutes" th:field="*{durationMinutes}" type="number" min="0"></div>
+</div></section><section class="pc-form-section"><h2>Thông tin theo loại</h2><div class="pc-form-grid"><div class="mb-3" th:if="${fields.contains('durationMinutes')}"><label for="durationMinutes">Thời lượng (phút)</label><input class="form-control" id="durationMinutes" th:field="*{durationMinutes}" type="number" min="0"></div>
 <div class="mb-3" th:if="${fields.contains('species')}"><label for="species">Loài</label><select class="form-select" id="species" th:field="*{species}"><option th:each="v : ${speciesOptions}" th:value="${v}" th:text="${v.label}"></option></select></div>
 <div class="mb-3" th:if="${fields.contains('breed')}"><label for="breed">Giống</label><input class="form-control" id="breed" th:field="*{breed}" type="text" ></div>
 <div class="mb-3" th:if="${fields.contains('ageMonths')}"><label for="ageMonths">Tuổi (tháng)</label><input class="form-control" id="ageMonths" th:field="*{ageMonths}" type="number" min="0"></div>
@@ -29,11 +29,11 @@
 <div class="mb-3" th:if="${fields.contains('durationMonths')}"><label for="durationMonths">Số tháng</label><input class="form-control" id="durationMonths" th:field="*{durationMonths}" type="number" min="0"></div>
 <div class="mb-3" th:if="${fields.contains('includedUses')}"><label for="includedUses">Số lượt</label><input class="form-control" id="includedUses" th:field="*{includedUses}" type="number" min="0"></div>
 <div class="mb-3" th:if="${fields.contains('includedServices')}"><label for="includedServices">Dịch vụ trong gói</label><input class="form-control" id="includedServices" th:field="*{includedServices}" type="text" ></div>
-<fieldset class="mb-3" th:if="${fields.contains('includedServices')}"><legend class="h5">Dịch vụ được dùng lượt của gói</legend>
+</div><fieldset class="mb-3 pc-coverage-fields" th:if="${fields.contains('includedServices')}"><legend class="h5">Dịch vụ được dùng lượt của gói</legend>
 <input type="hidden" name="_coveredServiceIds" value="on">
 <label class="d-block" th:each="s : ${bookableServices}"><input type="checkbox" th:field="*{coveredServiceIds}" th:value="${s.id}"> <span th:text="${s.name}"></span></label>
 <p class="text-muted">Bắt buộc chọn ít nhất một dịch vụ đang hiển thị. Quyền lợi được chốt khi khách đặt đơn mua hoặc gia hạn.</p></fieldset>
-<fieldset class="card card-body mb-3" th:if="${fields.contains('species')}"><legend class="h4">Hồ sơ ghép đôi</legend><p>Các mức từ 1 (thấp) đến 5 (cao). Hồ sơ dùng để tính gợi ý quiz.</p>
+</section><fieldset class="card card-body mb-3 pc-matching-fields" th:if="${fields.contains('species')}"><legend class="h4">Hồ sơ ghép đôi</legend><p>Các mức từ 1 (thấp) đến 5 (cao). Hồ sơ dùng để tính gợi ý quiz.</p>
 <input type="hidden" th:field="*{profile.version}">
 <label for="profile.sizeLevel">Kích thước (1–5)</label><input class="form-control mb-3" type="number" min="1" max="5" th:field="*{profile.sizeLevel}" required>
 <label for="profile.energyLevel">Năng lượng (1–5)</label><input class="form-control mb-3" type="number" min="1" max="5" th:field="*{profile.energyLevel}" required>
@@ -44,4 +44,4 @@
 <label><input type="checkbox" th:field="*{profile.childFriendly}"> Thân thiện với trẻ em</label>
 <label for="profile.timeNeedHoursPerDay">Thời gian chăm sóc (giờ/ngày)</label><input class="form-control" type="number" min="0.25" max="24" step="0.25" th:field="*{profile.timeNeedHoursPerDay}" required>
 </fieldset>
-<button class="btn btn-primary">Lưu sản phẩm</button></form></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>
+<div class="pc-form-submit"><button class="btn btn-primary">Lưu sản phẩm</button></div></form></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>
