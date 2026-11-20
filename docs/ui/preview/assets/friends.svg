@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 480"><ellipse cx="300" cy="425" rx="242" ry="24" fill="#253c31" opacity=".09"/>
+<circle cx="304" cy="232" r="189" fill="#e9cfa3"/><path d="M75 386Q35 278 75 224Q140 276 109 386" fill="#809d72"/><path d="M95 380Q101 282 160 281Q172 350 95 380" fill="#47694c"/>
+<path d="M176 418Q155 284 196 253L320 255Q368 303 350 418" fill="#bd794f"/>
+<path d="M214 415Q207 312 262 300Q317 312 309 415" fill="#f8e6c9"/>
+<path d="M179 195Q119 119 118 229Q122 304 184 264M318 195Q379 119 381 229Q376 302 316 264" fill="#84503a"/>
+<path d="M162 211Q163 133 251 130Q336 132 337 213L326 270Q303 312 249 312Q193 311 173 270Z" fill="#d49a67"/>
+<path d="M240 132L274 135L287 238L225 239Z" fill="#fff1d9"/>
+<ellipse cx="252" cy="264" rx="59" ry="41" fill="#f8e6c9"/>
+<circle cx="208" cy="220" r="8" fill="#282238"/><circle cx="298" cy="220" r="8" fill="#282238"/>
+<path d="M237 250Q251 240 268 250Q267 270 252 271Q238 266 237 250" fill="#282238"/>
+<path d="M251 272V287M251 287Q235 299 224 286M251 287Q269 299 280 285" fill="none" stroke="#282238" stroke-width="5" stroke-linecap="round"/>
+<path d="M185 309Q248 334 318 309" fill="none" stroke="#285444" stroke-width="18"/><circle cx="253" cy="333" r="13" fill="#ffcf4a"/>
+<path d="M173 418V372Q188 353 206 372V418M300 418V372Q321 354 337 372V418" fill="#d49a67"/>
+<path d="M366 410Q357 315 388 293L464 293Q511 350 482 419" fill="#a5b5b3"/>
+<path d="M373 288L369 213L416 248L459 242L492 211L489 293Q477 330 431 332Q385 331 373 288" fill="#b6c6c3"/>
+<path d="M378 256L379 232L398 251M464 253L481 230L480 258" fill="#d39f95"/>
+<path d="M398 283Q407 272 415 283M447 283Q457 271 466 282" fill="none" stroke="#282238" stroke-width="4" stroke-linecap="round"/>
+<path d="M427 295L437 295L432 302Z" fill="#84503a"/><path d="M431 303Q420 314 414 304M432 303Q443 314 450 304" fill="none" stroke="#282238" stroke-width="3"/>
+<path d="M392 297L357 291M392 305L355 310M471 297L505 288M471 305L507 310" stroke="#52616b" stroke-width="3"/>
+<path d="M481 405Q545 394 516 353" fill="none" stroke="#a5b5b3" stroke-width="20" stroke-linecap="round"/>
+<path d="M399 418L401 376M451 418L449 376" stroke="#738b88" stroke-width="4"/>
+<path d="M442 94Q423 72 408 89Q394 105 442 133Q489 103 473 88Q456 74 442 94" fill="#a3472c"/>
+<g fill="#285444"><ellipse cx="124" cy="110" rx="12" ry="9" transform="rotate(-25 124 110)"/><circle cx="111" cy="96" r="5"/><circle cx="122" cy="90" r="5"/><circle cx="134" cy="95" r="5"/></g></svg>

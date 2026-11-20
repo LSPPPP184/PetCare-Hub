@@ -2,10 +2,10 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/layout :: head('Xác nhận đặt lịch')}"></head><body>
 <header th:replace="~{fragments/layout :: header}"></header>
-<main class="container">
-    <h1>Xác nhận đặt lịch</h1>
-    <p><a th:href="@{/appointments/slots(serviceId=${selection.serviceId},date=${selection.startTime.toLocalDate()})}">Chọn khung giờ khác</a></p>
-    <h2 class="h4" th:text="${selection.serviceName}"></h2>
+<main class="container pc-customer">
+    <div th:replace="~{fragments/layout :: flash}"></div><p class="pc-eyebrow">Sẵn sàng cho buổi chăm sóc</p><h1>Xác nhận đặt lịch</h1>
+    <p class="pc-page-links"><a th:href="@{/appointments/slots(serviceId=${selection.serviceId},date=${selection.startTime.toLocalDate()})}">Chọn khung giờ khác</a></p>
+    <ol class="pc-steps" aria-label="Các bước đặt lịch"><li><span aria-hidden="true">1</span>Chọn dịch vụ</li><li><span aria-hidden="true">2</span>Chọn ngày và giờ</li><li aria-current="step"><span aria-hidden="true">3</span>Xác nhận lịch hẹn</li></ol><div class="pc-two-column pc-booking-confirm"><aside class="pc-panel pc-summary"><p class="pc-eyebrow">Lịch hẹn đã chọn</p><h2 class="h4" th:text="${selection.serviceName}"></h2>
     <p th:text="${'Nhân viên: ' + selection.staffName}"></p>
     <p th:text="${#temporals.format(selection.startTime, 'dd/MM/yyyy HH:mm') + ' – ' + #temporals.format(selection.endTime, 'HH:mm') + ' (giờ Việt Nam)'}"></p>
     <div class="alert alert-info" th:if="${subscriptionPreview != null}">
@@ -18,16 +18,16 @@
         <p th:text="${'Giá: ' + selection.price + ' VNĐ'}"></p>
         <div th:replace="~{loyalty/fragments :: quote}"></div>
     </th:block>
-    <form method="post" th:action="@{/appointments}" th:object="${form}">
+    </aside><form class="pc-panel" method="post" th:action="@{/appointments}" th:object="${form}">
         <input type="hidden" th:field="*{serviceId}"><input type="hidden" th:field="*{staffId}">
         <input type="hidden" th:field="*{startTime}">
         <div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}"><p th:each="e : ${#fields.allErrors()}" th:text="${e}"></p></div>
-        <label for="petName" class="form-label">Tên thú cưng</label><input id="petName" class="form-control mb-3" th:field="*{petName}" required maxlength="100">
+        <h2>Người bạn được chăm sóc</h2><label for="petName" class="form-label">Tên thú cưng</label><input id="petName" class="form-control mb-3" th:field="*{petName}" required maxlength="100">
         <label for="petSpecies" class="form-label">Loài</label><select id="petSpecies" class="form-select mb-3" th:field="*{petSpecies}" required>
             <option value="">Chọn loài</option><option th:each="species : ${speciesOptions}" th:value="${species}" th:text="${species.label}"></option>
         </select>
         <label for="note" class="form-label">Ghi chú</label><textarea id="note" class="form-control mb-3" th:field="*{note}" maxlength="1000" rows="3"></textarea>
         <p>Khách chỉ được hủy lịch khi còn cách giờ hẹn ít nhất 2 tiếng.</p>
         <button class="btn btn-primary">Xác nhận đặt lịch</button>
-    </form>
+    </form></div>
 </main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

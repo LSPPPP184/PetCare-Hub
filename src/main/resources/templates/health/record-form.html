@@ -1,8 +1,8 @@
 <!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/layout :: head('Thêm bản ghi khám')}"></head><body>
-<header th:replace="~{fragments/layout :: header}"></header><main class="container">
-<h1>Thêm bản ghi khám bệnh</h1><p>Thú cưng: <strong th:text="${pet.name}"></strong></p>
-<form class="col-lg-7" method="post" th:action="@{/staff/health/pets/{id}/records(id=${pet.id})}" th:object="${form}">
+<header th:replace="~{fragments/layout :: header}"></header><main class="container pc-workspace">
+<p class="pc-eyebrow">Lưu lại hành trình chăm sóc</p><h1>Thêm bản ghi khám bệnh</h1><p>Thú cưng: <strong th:text="${pet.name}"></strong></p>
+<form class="col-lg-7 pc-panel pc-record-form" method="post" th:action="@{/staff/health/pets/{id}/records(id=${pet.id})}" th:object="${form}">
 <div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}"><p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p></div>
 <label for="date" class="form-label">Ngày khám</label><input class="form-control mb-3" type="date" th:field="*{date}" th:min="${pet.birthDate}" th:max="${today}" required>
 <label for="type" class="form-label">Loại khám</label><input class="form-control mb-3" th:field="*{type}" maxlength="100" required>

@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <body>
-<div th:fragment="image(product)" class="mb-3">
+<div th:fragment="image(product)" class="mb-3 pc-product-image">
     <img th:if="${product.imageAvailable}" th:src="${product.imageUrl}"
-         th:alt="${'Ảnh ' + product.name}" class="img-fluid" loading="lazy"
-         style="max-height: 240px; object-fit: contain;">
+         th:alt="${'Ảnh ' + product.name}" class="img-fluid" loading="lazy">
     <p th:unless="${product.imageAvailable}" class="text-muted">Chưa có ảnh sản phẩm.</p>
 </div>
 </body>

@@ -2,15 +2,15 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments/layout :: head('Quiz chọn thú cưng')}"></head>
 <body><header th:replace="~{fragments/layout :: header}"></header>
-<main class="container" style="max-width: 850px">
-    <h1>Tìm người bạn phù hợp</h1>
+<main class="container pc-customer pc-quiz-page">
+    <p class="pc-eyebrow">Một cuộc gặp gỡ bắt đầu từ sự thấu hiểu</p><h1>Tìm người bạn phù hợp</h1>
     <p>Hoàn thành ba bước dưới đây. Kết quả gợi ý tối đa 3 thú cưng đang sẵn sàng tại cửa hàng.</p>
     <p sec:authorize="isAnonymous()"><a th:href="@{/login}">Đăng nhập</a> trước khi làm quiz để lưu lịch sử. Khách vẫn có thể xem kết quả trong phiên này.</p>
-    <form th:action="@{/quiz}" th:object="${answers}" method="post">
+    <nav class="pc-quiz-nav" aria-label="Đi đến bước trong quiz"><a href="#quiz-space"><span>1</span>Không gian</a><a href="#quiz-lifestyle"><span>2</span>Nhịp sống</a><a href="#quiz-care"><span>3</span>Chăm sóc</a></nav><form class="pc-quiz-form" th:action="@{/quiz}" th:object="${answers}" method="post">
         <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
             <p th:each="e : ${#fields.allErrors()}" th:text="${e}"></p>
         </div>
-        <fieldset class="card card-body mb-3">
+        <fieldset id="quiz-space" class="card card-body mb-3 pc-quiz-step">
             <legend class="h4">Bước 1 · Không gian và gia đình</legend>
             <label for="homeSize">Diện tích nhà</label>
             <select class="form-select mb-3" th:field="*{homeSize}" required>
@@ -22,14 +22,14 @@
             <label for="furAllergy">Bạn có dị ứng lông?</label>
             <select class="form-select" th:field="*{furAllergy}" required><option value="">Chọn câu trả lời</option><option value="true">Có</option><option value="false">Không</option></select>
         </fieldset>
-        <fieldset class="card card-body mb-3">
+        <fieldset id="quiz-lifestyle" class="card card-body mb-3 pc-quiz-step">
             <legend class="h4">Bước 2 · Nhịp sống của bạn</legend>
             <label for="activityLevel">Mức vận động (1: ít, 5: rất thường xuyên)</label>
             <input class="form-control mb-3" type="number" min="1" max="5" th:field="*{activityLevel}" required>
             <label for="freeHoursPerDay">Thời gian rảnh mỗi ngày (giờ, từ 0 đến 24)</label>
             <input class="form-control" type="number" min="0" max="24" step="0.25" th:field="*{freeHoursPerDay}" required>
         </fieldset>
-        <fieldset class="card card-body mb-3">
+        <fieldset id="quiz-care" class="card card-body mb-3 pc-quiz-step">
             <legend class="h4">Bước 3 · Khả năng chăm sóc</legend>
             <label for="budgetLevel">Ngân sách chăm sóc (1: thấp, 5: cao; không phải giá mua)</label>
             <input class="form-control mb-3" type="number" min="1" max="5" th:field="*{budgetLevel}" required>

@@ -1,1 +1,31 @@
-<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Đăng nhập')}"></head><body><header th:replace="~{fragments/layout :: header}"></header><main class="container"><div th:replace="~{fragments/layout :: flash}"></div><h1>Đăng nhập</h1><p th:if="${param.error}" class="alert alert-danger">Email hoặc mật khẩu không đúng.</p><p th:if="${param.logout}" class="alert alert-success">Bạn đã đăng xuất.</p><form th:action="@{/login}" method="post" class="col-md-6"><label for="email" class="form-label">Email</label><input class="form-control mb-3" id="email" name="email" type="email" autocomplete="username" required><label for="password" class="form-label">Mật khẩu</label><input class="form-control mb-3" id="password" name="password" type="password" autocomplete="current-password" required><button class="btn btn-primary">Đăng nhập</button></form></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Đăng nhập')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="container pc-auth">
+    <div th:replace="~{fragments/layout :: flash}"></div>
+    <section class="pc-auth-copy">
+        <p class="pc-eyebrow">Nhà của những người bạn</p>
+        <h2>Thật vui khi bạn trở lại.</h2>
+        <p class="pc-lead">Những món đồ yêu thích, lịch hẹn chăm sóc và hành trình lớn lên của thú cưng, cùng bạn theo dõi mỗi ngày.</p>
+        <img th:src="@{/images/friends.svg}" alt="Chú chó và mèo bên nhau trong mái nhà ấm áp" width="600" height="480">
+    </section>
+    <section class="pc-panel pc-auth-card">
+        <h1>Đăng nhập</h1>
+        <p class="text-muted">Chào bạn, hãy tiếp tục hành trình chăm sóc.</p>
+        <p th:if="${param.error}" class="alert alert-danger" role="alert">Email hoặc mật khẩu không đúng.</p>
+        <p th:if="${param.logout}" class="alert alert-success" role="status">Bạn đã đăng xuất.</p>
+        <form th:action="@{/login}" method="post" class="col-md-6">
+            <label for="email" class="form-label">Email</label>
+            <input class="form-control mb-3" id="email" name="email" type="email" autocomplete="username" required>
+            <label for="password" class="form-label">Mật khẩu</label>
+            <input class="form-control mb-3" id="password" name="password" type="password" autocomplete="current-password" required>
+            <button class="btn btn-primary">Đăng nhập</button>
+        </form>
+        <p class="pc-auth-switch">Bạn mới đến? <a th:href="@{/register}">Tạo tài khoản</a></p>
+    </section>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

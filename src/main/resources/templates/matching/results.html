@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/layout :: head('Kết quả ghép đôi')}"></head>
-<body><header th:replace="~{fragments/layout :: header}"></header><main class="container">
-    <h1>Kết quả ghép đôi thú cưng</h1>
+<body><header th:replace="~{fragments/layout :: header}"></header><main class="container pc-customer">
+    <p class="pc-eyebrow">Những người bạn có thể hợp với bạn</p><h1>Kết quả ghép đôi thú cưng</h1>
     <div th:if="${report == null}" class="alert alert-info">Bạn chưa có kết quả trong phiên hiện tại. Hãy bắt đầu quiz hoặc mở lịch sử để xem kết quả đã lưu.</div>
     <th:block th:if="${report != null}">
-        <p><strong th:text="${report.strategyLabel}"></strong> · <time th:text="${#temporals.format(report.createdAt, 'dd/MM/yyyy HH:mm')}"></time></p>
+        <section class="pc-panel pc-match-overview"><h2>Đáp án và cách tính điểm</h2><p><strong th:text="${report.strategyLabel}"></strong> · <time th:text="${#temporals.format(report.createdAt, 'dd/MM/yyyy HH:mm')}"></time></p>
         <p th:text="|Đáp án: nhà ${report.answers.homeSize.label}; trẻ em: ${report.answers.hasChildren ? 'có' : 'không'}; vận động ${report.answers.activityLevel}/5; rảnh ${report.answers.freeHoursPerDay} giờ/ngày; ngân sách ${report.answers.budgetLevel}/5; dị ứng: ${report.answers.furAllergy ? 'có' : 'không'}; kinh nghiệm ${report.answers.experienceLevel}/5.|"></p>
         <p>Lọc trước khi chấm: có trẻ em → chỉ thú thân thiện; dị ứng lông → rụng lông mức 1–2; nhà nhỏ → nhu cầu không gian mức 1–2.</p>
-        <p>Điểm = tổng (độ khớp × trọng số chuẩn hóa theo %). Tổng trọng số chuẩn hóa là 100%; độ khớp nằm trong khoảng 0–1. Điểm càng cao càng phù hợp với đáp án.</p>
+        <p class="pc-formula">Điểm = tổng (độ khớp × trọng số chuẩn hóa theo %). Tổng trọng số chuẩn hóa là 100%; độ khớp nằm trong khoảng 0–1. Điểm càng cao càng phù hợp với đáp án.</p>
         <p class="text-muted">Đây là gợi ý theo hồ sơ, không phải xác suất thành công. Thông tin tồn tại lúc làm quiz; tình trạng bán và hồ sơ có thể thay đổi.</p>
-        <div th:if="${#lists.isEmpty(report.matches)}" class="alert alert-info">Không có thú cưng đáp ứng bộ lọc hiện tại. Bạn có thể làm lại quiz khi điều kiện thực tế thay đổi hoặc xem danh mục.</div>
-        <article class="card card-body mb-4" th:each="match, rank : ${report.matches}">
+        </section><div th:if="${#lists.isEmpty(report.matches)}" class="alert alert-info">Không có thú cưng đáp ứng bộ lọc hiện tại. Bạn có thể làm lại quiz khi điều kiện thực tế thay đổi hoặc xem danh mục.</div>
+        <div class="pc-match-grid"><article class="card card-body mb-4 pc-match-card" th:each="match, rank : ${report.matches}">
             <h2 class="h4" th:text="|${rank.count}. ${match.petName}|"></h2>
             <p class="fs-3 text-primary"><span th:text="${#numbers.formatDecimal(T(java.math.BigDecimal).valueOf(match.scorePercent).setScale(2, T(java.math.RoundingMode).HALF_UP), 1, 2)}"></span>% phù hợp</p>
-            <ul><li th:each="reason : ${match.reasons}" th:text="${reason}"></li></ul>
+            <progress class="pc-score" max="100" th:value="${match.scorePercent}" th:attr="aria-label=${'Mức phù hợp của ' + match.petName}">Mức phù hợp</progress><ul class="pc-match-reasons"><li th:each="reason : ${match.reasons}" th:text="${reason}"></li></ul>
             <h3 class="h5">Vì sao được điểm này?</h3>
-            <p class="bg-light p-3" style="white-space: pre-line" th:text="${match.explanation}"></p>
-            <a class="btn btn-outline-primary align-self-start" th:href="@{/products/{id}(id=${match.petId})}">Xem thông tin thú cưng</a>
-        </article>
+            <details class="pc-explanation"><summary>Xem công thức và điểm thành phần</summary><p class="bg-light p-3 pc-preserve-lines" th:text="${match.explanation}"></p>
+            </details><a class="btn btn-outline-primary align-self-start" th:href="@{/products/{id}(id=${match.petId})}">Xem thông tin thú cưng</a>
+        </article></div>
     </th:block>
-    <nav class="d-flex gap-3"><a class="btn btn-primary" th:href="@{/quiz}">Làm lại quiz</a><a class="btn btn-outline-primary" th:href="@{/products(group='PET')}">Xem danh mục thú cưng</a></nav>
+    <nav class="d-flex gap-3 pc-page-links"><a class="btn btn-primary" th:href="@{/quiz}">Làm lại quiz</a><a class="btn btn-outline-primary" th:href="@{/products(group='PET')}">Xem danh mục thú cưng</a></nav>
 </main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

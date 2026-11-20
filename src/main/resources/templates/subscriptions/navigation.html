@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"><body>
-<th:block th:fragment="links">
-    <a sec:authorize="hasRole('CUSTOMER')" th:href="@{/subscriptions}">Gói của tôi</a>
-    <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/subscriptions}">Gói đang hoạt động</a>
+<th:block th:fragment="links" th:with="navPath=${#ctx.getExchange().getRequest().getPathWithinApplication()}">
+    <a sec:authorize="hasRole('CUSTOMER')" th:href="@{/subscriptions}" th:with="navCurrent=${(navPath == '/subscriptions' or #strings.startsWith(navPath, '/subscriptions/'))}" th:classappend="${navCurrent} ? 'pc-nav-current' : ''" th:attr="aria-current=${navCurrent ? 'page' : null}">Gói của tôi</a>
+    <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/subscriptions}" th:with="navCurrent=${(navPath == '/admin/subscriptions' or #strings.startsWith(navPath, '/admin/subscriptions/'))}" th:classappend="${navCurrent} ? 'pc-nav-current' : ''" th:attr="aria-current=${navCurrent ? 'page' : null}">Gói đang hoạt động</a>
 </th:block></body></html>

@@ -1,11 +1,11 @@
 <!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"><body>
-<th:block th:fragment="links">
-    <a sec:authorize="hasRole('CUSTOMER')" th:href="@{/my-pets}">Thú cưng của tôi</a>
-    <a sec:authorize="hasRole('CUSTOMER')" th:href="@{/my-pets/new}">Thêm thú cưng</a>
-    <a sec:authorize="hasAnyRole('STAFF','ADMIN')" th:href="@{/staff/health}">Theo dõi tiêm phòng</a>
-    <a sec:authorize="hasAnyRole('STAFF','ADMIN')" th:href="@{/staff/health(status='DUE_SOON')}">Sắp đến hạn tiêm</a>
-    <a sec:authorize="hasAnyRole('STAFF','ADMIN')" th:href="@{/staff/health(status='OVERDUE')}">Quá hạn tiêm</a>
-    <a sec:authorize="hasAnyRole('STAFF','ADMIN')" th:href="@{/staff/health/pets}">Hồ sơ sức khỏe cửa hàng</a>
-    <a sec:authorize="hasRole('ADMIN')" th:if="${healthDemoEnabled}" th:href="@{/admin/demo/health}">Giả lập ngày tiêm phòng</a>
+<th:block th:fragment="links" th:with="navPath=${#ctx.getExchange().getRequest().getPathWithinApplication()}, navStatus=${param.status != null ? param.status[0] : ''}">
+    <a sec:authorize="hasRole('CUSTOMER')" th:href="@{/my-pets}" th:with="navCurrent=${(navPath == '/my-pets' or #strings.startsWith(navPath, '/my-pets/')) and navPath != '/my-pets/new'}" th:classappend="${navCurrent} ? 'pc-nav-current' : ''" th:attr="aria-current=${navCurrent ? 'page' : null}">Thú cưng của tôi</a>
+    <a sec:authorize="hasRole('CUSTOMER')" th:href="@{/my-pets/new}" th:with="navCurrent=${navPath == '/my-pets/new'}" th:classappend="${navCurrent} ? 'pc-nav-current' : ''" th:attr="aria-current=${navCurrent ? 'page' : null}">Thêm thú cưng</a>
+    <a sec:authorize="hasAnyRole('STAFF','ADMIN')" th:href="@{/staff/health}" th:with="navCurrent=${navPath == '/staff/health' and navStatus != 'DUE_SOON' and navStatus != 'OVERDUE'}" th:classappend="${navCurrent} ? 'pc-nav-current' : ''" th:attr="aria-current=${navCurrent ? 'page' : null}">Theo dõi tiêm phòng</a>
+    <a sec:authorize="hasAnyRole('STAFF','ADMIN')" th:href="@{/staff/health(status='DUE_SOON')}" th:with="navCurrent=${navPath == '/staff/health' and navStatus == 'DUE_SOON'}" th:classappend="${navCurrent} ? 'pc-nav-current' : ''" th:attr="aria-current=${navCurrent ? 'page' : null}">Sắp đến hạn tiêm</a>
+    <a sec:authorize="hasAnyRole('STAFF','ADMIN')" th:href="@{/staff/health(status='OVERDUE')}" th:with="navCurrent=${navPath == '/staff/health' and navStatus == 'OVERDUE'}" th:classappend="${navCurrent} ? 'pc-nav-current' : ''" th:attr="aria-current=${navCurrent ? 'page' : null}">Quá hạn tiêm</a>
+    <a sec:authorize="hasAnyRole('STAFF','ADMIN')" th:href="@{/staff/health/pets}" th:with="navCurrent=${(navPath == '/staff/health/pets' or #strings.startsWith(navPath, '/staff/health/pets/'))}" th:classappend="${navCurrent} ? 'pc-nav-current' : ''" th:attr="aria-current=${navCurrent ? 'page' : null}">Hồ sơ sức khỏe cửa hàng</a>
+    <a sec:authorize="hasRole('ADMIN')" th:if="${healthDemoEnabled}" th:href="@{/admin/demo/health}" th:with="navCurrent=${(navPath == '/admin/demo/health' or #strings.startsWith(navPath, '/admin/demo/health/'))}" th:classappend="${navCurrent} ? 'pc-nav-current' : ''" th:attr="aria-current=${navCurrent ? 'page' : null}">Giả lập ngày tiêm phòng</a>
 </th:block>
 </body></html>
