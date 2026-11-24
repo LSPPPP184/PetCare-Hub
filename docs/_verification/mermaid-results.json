@@ -1,0 +1,78 @@
+{
+  "engine": "Mermaid 11.12.1",
+  "browser": "Microsoft Edge headless",
+  "results": [
+    {
+      "file": "uml-class-diagram.md",
+      "block": 1,
+      "syntax": "đạt",
+      "render": "đạt",
+      "svg": "uml-class-diagram-1.svg",
+      "viewBox": "0 0 1136.2421875 716"
+    },
+    {
+      "file": "uml-class-diagram.md",
+      "block": 2,
+      "syntax": "đạt",
+      "render": "đạt",
+      "svg": "uml-class-diagram-2.svg",
+      "viewBox": "0 0 882.875 888"
+    },
+    {
+      "file": "uml-class-diagram.md",
+      "block": 3,
+      "syntax": "đạt",
+      "render": "đạt",
+      "svg": "uml-class-diagram-3.svg",
+      "viewBox": "0 0 659.296875 888"
+    },
+    {
+      "file": "uml-class-diagram.md",
+      "block": 4,
+      "syntax": "đạt",
+      "render": "đạt",
+      "svg": "uml-class-diagram-4.svg",
+      "viewBox": "0 0 627.2890625 1070"
+    },
+    {
+      "file": "uml-class-diagram.md",
+      "block": 5,
+      "syntax": "đạt",
+      "render": "đạt",
+      "svg": "uml-class-diagram-5.svg",
+      "viewBox": "0 0 1051.98046875 960"
+    },
+    {
+      "file": "uml-class-diagram.md",
+      "block": 6,
+      "syntax": "đạt",
+      "render": "đạt",
+      "svg": "uml-class-diagram-6.svg",
+      "viewBox": "0 0 838.6875 742"
+    },
+    {
+      "file": "uml-class-diagram.md",
+      "block": 7,
+      "syntax": "đạt",
+      "render": "đạt",
+      "svg": "uml-class-diagram-7.svg",
+      "viewBox": "0 0 920.984375 828"
+    },
+    {
+      "file": "uml-class-diagram.md",
+      "block": 8,
+      "syntax": "đạt",
+      "render": "đạt",
+      "svg": "uml-class-diagram-8.svg",
+      "viewBox": "0 0 1265.78125 458"
+    },
+    {
+      "file": "erd.md",
+      "block": 1,
+      "syntax": "đạt",
+      "render": "đạt",
+      "svg": "erd-1.svg",
+      "viewBox": "0 0 6018.00390625 3871"
+    }
+  ]
+}
