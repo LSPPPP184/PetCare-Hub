@@ -1,0 +1,11 @@
+[
+  "uml-class-diagram.md: UTF-8, hàng rào mã và liên kết nội bộ đạt",
+  "erd.md: UTF-8, hàng rào mã và liên kết nội bộ đạt",
+  "patterns.md: UTF-8, hàng rào mã và liên kết nội bộ đạt",
+  "oop-checklist.md: UTF-8, hàng rào mã và liên kết nội bộ đạt",
+  "demo-script.md: UTF-8, hàng rào mã và liên kết nội bộ đạt",
+  "limitations.md: UTF-8, hàng rào mã và liên kết nội bộ đạt",
+  "UML: 8 khối, tên class tồn tại; ERD: đủ 22 entity và 4 bảng collection/nối",
+  "Pattern: 13 đoạn trích thật, mỗi đoạn dưới 20 dòng; tất cả tên test dẫn chiếu tồn tại",
+  "OOP: cả bốn tính chất có ba ví dụ kèm dòng nguồn"
+]
